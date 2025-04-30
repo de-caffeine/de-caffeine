@@ -1,4 +1,4 @@
-import searchIcon from '../../images/searchIcon.png';
+import searchIcon from '../../assets/images/searchIcon.png';
 export default function SearchBar() {
   return (
     <>
