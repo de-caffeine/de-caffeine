@@ -16,11 +16,9 @@ export default function FloatingButton() {
       </button>
       <button
         type="button"
-        className="w-[60px] h-[60px] bg-[#A9907E] rounded-full shadow-[0_4px_4px_rgba(0,0,0,0.25)] flex-col items-center justify-center">
-        <img className="" src={like} alt="좋아요" />
-        <p>1</p>
+        className="w-[60px] h-[60px] bg-[#A9907E] rounded-full shadow-[0_4px_4px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center leading-none text-[#ffffff] text-[12px]">
+        <img className="mt-[6px] mb-0" src={like} alt="좋아요" />1
       </button>
-      <p className="text-[9px]">이야야야야야야</p>
     </>
   );
 }
