@@ -14,7 +14,7 @@ export default function Button({
     return (
         <>
             <button
-                className={`border rounded-[5px]
+                className={`border rounded-[5px] nanum-gothic-regular
                     ${full && "bg-[#6B4C36] border-[#6B4C36] text-white"}
                     ${
                         size === "s" &&
