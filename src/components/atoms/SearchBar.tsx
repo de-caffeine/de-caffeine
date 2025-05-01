@@ -1,12 +1,13 @@
 import searchIcon from '../../assets/images/searchIcon.png';
+
 export default function SearchBar() {
   return (
     <>
-      <div className="relative w-[400px] border-b border-gray-300">
+      <div className="relative w-[400px] border-b border-[#ababab]">
         <input
           type="text"
           placeholder="검색어를 입력해주세요"
-          className="text-[12px] w-[400px] pl-2 py-2 text-gray-700 placeholder-gray-400 focus:outline-none"
+          className="text-[12px] w-[400px] pl-2 py-2 text-[#ababab] placeholder-[#ababab] focus:outline-none"
         />
         <img
           src={searchIcon}
