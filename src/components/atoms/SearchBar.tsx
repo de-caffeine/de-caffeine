@@ -1,7 +1,7 @@
 export default function SearchBar() {
-    return (
-        <>
-            <input type="text"></input>
-        </>
-    );
+  return (
+    <>
+      <input type="text"></input>
+    </>
+  );
 }
