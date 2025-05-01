@@ -15,15 +15,15 @@ export default function ChattingBubble({
                 }`}
             >
                 {sender === "user" && (
-                    <div className="max-w-[60%] bg-[#D7CAB9] px-[20px] py-[10px] rounded-r-[20px] rounded-tl-[20px] text-[16px] break-all">
+                    <div className="max-w-[60%] bg-[#D7CAB9] px-[20px] py-[10px] rounded-r-[20px] rounded-tl-[20px] text-[16px] nanum-gothic-regular break-all">
                         {children}
                     </div>
                 )}
-                <span className="self-end text-[12px] text-[#ababab]">
+                <span className="self-end text-[12px] text-[#ababab] nanum-gothic-regular">
                     {date}
                 </span>
                 {sender === "me" && (
-                    <div className="max-w-[60%] border border-[#D7CAB9] px-[20px] py-[10px] rounded-l-[20px] rounded-tr-[20px] text-[16px] break-all">
+                    <div className="max-w-[60%] border border-[#D7CAB9] px-[20px] py-[10px] rounded-l-[20px] rounded-tr-[20px] text-[16px] nanum-gothic-regular break-all">
                         {children}
                     </div>
                 )}
