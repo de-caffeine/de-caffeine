@@ -1,5 +1,5 @@
 interface TagProps {
-  value: string;
+  value?: string;
 }
 export default function Tag({ value }: TagProps) {
   return (
