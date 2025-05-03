@@ -1,7 +1,7 @@
 export default function Icon() {
-    return (
-        <>
-            <image></image>
-        </>
-    );
+  return (
+    <>
+      <image></image>
+    </>
+  );
 }
