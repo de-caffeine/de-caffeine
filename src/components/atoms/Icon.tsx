@@ -6,19 +6,18 @@ import velogIcon from "../../assets/images/velogIcon.png";
 import homepageIcon from "../../assets/images/homepageIcon.png";
 import completeIcon from "../../assets/images/completeIcon.png";
 import completeNotIcon from "../../assets/images/completeNotIcon.png";
+import comentsIcon from "../../assets/images/comentIcon.png";
+import likeIcon from "../../assets/images/likeIcon.png";
+import unlikeIcon from "../../assets/images/unlikeIcon.png";
 
 export default function Icon({
   name,
+  onClick,
+  size = 24, // 기본 24
 }: {
-  name:
-    | "alarmIcon"
-    | "chatIcon"
-    | "mailIcon"
-    | "githubIcon"
-    | "velogIcon"
-    | "homepageIcon"
-    | "completeIcon"
-    | "completeNotIcon";
+  name: string;
+  onClick?: () => void;
+  size?: number;
 }) {
   const src =
     name === "alarmIcon"
@@ -35,15 +34,18 @@ export default function Icon({
       ? homepageIcon
       : name === "completeIcon"
       ? completeIcon
-      : completeNotIcon;
-
-  const className =
-    name === "alarmIcon" ? "w-[34px] h-[34px]" : "w-[24px] h-[24px]";
+      : name === "completeNotIcon"
+      ? completeNotIcon
+      : name === "comentsIcon"
+      ? comentsIcon
+      : name === "likeIcon"
+      ? likeIcon
+      : unlikeIcon;
 
   return (
     <>
-      <button type="button" className="cursor-pointer">
-        <img src={src} alt={name} className={className} />
+      <button type="button" className="cursor-pointer" onClick={onClick}>
+        <img src={src} alt={name} style={{ width: size, height: size }} />
       </button>
     </>
   );
