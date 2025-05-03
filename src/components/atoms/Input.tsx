@@ -26,7 +26,7 @@ export default function Input({
         // 아이콘이 있을 때 왼쪽 패딩 10px 추가
         className={`
           ${icon ? "pl-10" : ""} 
-          rounded-[5px] border px-[20px] placeholder-[#ababab]
+          rounded-[5px] border px-[20px] placeholder-[#ababab]  nanum-gothic-regular
           ${fontSize === "12" ? "text-[12px]" : "text-[16px]"}
           ${className}
         `}
