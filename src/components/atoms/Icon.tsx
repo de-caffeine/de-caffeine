@@ -6,7 +6,7 @@ import velogIcon from "../../assets/images/velogIcon.png";
 import homepageIcon from "../../assets/images/homepageIcon.png";
 import completeIcon from "../../assets/images/completeIcon.png";
 import completeNotIcon from "../../assets/images/completeNotIcon.png";
-import comentsIcon from "../../assets/images/comentIcon.png";
+import commentIcon from "../../assets/images/commentIcon.png";
 import likeIcon from "../../assets/images/likeIcon.png";
 import unlikeIcon from "../../assets/images/unlikeIcon.png";
 
@@ -36,8 +36,8 @@ export default function Icon({
       ? completeIcon
       : name === "completeNotIcon"
       ? completeNotIcon
-      : name === "comentsIcon"
-      ? comentsIcon
+      : name === "commentIcon"
+      ? commentIcon
       : name === "likeIcon"
       ? likeIcon
       : unlikeIcon;
