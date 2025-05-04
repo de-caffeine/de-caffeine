@@ -1,3 +1,9 @@
+import Interest from './components/atoms/Interest';
+
 export default function App() {
-    return <></>;
+  return (
+    <>
+      <Interest />
+    </>
+  );
 }
