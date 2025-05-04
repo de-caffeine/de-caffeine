@@ -1,7 +1,7 @@
 export default function Header() {
-    return (
-        <>
-            <h1>Header Component</h1>
-        </>
-    );
+  return (
+    <>
+      <h1>Header Component</h1>
+    </>
+  );
 }

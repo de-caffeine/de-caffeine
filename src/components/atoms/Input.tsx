@@ -1,7 +1,7 @@
 export default function Input() {
-    return (
-        <>
-            <input type="text"></input>
-        </>
-    );
+  return (
+    <>
+      <input type="text"></input>
+    </>
+  );
 }
