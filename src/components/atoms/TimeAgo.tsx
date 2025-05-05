@@ -7,13 +7,14 @@ interface TimeAgoProps {
 // api 예시 createdAt: "2021-10-15T20:48:19.816Z",
 export default function TimeAgo({
   timestamp,
-  fontSize = 9, // 기본값 9px
+  fontSize = 12, // 기본값 12px
 }: TimeAgoProps) {
   const now = new Date();
   const time = new Date(timestamp);
   const diffInSeconds = Math.floor((now.getTime() - time.getTime()) / 1000);
 
   const style = { fontSize, color: "#00000080" };
+  const className = "nanum-gothic-regular"; // 기본 폰트 클래스
 
   if (diffInSeconds < 60) {
     return <span style={style}>{`${diffInSeconds}초 전`}</span>;
@@ -21,17 +22,17 @@ export default function TimeAgo({
 
   const diffInMinutes = Math.floor(diffInSeconds / 60);
   if (diffInMinutes < 60) {
-    return <span style={style}>{`${diffInMinutes}분 전`}</span>;
+    return <span className={className} style={style}>{`${diffInMinutes}분 전`}</span>;
   }
 
   const diffInHours = Math.floor(diffInMinutes / 60);
   if (diffInHours < 24) {
-    return <span style={style}>{`${diffInHours}시간 전`}</span>;
+    return <span className={className} style={style}>{`${diffInHours}시간 전`}</span>;
   }
 
   const diffInDays = Math.floor(diffInHours / 24);
   if (diffInDays < 7) {
-    return <span style={style}>{`${diffInDays}일 전`}</span>;
+    return <span className={className} style={style}>{`${diffInDays}일 전`}</span>;
   }
 
   // 7일 이상일 때는 년월일 출력
@@ -39,5 +40,5 @@ export default function TimeAgo({
   const month = time.getMonth() + 1;
   const day = time.getDate();
 
-  return <span style={style}>{`${year}년 ${month}월 ${day}일`}</span>;
+  return <span className={className} style={style}>{`${year}년 ${month}월 ${day}일`}</span>;
 }
