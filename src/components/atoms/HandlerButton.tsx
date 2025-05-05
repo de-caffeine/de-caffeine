@@ -1,7 +1,7 @@
 export default function HandlerButton() {
-    return (
-        <>
-            <button></button>
-        </>
-    );
+  return (
+    <>
+      <button></button>
+    </>
+  );
 }
