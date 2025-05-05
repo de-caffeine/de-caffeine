@@ -16,4 +16,25 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// 응답 인터셉터: alert로 에러 메시지 띄우기
+api.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    const status = err.response?.status;
+    const msg = err.response?.data || err.message;
+
+    if (status === 401) {
+      alert("인증이 필요합니다. 로그인 해주세요.");
+    } else if (status >= 500) {
+      alert("서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
+    } else if (status === 400) {
+      alert(`잘못된 요청입니다: ${msg}`);
+    } else {
+      alert(`에러가 발생했습니다: ${msg}`);
+    }
+
+    return Promise.reject(err);
+  }
+);
+
 export default api;
