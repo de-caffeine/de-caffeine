@@ -3,6 +3,7 @@ import UserAvatar from '../atoms/UserAvatar';
 import UserName from '../atoms/UserName';
 
 interface UserCardProps {
+  UName: string;
   followCount?: number;
   followerCount?: number;
   tags?: string[];
@@ -11,6 +12,7 @@ interface UserCardProps {
 }
 
 export default function UserCard({
+  UName = '',
   followCount = 0,
   followerCount = 0,
   tags = [],
@@ -28,7 +30,7 @@ export default function UserCard({
         />
         <div className="relative flex flex-col gap-2">
           <UserName
-            name="홍길동"
+            name={UName}
             className="nanum-gothic-regular top-0 text-[16px]"
           />
           <div className="nanum-gothic-regular mb-2 flex justify-between gap-4 text-[12px]">
