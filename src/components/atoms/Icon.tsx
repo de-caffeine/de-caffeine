@@ -1,14 +1,14 @@
-import alarmIcon from '../../assets/images/alarmIcon.png';
-import chatIcon from '../../assets/images/chatIcon.png';
-import mailIcon from '../../assets/images/mailIcon.png';
-import githubIcon from '../../assets/images/githubIcon.png';
-import velogIcon from '../../assets/images/velogIcon.png';
-import homepageIcon from '../../assets/images/homepageIcon.png';
-import completeIcon from '../../assets/images/completeIcon.png';
-import completeNotIcon from '../../assets/images/completeNotIcon.png';
-import commentIcon from '../../assets/images/commentIcon.png';
-import likeIcon from '../../assets/images/likeIcon.png';
-import unlikeIcon from '../../assets/images/unlikeIcon.png';
+import alarmIcon from "../../assets/images/alarmIcon.png";
+import chatIcon from "../../assets/images/chatIcon.png";
+import mailIcon from "../../assets/images/mailIcon.png";
+import githubIcon from "../../assets/images/githubIcon.png";
+import velogIcon from "../../assets/images/velogIcon.png";
+import homepageIcon from "../../assets/images/homepageIcon.png";
+import completeIcon from "../../assets/images/completeIcon.png";
+import completeNotIcon from "../../assets/images/completeNotIcon.png";
+import commentIcon from "../../assets/images/commentIcon.png";
+import likeIcon from "../../assets/images/likeIcon.png";
+import unlikeIcon from "../../assets/images/unlikeIcon.png";
 
 export default function Icon({
   name,
@@ -20,25 +20,25 @@ export default function Icon({
   size?: number;
 }) {
   const src =
-    name === 'alarmIcon'
+    name === "alarmIcon"
       ? alarmIcon
-      : name === 'chatIcon'
+      : name === "chatIcon"
       ? chatIcon
-      : name === 'mailIcon'
+      : name === "mailIcon"
       ? mailIcon
-      : name === 'githubIcon'
+      : name === "githubIcon"
       ? githubIcon
-      : name === 'velogIcon'
+      : name === "velogIcon"
       ? velogIcon
-      : name === 'homepageIcon'
+      : name === "homepageIcon"
       ? homepageIcon
-      : name === 'completeIcon'
+      : name === "completeIcon"
       ? completeIcon
-      : name === 'completeNotIcon'
+      : name === "completeNotIcon"
       ? completeNotIcon
-      : name === 'commentIcon'
+      : name === "commentIcon"
       ? commentIcon
-      : name === 'likeIcon'
+      : name === "likeIcon"
       ? likeIcon
       : unlikeIcon;
 
