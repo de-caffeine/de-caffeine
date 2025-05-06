@@ -22,29 +22,31 @@ export default function UserCard({
   return (
     <>
       <div className="r-[5px] flex h-[140px] w-[310px] gap-4 rounded-[5px] border-[1px] border-[#d9d9d9] p-[20px]">
-        <UserAvatar
-          size={100}
-          statusSize={20}
-          imageUrl={imgUrl}
-          status={loginStatus}
-        />
-        <div className="relative flex flex-col gap-2">
+        <div className="flex-shrink-0">
+          <UserAvatar
+            size={100}
+            statusSize={20}
+            imageUrl={imgUrl}
+            status={loginStatus}
+          />
+        </div>
+        <div className="flex min-w-0 flex-1 flex-col gap-2">
           <UserName
             name={UName}
             className="nanum-gothic-regular top-0 text-[16px]"
           />
-          <div className="nanum-gothic-regular mb-2 flex justify-between gap-4 text-[12px]">
+          <div className="nanum-gothic-regular mb-2 flex justify-baseline gap-4 text-[12px]">
             <span>팔로우 {followCount}</span>
             <span>팔로워 {followerCount}</span>
           </div>
           {/* tags 배열로 정보 받아와서 맵핑 */}
-          <ul className="flex gap-0.5">
-            {tags.map(
+          <ul className="flex flex-wrap gap-0.5">
+            {tags.slice(0, 2).map(
               (t) =>
                 // Tag value 값이 없을 경우 렌더링 하지 않음
                 t.trim() !== '' && (
-                  <li>
-                    <Tag key={t} value={t} />
+                  <li key={t.trim().toUpperCase()}>
+                    <Tag value={t.trim().toUpperCase()} />
                   </li>
                 ),
             )}
