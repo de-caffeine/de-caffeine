@@ -73,13 +73,17 @@ export const getPost = (postId: string) =>
 export const updatePost = (
   postId: string,
   title: string,
+  body: string | undefined, // ← 본문 파라미터 추가
   channelId: string,
   imageFile: File | null,
   imageToDeletePublicId?: string,
 ) => {
+  // 제목+본문을 합쳐 JSON 문자열로 만든다
+  const payload = JSON.stringify({ title, body });
+
   const form = new FormData();
   form.append('postId', postId);
-  form.append('title', title);
+  form.append('title', payload); // 원래 title 대신 JSON 문자열
   form.append('channelId', channelId);
   if (imageFile) form.append('image', imageFile);
   if (imageToDeletePublicId)
@@ -87,13 +91,10 @@ export const updatePost = (
 
   return api
     .put('/posts/update', form, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+      headers: { 'Content-Type': 'multipart/form-data' },
     })
     .then((res) => res.data);
 };
-
 // 포스트 삭제
 export const deletePost = (id: string) =>
   api.delete('/posts/delete', { data: { id } }).then((res) => res.data);
