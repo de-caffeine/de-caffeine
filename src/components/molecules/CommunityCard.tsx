@@ -5,7 +5,7 @@ import Tag from "../atoms/Tag";
 interface CommunityCard {
   post: {
     _id: string;
-    image: string | null;
+    image: string | undefined;
     channelName: string;
     title: string;
     body: string;
