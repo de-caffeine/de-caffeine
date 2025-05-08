@@ -94,7 +94,7 @@ export default function CommentBox({
             <Info
               imageUrl={c.author.image}
               size={32}
-              name={c.author.fullName}
+              userName={c.author.fullName}
               timestamp={c.createdAt}
             />
 
