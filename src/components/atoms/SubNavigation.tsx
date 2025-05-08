@@ -1,6 +1,8 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useParams } from 'react-router-dom';
 
-const tabData: Record<string, { name: string; path: string }[]> = {
+const getTabData = (
+  username: string | undefined
+): Record<string, { name: string; path: string }[]> => ({
   community: [
     { name: '전체', path: '/community' },
     { name: '일상공유', path: '/community/daily' },
@@ -14,13 +16,22 @@ const tabData: Record<string, { name: string; path: string }[]> = {
     { name: '해결완료', path: '/question/unsolved' },
   ],
   users: [
-    { name: '전체', path: '/users' },
-    { name: '온라인', path: '/users/online' },
-    { name: '오프라인', path: '/users/offline' },
+    { name: '프로필', path: `/users/${username}` },
+    { name: `${username}의 질문`, path: `/users/${username}/questions` },
+    { name: '작성한 댓글', path: `/users/${username}/comments` },
+    { name: '좋아요 누른 글', path: `/users/${username}/likes` },
   ],
-};
+  me: [
+    { name: '전체', path: '/me' },
+    { name: '나의 질문', path: '/me/questions' },
+    { name: '작성한 댓글', path: '/me/comments' },
+    { name: '좋아요 누른 글', path: '/me/likes' },
+  ],
+});
 
 export default function SubNavigation({ channel }: { channel: string }) {
+  const { username } = useParams(); // URL 파라미터에서 유저 이름 추출
+  const tabData = getTabData(username);
   const tabs = tabData[channel];
 
   return (
@@ -32,7 +43,7 @@ export default function SubNavigation({ channel }: { channel: string }) {
               <li key={path} className="cursor-pointer">
                 <NavLink
                   to={path}
-                  end={path === `/${channel}`} // '전체'일 때만 end 처리
+                  end={path === `/${channel}` || path === `/users/${username}`} // '전체'일 때만 end 처리
                   className={({ isActive }) => (isActive ? '' : 'opacity-50')}
                 >
                   {name}
