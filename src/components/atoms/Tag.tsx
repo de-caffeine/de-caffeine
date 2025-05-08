@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 interface TagProps {
   children: ReactNode;
-  className: string;
+  className?: string;
 }
 export default function Tag({ children }: TagProps) {
   return (
