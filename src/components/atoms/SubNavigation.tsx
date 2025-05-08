@@ -16,10 +16,15 @@ const getTabData = (
     { name: '해결완료', path: '/question/unsolved' },
   ],
   users: [
-    { name: '프로필', path: `/users/${username}` },
-    { name: `${username}의 질문`, path: `/users/${username}/questions` },
-    { name: '작성한 댓글', path: `/users/${username}/comments` },
-    { name: '좋아요 누른 글', path: `/users/${username}/likes` },
+    { name: '전체', path: '/users' },
+    { name: '온라인', path: '/users/online' },
+    { name: '오프라인', path: '/users/offline' },
+  ],
+  userPage: [
+    { name: '프로필', path: `/userPage/${username}` },
+    { name: `${username}의 질문`, path: `/userPage/${username}/questions` },
+    { name: '작성한 댓글', path: `/userPage/${username}/comments` },
+    { name: '좋아요 누른 글', path: `/userPage/${username}/likes` },
   ],
   me: [
     { name: '전체', path: '/me' },
@@ -43,7 +48,9 @@ export default function SubNavigation({ channel }: { channel: string }) {
               <li key={path} className="cursor-pointer">
                 <NavLink
                   to={path}
-                  end={path === `/${channel}` || path === `/users/${username}`} // '전체'일 때만 end 처리
+                  end={
+                    path === `/${channel}` || path === `/userPage/${username}`
+                  } // '전체'일 때만 end 처리, '프로필'
                   className={({ isActive }) => (isActive ? '' : 'opacity-50')}
                 >
                   {name}
