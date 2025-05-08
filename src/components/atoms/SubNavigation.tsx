@@ -1,7 +1,7 @@
 import { NavLink, Outlet, useParams } from 'react-router-dom';
 
 const getTabData = (
-  username: string | undefined
+  userId: string | undefined
 ): Record<string, { name: string; path: string }[]> => ({
   community: [
     { name: '전체', path: '/community' },
@@ -20,23 +20,23 @@ const getTabData = (
     { name: '온라인', path: '/users/online' },
     { name: '오프라인', path: '/users/offline' },
   ],
-  userPage: [
-    { name: '프로필', path: `/userPage/${username}` },
-    { name: `${username}의 질문`, path: `/userPage/${username}/questions` },
-    { name: '작성한 댓글', path: `/userPage/${username}/comments` },
-    { name: '좋아요 누른 글', path: `/userPage/${username}/likes` },
+  userId: [
+    { name: '프로필', path: `/${userId}` },
+    { name: `${userId}의 질문`, path: `/${userId}/question` },
+    { name: '작성한 댓글', path: `/${userId}/comments` },
+    { name: '좋아요 누른 글', path: `/${userId}/liked` },
   ],
   me: [
     { name: '전체', path: '/me' },
-    { name: '나의 질문', path: '/me/questions' },
+    { name: '나의 질문', path: '/me/question' },
     { name: '작성한 댓글', path: '/me/comments' },
-    { name: '좋아요 누른 글', path: '/me/likes' },
+    { name: '좋아요 누른 글', path: '/me/liked' },
   ],
 });
 
 export default function SubNavigation({ channel }: { channel: string }) {
-  const { username } = useParams(); // URL 파라미터에서 유저 이름 추출
-  const tabData = getTabData(username);
+  const { userId } = useParams(); // URL 파라미터에서 유저 이름 추출
+  const tabData = getTabData(userId);
   const tabs = tabData[channel];
 
   return (
@@ -48,9 +48,7 @@ export default function SubNavigation({ channel }: { channel: string }) {
               <li key={path} className="cursor-pointer">
                 <NavLink
                   to={path}
-                  end={
-                    path === `/${channel}` || path === `/userPage/${username}`
-                  } // '전체'일 때만 end 처리, '프로필'
+                  end={path === `/${channel}` || path === `/${userId}`} // '전체'일 때만 end 처리, '프로필'
                   className={({ isActive }) => (isActive ? '' : 'opacity-50')}
                 >
                   {name}
