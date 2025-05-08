@@ -1,7 +1,7 @@
 import { NavLink, Outlet, useParams } from 'react-router-dom';
 
 const getTabData = (
-  userId: string | undefined
+  userId: string | undefined,
 ): Record<string, { name: string; path: string }[]> => ({
   community: [
     { name: '전체', path: '/community' },
