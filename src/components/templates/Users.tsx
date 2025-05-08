@@ -1,7 +1,50 @@
-export default function Users () {
+import { useState, useEffect } from 'react';
+import { getUsers } from '../../api/users';
+import UserCard from '../molecules/UserCard';
+import { Link } from 'react-router-dom';
+
+export default function Users() {
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const data = await getUsers(0, 30);
+        setUsers(data);
+      } catch (error: unknown) {
+        if (error instanceof Error) setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
+
+  if (loading) {
+    return <p className="py-8 text-center">로딩 중...</p>;
+  }
+  if (error) {
+    return <p className="py-8 text-center text-red-500">{error}</p>;
+  }
+  if (!users.length) {
+    return <p className="py-8 text-center">등록된 유저가 없습니다.</p>;
+  }
   return (
-    <>
-      <h1>Users Component</h1>
-    </>
+    <div className="grid grid-cols-1 gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3">
+      {users.map((user) => (
+        <Link key={user._id} to={`/users/${user._id}`} className="block">
+          <UserCard
+            UName={user.fullName}
+            followCount={user.following.length}
+            followerCount={user.followers.length}
+            // tags={user.tag}
+            imgUrl={user.image}
+            loginStatus={user.isOnline ? 'online' : 'offline'}
+          />
+        </Link>
+      ))}
+    </div>
   );
 }
