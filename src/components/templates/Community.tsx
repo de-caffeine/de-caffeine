@@ -1,7 +1,8 @@
 import CommunityCard from '../molecules/CommunityCard';
 import { getPostsByChannel } from '../../api/posts';
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import FloatingButton from '../atoms/FloatingButton';
 
 export default function Community() {
   const location = useLocation();
@@ -61,6 +62,9 @@ export default function Community() {
           </p>
         )}
       </div>
+      <Link to="/writer" className="fixed right-[10%] bottom-[5%]">
+        <FloatingButton buttonType="write" />
+      </Link>
     </>
   );
 }
