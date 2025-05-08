@@ -3,19 +3,24 @@ import React, { useEffect, useState } from 'react';
 // import { useParams } from 'react-router-dom';
 import { getPost } from '../../api/posts';
 import PostCard from '../molecules/PostCard';
-import CommentBox from '../molecules/CommentBox';
+import CommentBox, { Comment } from '../molecules/CommentBox';
 
 export default function PostPage() {
-  // const { postId } = useParams<{ postId: string }>();
+  // const { postId } = useParams<{ postId: string }>(); // 나중에 params 사용
   const postId = '681c4426e932182b47edad9d';
+
   const [post, setPost] = useState<any>(null);
+  const [comments, setComments] = useState<Comment[]>([]); // ← 댓글 배열 상태 추가
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!postId) return;
     getPost(postId)
-      .then((data) => setPost(data))
+      .then((data) => {
+        setPost(data);
+        setComments(data.comments ?? []); // ← post.comments 를 세팅
+      })
       .catch((err) => setError(err.message || '불러오기 실패'))
       .finally(() => setLoading(false));
   }, [postId]);
@@ -27,13 +32,13 @@ export default function PostPage() {
   // title/body/tags JSON 파싱 (임시 방편)
   let parsedTitle = post.title;
   let parsedBody = (post as any).body ?? '';
-  let parsedTags: string[] = []; // ← tags 배열 초기화
+  let parsedTags: string[] = [];
 
   try {
     const obj = JSON.parse(post.title);
     parsedTitle = obj.title;
     parsedBody = obj.body;
-    parsedTags = obj.tags ?? []; // ← JSON에서 tags 파싱
+    parsedTags = obj.tags ?? [];
   } catch {
     /* JSON 아니면 넘어감 */
   }
@@ -46,9 +51,11 @@ export default function PostPage() {
         imageUrl={post.image}
         authorName={post.author.fullName}
         createdAt={post.createdAt}
-        tags={parsedTags} // ← tags prop 전달
+        tags={parsedTags}
       />
-      <CommentBox />
+
+      {/* CommentBox에 초기 댓글 목록을 넘겨줍니다 */}
+      <CommentBox postId={postId} initialComments={comments} />
     </div>
   );
 }
