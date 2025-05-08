@@ -20,15 +20,10 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Header />}>
             <Route index element={<Main />} />
-
-<<<<<<< HEAD
             <Route
               path="/community"
               element={<SubNavigation channel="community" />}
             >
-=======
-            <Route path="/community" element={<SubNavigation />}>
->>>>>>> aaa50fab2f3d64e1641f71cadf597296043518c2
               <Route index element={<Community />} />
               <Route path="daily" element={<Community />} />
               <Route path="develop" element={<Community />} />
@@ -36,20 +31,14 @@ export default function App() {
               <Route path="recruit" element={<Community />} />
             </Route>
 
-<<<<<<< HEAD
             <Route
               path="/question"
               element={<SubNavigation channel="question" />}
             >
-=======
-            <Route path="/question" element={<SubNavigation />}>
->>>>>>> aaa50fab2f3d64e1641f71cadf597296043518c2
               <Route index element={<Question />} />
               <Route path="solved" element={<Question />} />
               <Route path="unsolved" element={<Question />} />
             </Route>
-
-<<<<<<< HEAD
             <Route path="/me" element={<SubNavigation channel="me" />}>
               <Route index element={<MyPage />} />
               <Route path="question" element={<MyPage />} />
@@ -65,23 +54,6 @@ export default function App() {
             </Route>
 
             <Route path="/users" element={<SubNavigation channel="users" />}>
-=======
-            <Route path="/userpage/my" element={<SubNavigation />}>
-              <Route index element={<MyPage />} />
-              <Route path="question" element={<MyPage />} />
-              <Route path="comment" element={<MyPage />} />
-              <Route path="liked" element={<MyPage />} />
-            </Route>
-
-            <Route path="/userpage/:userId" element={<SubNavigation />}>
-              <Route index element={<UserPage />} />
-              <Route path="question" element={<UserPage />} />
-              <Route path="comment" element={<UserPage />} />
-              <Route path="liked" element={<UserPage />} />
-            </Route>
-
-            <Route path="/users" element={<SubNavigation />}>
->>>>>>> aaa50fab2f3d64e1641f71cadf597296043518c2
               <Route index element={<Users />} />
               <Route path="online" element={<Users />} />
               <Route path="offline" element={<Users />} />
