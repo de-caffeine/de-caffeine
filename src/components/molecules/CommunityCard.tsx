@@ -13,14 +13,14 @@ export default function CommunityCard ( {post}: {post: Post} ) {
                 <Tag className="absolute bottom-[10px] right-[10px]">{post.channel.description}</Tag>
             </div>
           </Link>
-          <div className="flex flex-col h-[45%] p-[10px] justify-between">
+          <div className="flex flex-col h-[45%] justify-between">
             <Link to={`/post/${post._id}`}>
-              <div className="p-[5px]">
-                <h3 className="nanum-gothic-bold text-base line-clamp-1 pr-[30px]">{post.title.split("\"")[3]}</h3>
-                <p className="nanum-gothic-regular text-sm line-clamp-2">{post.title.split("\"")[7]}</p>
+              <div className="p-[15px] h-[90px]">
+                <h3 className="nanum-gothic-bold text-base line-clamp-1 pr-[30px]">{JSON.parse(post.title).title}</h3>
+                <p className="nanum-gothic-regular text-sm line-clamp-2">{JSON.parse(post.title).body + "asdfjnakfjndkjwfnajkwnfjkedn"}</p>
               </div>
             </Link>
-            <div className="flex flex-row border-t border-[#d9d9d9] items-center justify-between pt-[10px] px-[5px]">
+            <div className="flex flex-row border-t border-[#d9d9d9] items-center justify-between mx-[5px] py-[10px] px-[5px]">
               <Info size={30} userName={post.author.fullName} timestamp={post.createdAt}/>
               <Interest commentCount={post.comments.length} like={{likeCount: post.likes.length, isLike: false}} _id={post._id}/>
             </div>
