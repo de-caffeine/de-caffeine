@@ -20,8 +20,10 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Header />}>
             <Route index element={<Main />} />
-
-            <Route path="/community" element={<SubNavigation />}>
+            <Route
+              path="/community"
+              element={<SubNavigation channel="community" />}
+            >
               <Route index element={<Community />} />
               <Route path="daily" element={<Community />} />
               <Route path="develop" element={<Community />} />
@@ -29,27 +31,29 @@ export default function App() {
               <Route path="recruit" element={<Community />} />
             </Route>
 
-            <Route path="/question" element={<SubNavigation />}>
+            <Route
+              path="/question"
+              element={<SubNavigation channel="question" />}
+            >
               <Route index element={<Question />} />
               <Route path="solved" element={<Question />} />
               <Route path="unsolved" element={<Question />} />
             </Route>
-
-            <Route path="/userpage/my" element={<SubNavigation />}>
+            <Route path="/me" element={<SubNavigation channel="me" />}>
               <Route index element={<MyPage />} />
               <Route path="question" element={<MyPage />} />
-              <Route path="comment" element={<MyPage />} />
+              <Route path="comments" element={<MyPage />} />
               <Route path="liked" element={<MyPage />} />
             </Route>
 
-            <Route path="/userpage/:userId" element={<SubNavigation />}>
+            <Route path="/:userId" element={<SubNavigation channel="userId" />}>
               <Route index element={<UserPage />} />
               <Route path="question" element={<UserPage />} />
-              <Route path="comment" element={<UserPage />} />
+              <Route path="comments" element={<UserPage />} />
               <Route path="liked" element={<UserPage />} />
             </Route>
 
-            <Route path="/users" element={<SubNavigation />}>
+            <Route path="/users" element={<SubNavigation channel="users" />}>
               <Route index element={<Users />} />
               <Route path="online" element={<Users />} />
               <Route path="offline" element={<Users />} />
