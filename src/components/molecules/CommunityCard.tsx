@@ -7,19 +7,19 @@ import LogoImage from '../../assets/images/logo.png';
 // todo : Login 연결 후 isLike 동적으로 변경 필요함
 export default function CommunityCard({ post }: { post: Post }) {
   return (
-    <div className="h-[340px] w-[270px] rounded-[5px] border border-[#d9d9d9]">
+    <div className="rounded-top-[6px] h-[340px] w-[270px] rounded-[6px] border border-[#d9d9d9]">
       <Link to={`/post/${post._id}`}>
-        <div className="m-between relative h-[55%] rounded-t-[5px]">
+        <div className="m-between relative h-[55%]">
           {post.image ? (
             <>
               <img
                 src={post.image}
-                className="h-[100%] w-[100%] object-cover"
+                className="h-[100%] w-[100%] rounded-t-[5px] object-cover"
               />
             </>
           ) : (
             <>
-              <div className="cafe24 flex h-[100%] w-[100%] items-center justify-center gap-1 bg-[#A9907E] text-3xl leading-[0.9]">
+              <div className="cafe24 flex h-[100%] w-[100%] items-center justify-center gap-1 rounded-t-[5px] bg-[#755842] text-3xl leading-[0.9]">
                 <img src={LogoImage} className="h-[40%] w-auto"></img>
                 <p>
                   de:
