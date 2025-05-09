@@ -31,11 +31,11 @@ export default function Question() {
         break;
       }
       case '/question/unsolved': {
-        fetchPosts('681b66f960d7dc2aa8be13a8');
+        fetchPosts('681b66f060d7dc2aa8be13a3');
         break;
       }
       case '/question/solved': {
-        fetchPosts('681b66f060d7dc2aa8be13a3');
+        fetchPosts('681b66f960d7dc2aa8be13a8');
         break;
       }
     }
