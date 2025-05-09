@@ -23,11 +23,9 @@ export default function QuestionCard({ post }: { post: Post }) {
             </div>
           </div>
           <div className="flex gap-[5px] pl-[15px]">
-            {JSON.parse(post.title)
-              .tag.split(',')
-              .map((t: string) => (
-                <Tag>{t}</Tag>
-              ))}
+            {JSON.parse(post.title).tags.map((t: string, index: number) => (
+              <Tag key={index}>{t}</Tag>
+            ))}
           </div>
         </div>
       </Link>
