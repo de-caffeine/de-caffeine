@@ -1,18 +1,26 @@
 // src/components/molecules/CommentBox.tsx
 import React, { useState, useRef, useEffect } from 'react';
 import Info from '../atoms/Info';
+import { getAuthUser } from '../../api/auth';
 import { createComment, deleteComment } from '../../api/comments';
-
-export interface Comment {
-  _id: string;
-  comment: string; //  이 필드가 실제 댓글 텍스트
-  author: { fullName: string; image?: string };
-  createdAt: string;
-}
 
 interface CommentBoxProps {
   postId: string;
-  initialComments?: Comment[]; // 작성된 초기 댓글
+  initialComments?: Comment[]; // API 쪽 Comment[]
+}
+
+// 댓글 생성 인터페이스
+export interface Comment {
+  _id: string;
+  comment: string;
+  author: {
+    fullName: string;
+    image?: string;
+    _id: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+  // post, __v 등은 필요 없으면 생략해도 됩니다
 }
 
 export default function CommentBox({
@@ -21,6 +29,7 @@ export default function CommentBox({
 }: CommentBoxProps) {
   const [comments, setComments] = useState<Comment[]>(initialComments);
   const [text, setText] = useState('');
+  const [meId, setMeId] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // textarea 높이 자동 조정
@@ -31,6 +40,13 @@ export default function CommentBox({
       ta.style.height = `${ta.scrollHeight}px`;
     }
   }, [text]);
+
+  // 로그인 유저 ID 조회
+  useEffect(() => {
+    getAuthUser()
+      .then((me) => setMeId(me._id))
+      .catch(() => setMeId(null));
+  }, []);
 
   // 댓글 등록
   const handleSubmit = async () => {
@@ -84,13 +100,8 @@ export default function CommentBox({
 
       {/* 댓글 목록 */}
       {comments.map((c) => (
-        <div
-          key={c._id}
-          className="mb-10 flex flex-col" /* ← flex-col 으로 바꿈 */
-        >
-          {/* 댓글 내용(가로 영역) */}
+        <div key={c._id} className="mb-10 flex flex-col">
           <div className="flex items-start justify-between">
-            {/* 작성자 정보 + 상대 시간 */}
             <Info
               imageUrl={c.author.image}
               size={32}
@@ -103,18 +114,20 @@ export default function CommentBox({
               {c.comment}
             </p>
 
-            {/* 삭제 버튼 */}
-            <div className="flex flex-col items-end gap-2">
-              <button
-                onClick={() => handleDelete(c._id)}
-                className="text-sm hover:text-gray-600"
-              >
-                삭제
-              </button>
-            </div>
+            {/* 본인 댓글일 때만 삭제 버튼 */}
+            {meId === c.author._id && (
+              <div className="flex flex-col items-end gap-2">
+                <button
+                  onClick={() => handleDelete(c._id)}
+                  className="text-sm hover:text-gray-600"
+                >
+                  삭제
+                </button>
+              </div>
+            )}
           </div>
 
-          {/* 구분선(이제 전체 폭에 걸쳐서 그려짐) */}
+          {/* 구분선 */}
           <hr className="mt-6 w-full border-t border-[#ABABAB]" />
         </div>
       ))}

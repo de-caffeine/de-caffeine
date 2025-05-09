@@ -1,12 +1,13 @@
 import api from './index';
 
-// 댓글 생성
+// 댓글 생성 인터페이스
 export interface Comment {
   _id: string;
   comment: string;
   author: {
     fullName: string;
     image?: string;
+    _id: string;
   };
   createdAt: string;
   updatedAt: string;
