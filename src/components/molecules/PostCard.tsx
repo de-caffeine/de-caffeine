@@ -1,4 +1,3 @@
-// src/components/organisms/PostCard.tsx
 import React from 'react';
 import TimeAgo from '../atoms/TimeAgo';
 import UserName from '../atoms/UserName';
@@ -10,6 +9,8 @@ interface PostCardProps {
   authorName: string;
   createdAt: string | number | Date;
   tags?: string[];
+  onDelete?: () => void; // 삭제 콜백
+  canDelete?: boolean; // 삭제 권한 여부
 }
 
 export default function PostCard({
@@ -19,6 +20,8 @@ export default function PostCard({
   authorName,
   createdAt,
   tags = [],
+  onDelete,
+  canDelete,
 }: PostCardProps) {
   return (
     <div className="h-auto w-[979px] rounded-[5px] border border-[#ABABAB] bg-white px-25 py-8">
@@ -45,15 +48,26 @@ export default function PostCard({
                 key={tag}
                 className="nanum-gothic-regular rounded bg-[#D7CAB9] px-2 py-1 text-xs"
               >
-                #{tag}
+                {tag}
               </span>
             ))}
           </div>
         )}
 
         <div className="flex gap-2">
-          <button className="text-sm hover:text-gray-600">수정</button>
-          <button className="text-sm hover:text-gray-600">삭제</button>
+          {canDelete && (
+            <button className="text-sm hover:text-gray-600">수정</button>
+          )}
+
+          {/* canDelete가 true일 때만 노출 */}
+          {canDelete && (
+            <button
+              onClick={() => onDelete?.()}
+              className="text-sm hover:text-gray-600"
+            >
+              삭제
+            </button>
+          )}
         </div>
       </div>
 
