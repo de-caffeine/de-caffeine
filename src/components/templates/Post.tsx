@@ -15,7 +15,7 @@ interface Like {
   createdAt: string;
 }
 
-export default function PostPage() {
+export default function Post() {
   // const { postId } = useParams<{ postId: string }>(); // 나중에 params 사용
   const postId = '681c4426e932182b47edad9d';
 
