@@ -33,7 +33,7 @@ export default function UserCard({
         <div className="flex min-w-0 flex-1 flex-col gap-2">
           <UserName
             name={UName}
-            className="nanum-gothic-regular top-0 text-[16px]"
+            className="nanum-gothic-bold top-0 text-[16px]"
           />
           <div className="nanum-gothic-regular mb-2 flex justify-baseline gap-4 text-[12px]">
             <span>팔로우 {followCount}</span>
