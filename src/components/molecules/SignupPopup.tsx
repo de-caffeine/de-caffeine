@@ -63,7 +63,7 @@ export default function SignupPopup({ onClose }: { onClose: () => void }) {
       const msg = error.response?.data?.message || error.message;
 
       // 이메일 중복 오류 처리
-      if (msg.includes('Request failed with status code 400')) {
+      if (error.response?.status === 400 && msg.includes('email')) {
         setError('이미 존재하는 이메일입니다.');
       } else {
         setError(msg);
