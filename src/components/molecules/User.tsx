@@ -17,6 +17,7 @@ interface UserProps {
   github?: string;
   velog?: string;
   homepage?: string;
+  followHandler?: () => void;
 }
 
 export default function User({
@@ -31,6 +32,7 @@ export default function User({
   github = '',
   velog = '',
   homepage = '',
+  followHandler,
 }: UserProps) {
   return (
     <>
@@ -83,8 +85,7 @@ export default function User({
           </div>
         </div>
         <div className="nanum-gothic-regular mb-1 flex flex-col items-end gap-1 self-end text-[12px]">
-          {/* TODO onClick 수정필요 */}
-          <Button full size="s" onClick={() => console.log('팔로우클릭')}>
+          <Button full size="s" onClick={followHandler}>
             팔로우
           </Button>
           <div className="flex gap-4">
