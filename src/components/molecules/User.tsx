@@ -10,13 +10,14 @@ interface UserProps {
   followCount?: number;
   followerCount?: number;
   imgUrl?: string;
-  //update - username에서 받아오기
   techStack?: string[];
   introduction?: string;
   email?: string;
   github?: string;
   velog?: string;
   homepage?: string;
+  // pageUserId: string;
+  // currentUserId: string;
   followHandler?: () => void;
 }
 
@@ -25,21 +26,23 @@ export default function User({
   followCount = 0,
   followerCount = 0,
   imgUrl = '',
-  //update - username에서 받아오기
   techStack = [],
   introduction = '',
   email = '',
   github = '',
   velog = '',
   homepage = '',
+  // pageUserId,
+  // currentUserId,
   followHandler,
 }: UserProps) {
+  // const isMe = pageUserId === currentUserId;
   return (
     <>
-      <div className="flex min-h-[184px] w-[970px] items-center justify-between border-b-1 border-b-[#ababab] px-[30px] py-[10px]">
+      <div className="flex min-h-[184px] w-[1128px] items-center justify-between border-b-[1px] border-b-[#ababab] px-[30px] py-[10px]">
         <div className="flex items-center justify-center">
           <UserAvatar size={150} imageUrl={imgUrl} />
-          <div className="ml-8 inline-block flex-col gap-1 self-end">
+          <div className="ml-8 flex flex-col gap-1 self-end">
             <UserName name={name} className="nanum-gothic-bold text-[28px]" />
             {/* tags 배열로 정보 받아와서 맵핑 */}
             <ul className="flex w-[580px] flex-wrap gap-1 leading-none">
@@ -85,7 +88,13 @@ export default function User({
           </div>
         </div>
         <div className="nanum-gothic-regular mb-1 flex flex-col items-end gap-1 self-end text-[12px]">
-          <Button full size="s" onClick={followHandler}>
+          {/* {!isMe && (
+            <Button full size="s" onClick={() => followHandler?.()}>
+              팔로우
+            </Button>
+          )} */}
+
+          <Button full size="s" onClick={() => followHandler?.()}>
             팔로우
           </Button>
           <div className="flex gap-4">
