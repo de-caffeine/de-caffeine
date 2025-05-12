@@ -11,10 +11,10 @@ export default function QuestionCard({ post }: { post: Post }) {
         <div className="items-between flex flex-col">
           <div className="flex h-[90px] flex-col p-[15px]">
             <div className="inline-flex w-[100%] gap-[5px]">
-              <span className="nanum-gothic-bold max-w-[70%] overflow-hidden text-base break-all text-ellipsis whitespace-nowrap">
+              <span className="nanum-gothic-bold line-clamp-1 max-w-[70%] text-base break-all">
                 {JSON.parse(post.title).title}
               </span>
-              {post.channel.description === '해결완료' && (
+              {post.channel.description === '해결' && (
                 <Icon name="completeIcon" size={20} />
               )}
             </div>
@@ -22,10 +22,12 @@ export default function QuestionCard({ post }: { post: Post }) {
               {JSON.parse(post.title).body}
             </div>
           </div>
-          <div className="flex gap-[5px] pl-[15px]">
+          <div className="relative flex gap-[5px] overflow-hidden pl-[15px] whitespace-nowrap">
             {JSON.parse(post.title).tags.map((t: string, index: number) => (
               <Tag key={index}>{t}</Tag>
             ))}
+            <div className="absolute right-[15px] h-[30px] w-[15px] bg-linear-to-r from-transparent to-white" />
+            <div className="absolute right-0 h-[30px] w-[15px] bg-white" />
           </div>
         </div>
       </Link>

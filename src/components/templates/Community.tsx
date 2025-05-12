@@ -15,10 +15,10 @@ export default function Community() {
     };
 
     const fetchAllPosts = async () => {
-      const daily = await getPostsByChannel('681b6760bd535b296ed6fffc');
-      const develop = await getPostsByChannel('681b663760d7dc2aa8be1393');
-      const employ = await getPostsByChannel('681b669660d7dc2aa8be139b');
-      const recruit = await getPostsByChannel('681b66c660d7dc2aa8be139f');
+      const daily = await getPostsByChannel('681d9fee7ffa911fa118e4b5');
+      const develop = await getPostsByChannel('681da0077ffa911fa118e4ba');
+      const employ = await getPostsByChannel('681da0247ffa911fa118e4be');
+      const recruit = await getPostsByChannel('681da0307ffa911fa118e4c2');
       setPosts(
         [...daily, ...develop, ...employ, ...recruit].sort(
           (a, b) =>
@@ -33,19 +33,19 @@ export default function Community() {
         break;
       }
       case '/community/daily': {
-        fetchPosts('681b6760bd535b296ed6fffc');
+        fetchPosts('681d9fee7ffa911fa118e4b5');
         break;
       }
       case '/community/develop': {
-        fetchPosts('681b663760d7dc2aa8be1393');
+        fetchPosts('681da0077ffa911fa118e4ba');
         break;
       }
       case '/community/employ': {
-        fetchPosts('681b669660d7dc2aa8be139b');
+        fetchPosts('681da0247ffa911fa118e4be');
         break;
       }
       case '/community/recruit': {
-        fetchPosts('681b66c660d7dc2aa8be139f');
+        fetchPosts('681da0307ffa911fa118e4c2');
         break;
       }
     }
@@ -53,7 +53,7 @@ export default function Community() {
 
   return (
     <>
-      <div className="flex w-[90%] max-w-[1125px] min-w-[270px] flex-wrap justify-center gap-[15px]">
+      <div className="mb-[20px] flex w-[270px] flex-wrap justify-center gap-[15px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px]">
         {posts.length !== 0 ? (
           posts.map((post) => <CommunityCard key={post._id} post={post} />)
         ) : (

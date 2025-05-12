@@ -15,8 +15,8 @@ export default function Question() {
     };
 
     const fetchAllPosts = async () => {
-      const solved = await getPostsByChannel('681b66f960d7dc2aa8be13a8');
-      const unsolved = await getPostsByChannel('681b66f060d7dc2aa8be13a3');
+      const solved = await getPostsByChannel('681da03c7ffa911fa118e4c6');
+      const unsolved = await getPostsByChannel('681da0447ffa911fa118e4ca');
       setPosts(
         [...solved, ...unsolved].sort(
           (a, b) =>
@@ -31,11 +31,11 @@ export default function Question() {
         break;
       }
       case '/question/unsolved': {
-        fetchPosts('681b66f060d7dc2aa8be13a3');
+        fetchPosts('681da0447ffa911fa118e4ca');
         break;
       }
       case '/question/solved': {
-        fetchPosts('681b66f960d7dc2aa8be13a8');
+        fetchPosts('681da03c7ffa911fa118e4c6');
         break;
       }
     }
