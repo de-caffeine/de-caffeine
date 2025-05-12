@@ -48,10 +48,7 @@ export default function App() {
               <Route path="liked" element={<MyPage />} />
             </Route>
 
-            <Route
-              path="/users/:userId"
-              element={<SubNavigation channel="userId" />}
-            >
+            <Route path="/:userId" element={<SubNavigation channel="userId" />}>
               <Route index element={<UserPage />} />
               <Route path="question" element={<UserPage />} />
               <Route path="comments" element={<UserPage />} />
