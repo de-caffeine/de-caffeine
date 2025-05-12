@@ -3,7 +3,13 @@ import { login, signup } from '../../api/auth';
 import { AxiosError } from 'axios';
 import coffeeBean from '../../assets/images/CoffeeBean.svg';
 
-export default function SignupPopup({ onClose }: { onClose: () => void }) {
+export default function SignupPopup({
+  onClose,
+  onSwitchToLogin,
+}: {
+  onClose: () => void;
+  onSwitchToLogin: () => void;
+}) {
   const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
   const [password, setPassword] = useState('');
@@ -158,7 +164,10 @@ export default function SignupPopup({ onClose }: { onClose: () => void }) {
           >
             회원가입
           </button>
-          <button className="h-[50px] w-full cursor-pointer rounded-[5px] border text-[20px]">
+          <button
+            onClick={onSwitchToLogin}
+            className="h-[50px] w-full cursor-pointer rounded-[5px] border text-[20px]"
+          >
             로그인
           </button>
         </div>

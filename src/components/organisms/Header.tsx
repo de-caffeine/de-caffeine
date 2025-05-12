@@ -3,19 +3,37 @@ import SignupPopup from '../molecules/SignupPopup';
 import LoginPopup from '../molecules/LoginPopup';
 
 export default function Header() {
-  const [showModal, setShowModal] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
 
-  const handleClose = () => {
-    setShowModal(false); // 모달을 닫는 함수
+  const openLogin = () => {
+    setShowSignup(false);
+    setShowLogin(true);
+  };
+
+  const openSignup = () => {
+    setShowLogin(false);
+    setShowSignup(true);
   };
 
   return (
-    <div>
-      <button onClick={() => setShowModal(true)}>로그인</button>
-      {showModal && <LoginPopup onClose={handleClose} />}
-      <button onClick={() => setShowModal(true)}>회원가입</button>
-      {showModal && <SignupPopup onClose={handleClose} />}
-    </div>
+    <>
+      <button onClick={() => setShowLogin(true)}>로그인</button>
+      <button onClick={() => setShowSignup(true)}>회원가입</button>
+      {showLogin && (
+        <LoginPopup
+          onClose={() => setShowLogin(false)}
+          onSwitchToSignup={openSignup}
+        />
+      )}
+
+      {showSignup && (
+        <SignupPopup
+          onClose={() => setShowSignup(false)}
+          onSwitchToLogin={openLogin}
+        />
+      )}
+    </>
     // 고쳐야 할 것: 에러메시지 올바르게 띄우기
   );
 }
