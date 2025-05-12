@@ -45,18 +45,28 @@ export const getPostsByAuthor = (
 // console.log(parsed.body);  // "이곳이 본문입니다."
 
 export const createPost = (
-  title: string,
-  body: string | undefined,
-  channelId: string,
-  imageFile?: File,
+  title: string, // 제목
+  body: string, // 내용
+  channelId: string, //게시판 id
+  tags?: string[], // 태그
+  imageFile?: File, // 이미지
 ) => {
-  // 1) 제목+본문 합쳐서 JSON 문자열로 만든다
-  const payload = JSON.stringify({ title, body });
+  // 제목+본문+태그를 합쳐 JSON 문자열로 만든다
+  const payloadObj: { title: string; body: string; tags?: string[] } = {
+    title,
+    body,
+  };
+  if (tags !== undefined) {
+    payloadObj.tags = tags;
+  }
+  const payload = JSON.stringify(payloadObj);
 
   const form = new FormData();
-  form.append('title', payload); // 원래 title 자리에 JSON 문자열
+  form.append('title', payload);
   form.append('channelId', channelId);
-  if (imageFile) form.append('image', imageFile);
+  if (imageFile) {
+    form.append('image', imageFile);
+  }
 
   return api
     .post('/posts/create', form, {
@@ -69,25 +79,36 @@ export const createPost = (
 export const getPost = (postId: string) =>
   api.get(`/posts/${postId}`).then((res) => res.data);
 
-// 포스트 수정 (FormData)
+// 포스트 수정 (FormData) → tags 필드 추가
 export const updatePost = (
   postId: string,
   title: string,
-  body: string | undefined, // ← 본문 파라미터 추가
+  body: string,
   channelId: string,
-  imageFile: File | null,
+  tags?: string[], // 선택
+  imageFile?: File, // 선택
   imageToDeletePublicId?: string,
 ) => {
-  // 제목+본문을 합쳐 JSON 문자열로 만든다
-  const payload = JSON.stringify({ title, body });
+  // 제목+본문+태그를 합쳐 JSON 문자열로 만든다
+  const payloadObj: { title: string; body: string; tags?: string[] } = {
+    title,
+    body,
+  };
+  if (tags !== undefined) {
+    payloadObj.tags = tags;
+  }
+  const payload = JSON.stringify(payloadObj);
 
   const form = new FormData();
   form.append('postId', postId);
-  form.append('title', payload); // 원래 title 대신 JSON 문자열
+  form.append('title', payload);
   form.append('channelId', channelId);
-  if (imageFile) form.append('image', imageFile);
-  if (imageToDeletePublicId)
+  if (imageFile) {
+    form.append('image', imageFile);
+  }
+  if (imageToDeletePublicId) {
     form.append('imageToDeletePublicId', imageToDeletePublicId);
+  }
 
   return api
     .put('/posts/update', form, {

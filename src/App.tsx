@@ -20,7 +20,6 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Header />}>
             <Route index element={<Main />} />
-
             <Route
               path="/community"
               element={<SubNavigation channel="community" />}
@@ -40,7 +39,6 @@ export default function App() {
               <Route path="solved" element={<Question />} />
               <Route path="unsolved" element={<Question />} />
             </Route>
-
             <Route path="/me" element={<SubNavigation channel="me" />}>
               <Route index element={<MyPage />} />
               <Route path="question" element={<MyPage />} />
@@ -48,7 +46,8 @@ export default function App() {
               <Route path="liked" element={<MyPage />} />
             </Route>
 
-            <Route path=":userId" element={<SubNavigation channel="userId" />}>
+
+            <Route path="/:userId" element={<SubNavigation channel="userId" />}>
               <Route index element={<UserPage />} />
               <Route path="question" element={<UserPage />} />
               <Route path="comments" element={<UserPage />} />

@@ -37,8 +37,8 @@ declare global {
     likes: Like[]; // 게시글에 달린 좋아요
     comments: Comment[]; // 게시글에 달린 댓글
     _id: string; // 게시글 ID
-    image: string | null | undefined; // 게시글 이미지
-    imagePublicId: string | null | undefined; // 게시글 이미지 공개 ID
+    image: string | undefined; // 게시글 이미지
+    imagePublicId: string | undefined; // 게시글 이미지 공개 ID
     title: string; // 게시글 제목 (제목, 내용, 태그)
     channel: Channel; // 게시글이 속한 채널
     author: User; // 게시글 작성자
