@@ -57,7 +57,7 @@ export default function CommunityCard({ post }: { post: Post }) {
               {JSON.parse(post.title).title}
             </h3>
             <p className="nanum-gothic-regular line-clamp-2 text-sm">
-              {JSON.parse(post.title).body}
+              {JSON.parse(post.title).body.replace(/<[^>]*>?/g, '')}
             </p>
           </div>
         </Link>
