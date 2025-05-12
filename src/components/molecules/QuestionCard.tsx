@@ -2,60 +2,46 @@ import Tag from '../atoms/Tag';
 import Icon from '../atoms/Icon';
 import Info from '../atoms/Info';
 import Interest from '../atoms/Interest';
+import { Link } from 'react-router-dom';
 
-interface QuestionCardProps {
-  title: string;
-  content: string;
-  tags: string[];
-  name: string;
-  ImgUrl?: string;
-  timestamp: string | number | Date;
-  solved: boolean;
-  commentCount: number;
-  likeCount: number;
-  isLike: boolean;
-}
-
-export default function QuestionCard({
-  title,
-  content,
-  tags,
-  name,
-  ImgUrl,
-  timestamp,
-  solved,
-  commentCount,
-  likeCount,
-  isLike,
-}: QuestionCardProps) {
+export default function QuestionCard({ post }: { post: Post }) {
   return (
-    <div className="mx-auto h-[182px] w-[978px] rounded-[5px] border border-[#d9d9d9] p-[16px]">
-      <div className="mb-1 flex items-center">
-        <span className="nanum-gothic-bold mr-1 line-clamp-1 text-base text-[#000000]">
-          {title}
-        </span>
-        {/* solved가 true일 때 해결아이콘 */}
-        {solved && <Icon name="completeIcon" size={24} />}
-      </div>
-      <div className="nanum-gothic-regular mb-2 line-clamp-2 text-sm text-[#000000]">
-        {content}
-      </div>
-      <div className="mb-[10px] flex gap-[5px]">
-        {tags
-          .slice(0, 2)
-          .map(
-            (t) =>
-              t.trim() !== '' && (
-                <Tag className="">{t.trim().toUpperCase()}</Tag>
-              ),
-          )}
-      </div>
-      <div className="flex items-center justify-between border-t border-[#d9d9d9] pt-[6px]">
-        <Info imageUrl={ImgUrl} timestamp={timestamp} name={name} />
+    <div className="flex h-[190px] w-[100%] flex-col justify-between rounded-[5px] border border-[#d9d9d9]">
+      <Link to={`/post/${post._id}`}>
+        <div className="items-between flex flex-col">
+          <div className="flex h-[90px] flex-col p-[15px]">
+            <div className="inline-flex w-[100%] gap-[5px]">
+              <span className="nanum-gothic-bold line-clamp-1 max-w-[70%] text-base break-all">
+                {JSON.parse(post.title).title}
+              </span>
+              {post.channel.description === '해결' && (
+                <Icon name="completeIcon" size={20} />
+              )}
+            </div>
+            <div className="nanum-gothic-regular line-clamp-2 text-sm text-[#000000]">
+              {JSON.parse(post.title).body}
+            </div>
+          </div>
+          <div className="relative flex gap-[5px] overflow-hidden pl-[15px] whitespace-nowrap">
+            {JSON.parse(post.title).tags.map((t: string, index: number) => (
+              <Tag key={index}>{t}</Tag>
+            ))}
+            <div className="absolute right-[15px] h-[30px] w-[15px] bg-linear-to-r from-transparent to-white" />
+            <div className="absolute right-0 h-[30px] w-[15px] bg-white" />
+          </div>
+        </div>
+      </Link>
+      <div className="mx-[10px] flex flex-row items-center justify-between border-t border-[#d9d9d9] px-[5px] py-[10px]">
+        <Info
+          size={30}
+          userName={post.author.fullName}
+          timestamp={post.createdAt}
+          imageUrl={post.author.image}
+        />
         <Interest
-          commentCount={commentCount}
-          likeCount={likeCount}
-          isLike={isLike}
+          commentCount={post.comments.length}
+          like={{ likeCount: post.likes.length, isLike: false }}
+          _id={post._id}
         />
       </div>
     </div>
