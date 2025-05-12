@@ -26,7 +26,6 @@ export default function Header() {
           onSwitchToSignup={openSignup}
         />
       )}
-
       {showSignup && (
         <SignupPopup
           onClose={() => setShowSignup(false)}
