@@ -59,20 +59,31 @@ export default function SignupPopup({ onClose }: { onClose: () => void }) {
       // 모달 닫기
       onClose();
     } catch (err) {
-      const error = err as AxiosError<{ message: string }>;
-      const msg = error.response?.data?.message || error.message;
+      let msg = '알 수 없는 오류가 발생했습니다.';
+      const axiosError = err as AxiosError<{ message?: string }>;
+      msg =
+        (typeof axiosError.response?.data === 'string'
+          ? axiosError.response.data
+          : axiosError.response?.data?.message) ||
+        axiosError.message ||
+        msg;
 
       // 이메일 중복 오류 처리
-      if (error.response?.status === 400 && msg.includes('email')) {
+      if (
+        axiosError.response?.status === 400 &&
+        msg.includes('The email address is already being used.')
+      ) {
         setError('이미 존재하는 이메일입니다.');
-      } else {
-        setError(msg);
+        console.log(msg);
+        return;
       }
+
+      setError(msg);
     }
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+    <div className="nanum-gothic-regular fixed inset-0 flex items-center justify-center bg-black/50">
       <div className="relative rounded-[15px] bg-white p-7 shadow-inner">
         <button
           onClick={onClose}
