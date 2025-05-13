@@ -12,9 +12,8 @@ const getTabData = (
   ],
   question: [
     { name: '전체', path: '/question' },
-    { name: '미해결', path: '/question/solved' },
-    { name: '해결완료', path: '/question/unsolved' },
-
+    { name: '미해결', path: '/question/unsolved' },
+    { name: '해결완료', path: '/question/solved' },
   ],
   users: [
     { name: '전체', path: '/users' },
@@ -22,7 +21,6 @@ const getTabData = (
     { name: '오프라인', path: '/users/offline' },
   ],
   userId: [
-
     { name: '프로필', path: `/user/${userId}` },
     { name: `${userId}의 질문`, path: `/user/${userId}/question` },
     { name: '작성한 댓글', path: `/user/${userId}/comments` },

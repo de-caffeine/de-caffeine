@@ -3,9 +3,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import Info from '../atoms/Info';
 import { getAuthUser } from '../../api/auth';
 import { createComment, deleteComment } from '../../api/comments';
+import { createNotification } from '../../api/notifications';
 
 interface CommentBoxProps {
   postId: string;
+  postAuthorId: string;
   initialComments?: Comment[]; // API 쪽 Comment[]
 }
 
@@ -25,6 +27,7 @@ export interface Comment {
 
 export default function CommentBox({
   postId,
+  postAuthorId,
   initialComments = [],
 }: CommentBoxProps) {
   const [comments, setComments] = useState<Comment[]>(initialComments);
@@ -55,6 +58,13 @@ export default function CommentBox({
       const newComment = await createComment(postId, text);
       setComments((prev) => [...prev, newComment]);
       setText('');
+      // 2) 알림 생성
+      await createNotification({
+        notificationType: 'COMMENT', // 고정: COMMENT
+        notificationTypeId: newComment._id, // 방금 생성된 댓글 ID
+        userId: postAuthorId, // 알림 받을 사람(포스트 작성자) ID
+        postId: postId, // 댓글이 달린 포스트 ID
+      });
     } catch {
       alert('댓글 작성에 실패했습니다.');
     }
@@ -109,11 +119,6 @@ export default function CommentBox({
               timestamp={c.createdAt}
             />
 
-            {/* 댓글 텍스트 */}
-            <p className="nanum-gothic-regular ml-4 flex-1 leading-relaxed whitespace-pre-line">
-              {c.comment}
-            </p>
-
             {/* 본인 댓글일 때만 삭제 버튼 */}
             {meId === c.author._id && (
               <div className="flex flex-col items-end gap-2">
@@ -126,6 +131,10 @@ export default function CommentBox({
               </div>
             )}
           </div>
+          {/* 댓글 텍스트 */}
+          <p className="nanum-gothic-regular flex-1 leading-relaxed whitespace-pre-line">
+            {c.comment}
+          </p>
 
           {/* 구분선 */}
           <hr className="mt-6 w-full border-t border-[#ABABAB]" />
