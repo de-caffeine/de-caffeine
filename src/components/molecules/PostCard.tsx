@@ -91,7 +91,7 @@ export default function PostCard({
 
       <hr className="mb-6 border-t border-[#ABABAB]" />
 
-      {/* 이미지 */}
+      {/* 커버 이미지 포스트에서 보이게 */}
       {/* {imageUrl && (
         <img
           src={imageUrl}
