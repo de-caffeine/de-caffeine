@@ -4,9 +4,9 @@ import CommentIcon from '../../assets/images/comment_icon.svg';
 import AddIcon from '../../assets/images/comment_icon.svg';
 import ArrowRightIcon from '../../assets/images/arrow_right_icon.svg';
 import ArrowLeftIcon from '../../assets/images/arrow_left_icon.svg';
+import alarmIcon from '../../assets/images/alarmIcon.svg';
+import chatIcon from '../../assets/images/chatIcon.svg';
 
-import alarmIcon from '../../assets/images/alarmIcon.png';
-import chatIcon from '../../assets/images/chatIcon.png';
 import mailIcon from '../../assets/images/mailIcon.png';
 import githubIcon from '../../assets/images/githubIcon.png';
 import velogIcon from '../../assets/images/velogIcon.png';

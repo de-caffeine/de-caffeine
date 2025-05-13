@@ -56,7 +56,7 @@ export default function LoginPopup({
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="nanum-gothic-regular relative rounded-[15px] bg-white p-7 shadow-inner">
         <button
           onClick={onClose}
