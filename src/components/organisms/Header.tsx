@@ -8,11 +8,14 @@ import SearchBar from '../atoms/SearchBar';
 import Icon from '../atoms/Icon';
 import UserAvatar from '../atoms/UserAvatar';
 import { getAuthUser, logout } from '../../api/auth';
+import { useLoginStore } from '../../loginStore';
 
 export default function Header() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { myInfo, deleteLoginInfo, saveLoginInfo } = useLoginStore();
+  const isLoggedIn = !!myInfo && Object.keys(myInfo).length > 0;
   const [showDropdown, setShowDropdown] = useState(false);
   const avatarRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -51,7 +54,7 @@ export default function Header() {
     }
     localStorage.removeItem('accessToken');
 
-    setIsLoggedIn(false);
+    deleteLoginInfo();
     setShowDropdown(false);
   };
 
@@ -59,10 +62,8 @@ export default function Header() {
     const token = localStorage.getItem('accessToken');
     if (token) {
       getAuthUser()
-        .then(() => setIsLoggedIn(true))
-        .catch(() => setIsLoggedIn(false));
-    } else {
-      setIsLoggedIn(false);
+        .then((user) => saveLoginInfo(user))
+        .catch(() => deleteLoginInfo());
     }
   }, [showLogin, showSignup]); // 로그인/회원가입 팝업 열고 닫힐 때 상태 재확인
   console.log(isLoggedIn, showDropdown);
