@@ -1,9 +1,10 @@
+// src/components/pages/Post.tsx
 import React, { useEffect, useState } from 'react';
-// import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { getPost, deletePost } from '../../api/posts';
 import { getAuthUser } from '../../api/auth'; // 로그인 사용자 정보 불러오기
 import { likePost, unlikePost } from '../../api/likes'; // 좋아요 생성/취소 API
+import { createNotification } from '../../api/notifications'; // ← 추가
 import PostCard from '../molecules/PostCard';
 import CommentBox, { Comment } from '../molecules/CommentBox';
 import FloatingButton from '../atoms/FloatingButton';
@@ -15,9 +16,8 @@ interface Like {
   createdAt: string;
 }
 
-export default function PostPage() {
-  // const { postId } = useParams<{ postId: string }>(); // 나중에 params 사용
-  const postId = '681c4426e932182b47edad9d';
+export default function Post() {
+  const { postId } = useParams<{ postId: string }>(); // 나중에 params 사용
   const navigate = useNavigate();
 
   // --- 상태 정의 ---
@@ -62,13 +62,17 @@ export default function PostPage() {
     })();
   }, [postId]);
 
+  // postId가 없으면 404
+  if (!postId) {
+    return <Navigate to="*" replace />;
+  }
+
   // 4) 포스트 삭제 핸들러
   const handleDeletePost = async () => {
     if (!confirm('정말 이 포스트를 삭제하시겠습니까?')) return;
     try {
       await deletePost(postId);
       alert('삭제되었습니다.');
-      // 삭제 후 목록 페이지로 이동
       navigate('/posts');
     } catch (err) {
       console.error(err);
@@ -77,7 +81,7 @@ export default function PostPage() {
   };
 
   if (loading) return <p>로딩 중…</p>;
-  if (error) return <p style={{ color: 'red' }}>에러: {error}</p>;
+  if (error) return <Navigate to="*" replace />;
   if (!post) return null;
 
   // 5) title/body/tags JSON 파싱 (임시 방편)
@@ -107,6 +111,18 @@ export default function PostPage() {
       setLikes((prev) => [...prev, newLike]);
       setIsLiked(true);
       setMyLikeId(newLike._id);
+
+      // 좋아요 알림 생성
+      try {
+        await createNotification({
+          notificationType: 'LIKE', // 알림 타입: LIKE
+          notificationTypeId: newLike._id, // 생성된 좋아요 ID
+          userId: post.author._id, // 알림 받을 사람(포스트 작성자) ID
+          postId: postId, // 좋아요가 달린 포스트 ID
+        });
+      } catch (e) {
+        console.error('좋아요 알림 생성 실패', e);
+      }
     }
   };
 
@@ -122,12 +138,16 @@ export default function PostPage() {
         authorName={post.author.fullName}
         createdAt={post.createdAt}
         tags={parsedTags}
-        canDelete={canDelete} // 삭제 권한 플래그 전달
-        onDelete={handleDeletePost} // 삭제 핸들러 전달
+        canDelete={canDelete}
+        onDelete={handleDeletePost}
       />
 
       {/* 댓글 입력/목록 */}
-      <CommentBox postId={postId} initialComments={comments} />
+      <CommentBox
+        postId={postId}
+        initialComments={comments}
+        postAuthorId={post.author._id}
+      />
 
       {/* 좋아요 FloatingButton */}
       <div className="fixed top-100 right-40">
