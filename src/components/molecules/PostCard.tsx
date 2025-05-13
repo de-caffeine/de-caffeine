@@ -92,13 +92,13 @@ export default function PostCard({
       <hr className="mb-6 border-t border-[#ABABAB]" />
 
       {/* 이미지 */}
-      {imageUrl && (
+      {/* {imageUrl && (
         <img
           src={imageUrl}
           alt="post"
           className="mb-6 max-h-[600px] w-full rounded-[5px]"
         />
-      )}
+      )} */}
 
       {/* 본문 */}
       <ReactQuill
