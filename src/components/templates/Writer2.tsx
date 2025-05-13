@@ -36,10 +36,13 @@ export default function Writer2({
   const [title, setTitle] = useState(state?.title ?? '');
   const [editor, setEditor] = useState(state?.body ?? '');
   const [tags, setTags] = useState(state?.tags?.join(',') ?? '');
-  const [previewUrl, setPreviewUrl] = useState<string | undefined>(
+
+  // 커버용 상태 분리
+  const [coverFile, setCoverFile] = useState<File>();
+  const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | undefined>(
     state?.imageUrl,
   );
-  const [imageFile, setImageFile] = useState<File>();
+
   const [loading, setLoading] = useState(false);
   const quillRef = useRef<ReactQuill>(null);
 
@@ -51,7 +54,7 @@ export default function Writer2({
           setTitle(data.title);
           setEditor(data.body);
           setTags((data.tags ?? []).join(','));
-          if (data.image) setPreviewUrl(data.image);
+          if (data.image) setCoverPreviewUrl(data.image);
         })
         .catch((err) => {
           console.error('포스트 불러오기 실패', err);
@@ -59,15 +62,15 @@ export default function Writer2({
     }
   }, [postId, state]);
 
-  // 이미지 파일 선택 시 미리보기 URL 생성
+  // 커버 파일 선택 시 미리보기 URL 생성
   useEffect(() => {
-    if (!imageFile) return;
-    const url = URL.createObjectURL(imageFile);
-    setPreviewUrl(url);
+    if (!coverFile) return;
+    const url = URL.createObjectURL(coverFile);
+    setCoverPreviewUrl(url);
     return () => URL.revokeObjectURL(url);
-  }, [imageFile]);
+  }, [coverFile]);
 
-  // Quill 커스텀 이미지 핸들러
+  // Quill 커스텀 이미지 핸들러 (커버 상태 건드리지 않음)
   const imageHandler = useCallback(() => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -76,7 +79,6 @@ export default function Writer2({
     input.onchange = () => {
       const file = input.files?.[0];
       if (!file) return;
-      setImageFile(file);
       const reader = new FileReader();
       reader.onload = () => {
         const range = quillRef.current?.getEditor().getSelection(true);
@@ -104,6 +106,7 @@ export default function Writer2({
     }),
     [imageHandler],
   );
+
   const formats = useMemo(
     () => [
       'header',
@@ -130,34 +133,33 @@ export default function Writer2({
       // 임시 테스트용 로그인
       await login('lhw971103@gmail.com', 'fnskq787!');
 
+      const tagArray = tags
+        .split(',')
+        .map((t) => t.trim())
+        .filter(Boolean);
+
       if (postId) {
         // 수정 모드
         await updatePost(
           postId,
           title,
           editor,
-          channelId,
-          tags.split(',').map((t) => t.trim()),
-          imageFile,
+          channelId!,
+          tagArray,
+          coverFile,
         );
         alert('포스트가 성공적으로 수정되었습니다!');
         navigate(`/post/${postId}`);
       } else {
         // 새 글 작성 모드
-        await createPost(
-          title,
-          editor,
-          channelId,
-          tags.split(',').map((t) => t.trim()),
-          imageFile,
-        );
+        await createPost(title, editor, channelId!, tagArray, coverFile);
         alert('포스트가 성공적으로 생성되었습니다!');
         // 입력값 초기화
         setTitle('');
         setEditor('');
         setTags('');
-        setImageFile(undefined);
-        setPreviewUrl(undefined);
+        setCoverFile(undefined);
+        setCoverPreviewUrl(undefined);
       }
     } catch (err: any) {
       console.error(err);
@@ -165,7 +167,7 @@ export default function Writer2({
     } finally {
       setLoading(false);
     }
-  }, [postId, title, editor, tags, imageFile, channelId, navigate]);
+  }, [postId, title, editor, tags, coverFile, channelId, navigate]);
 
   return (
     <div className="nanum-gothic-regular flex min-h-[700px] w-[1200px] gap-4 px-30 py-5">
@@ -214,13 +216,13 @@ export default function Writer2({
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => setImageFile(e.target.files?.[0])}
+            onChange={(e) => setCoverFile(e.target.files?.[0])}
           />
-          {previewUrl && (
+          {coverPreviewUrl && (
             <img
-              src={previewUrl}
+              src={coverPreviewUrl}
               alt="커버 이미지 미리보기"
-              className="mt-2 max-h-[200px] max-w-[200px] rounded-[5px]"
+              className="mt-2 max-h-[200px] max-w-[200px] rounded-[5px] object-cover"
             />
           )}
         </div>
