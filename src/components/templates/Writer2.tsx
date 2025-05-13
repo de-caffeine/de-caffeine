@@ -10,7 +10,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 // import { useAuth } from '../../contexts/AuthContext'; // 나중에 전역 로그인 관리용
-import { login } from '../../api/auth';
+import { login, logout } from '../../api/auth';
 import { createPost, getPost, updatePost } from '../../api/posts';
 
 interface LocationState {
@@ -131,6 +131,7 @@ export default function Writer2({
     setLoading(true);
     try {
       // 임시 테스트용 로그인
+      await logout;
       await login('lhw971103@gmail.com', 'fnskq787!');
 
       const tagArray = tags

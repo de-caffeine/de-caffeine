@@ -1,8 +1,10 @@
+// src/components/pages/Post.tsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { getPost, deletePost } from '../../api/posts';
 import { getAuthUser } from '../../api/auth'; // 로그인 사용자 정보 불러오기
 import { likePost, unlikePost } from '../../api/likes'; // 좋아요 생성/취소 API
+import { createNotification } from '../../api/notifications'; // ← 추가
 import PostCard from '../molecules/PostCard';
 import CommentBox, { Comment } from '../molecules/CommentBox';
 import FloatingButton from '../atoms/FloatingButton';
@@ -16,7 +18,6 @@ interface Like {
 
 export default function Post() {
   const { postId } = useParams<{ postId: string }>(); // 나중에 params 사용
-  // const postId = '6821a6ca4a4df65ad1268b46';
   const navigate = useNavigate();
 
   // --- 상태 정의 ---
@@ -60,7 +61,8 @@ export default function Post() {
       }
     })();
   }, [postId]);
-  // postid가 없을시에 에러404
+
+  // postId가 없으면 404
   if (!postId) {
     return <Navigate to="*" replace />;
   }
@@ -71,7 +73,6 @@ export default function Post() {
     try {
       await deletePost(postId);
       alert('삭제되었습니다.');
-      // 삭제 후 목록 페이지로 이동
       navigate('/posts');
     } catch (err) {
       console.error(err);
@@ -110,6 +111,18 @@ export default function Post() {
       setLikes((prev) => [...prev, newLike]);
       setIsLiked(true);
       setMyLikeId(newLike._id);
+
+      // 좋아요 알림 생성
+      try {
+        await createNotification({
+          notificationType: 'LIKE', // 알림 타입: LIKE
+          notificationTypeId: newLike._id, // 생성된 좋아요 ID
+          userId: post.author._id, // 알림 받을 사람(포스트 작성자) ID
+          postId: postId, // 좋아요가 달린 포스트 ID
+        });
+      } catch (e) {
+        console.error('좋아요 알림 생성 실패', e);
+      }
     }
   };
 
@@ -125,8 +138,8 @@ export default function Post() {
         authorName={post.author.fullName}
         createdAt={post.createdAt}
         tags={parsedTags}
-        canDelete={canDelete} // 삭제 권한 플래그 전달
-        onDelete={handleDeletePost} // 삭제 핸들러 전달
+        canDelete={canDelete}
+        onDelete={handleDeletePost}
       />
 
       {/* 댓글 입력/목록 */}
