@@ -46,7 +46,6 @@ export default function App() {
               <Route path="liked" element={<MyPage />} />
             </Route>
 
-
             <Route path="/:userId" element={<SubNavigation channel="userId" />}>
               <Route index element={<UserPage />} />
               <Route path="question" element={<UserPage />} />
@@ -63,7 +62,12 @@ export default function App() {
             <Route path="/post/:postId" element={<Post />} />
             <Route path="/writer" element={<Writer />} />
 
-            <Route path="/search/:keyword" element={<Search />} />
+            <Route path="/search/:keyword">
+              <Route index element={<Search />} />
+              <Route path="community" element={<Search />} />
+              <Route path="question" element={<Search />} />
+              <Route path="user" element={<Search />} />
+            </Route>
             <Route path="/setting" element={<Setting />} />
           </Route>
 
