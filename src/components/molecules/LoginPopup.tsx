@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { login } from '../../api/auth'; // 로그인 API
 import { AxiosError } from 'axios';
 import coffeeBean from '../../assets/images/CoffeeBean.svg';
+import { useLoginStore } from '../../loginStore';
 
 export default function LoginPopup({
   onClose,
@@ -13,6 +14,7 @@ export default function LoginPopup({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const { saveLoginInfo } = useLoginStore();
 
   const handleLogin = async () => {
     setError('');
@@ -25,6 +27,7 @@ export default function LoginPopup({
     try {
       const res = await login(email, password);
       localStorage.setItem('accessToken', res.token); // 로그인 성공 시 토큰 저장
+      saveLoginInfo(res); // 전역 변수에 내 유저 정보 저장
       onClose(); // 팝업 닫기
     } catch (err) {
       let msg = '알 수 없는 오류가 발생했습니다.';
@@ -53,7 +56,7 @@ export default function LoginPopup({
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="nanum-gothic-regular relative rounded-[15px] bg-white p-7 shadow-inner">
         <button
           onClick={onClose}
