@@ -3,6 +3,7 @@ declare global {
   interface User {
     _id: string; // 사용자 ID
     fullName: string; // 사용자 이름
+    username: string; // 사용자 기타 정보 (한 줄 소개, 기술스택, 소셜 정보)
     email: string; // 사용자 이메일
     coverImage: string; // 커버 이미지 (한 줄 설명, 기술스택 태그)
     image: string; // 프로필 이미지
@@ -37,8 +38,8 @@ declare global {
     likes: Like[]; // 게시글에 달린 좋아요
     comments: Comment[]; // 게시글에 달린 댓글
     _id: string; // 게시글 ID
-    image: string | null | undefined; // 게시글 이미지
-    imagePublicId: string | null | undefined; // 게시글 이미지 공개 ID
+    image: string | undefined; // 게시글 이미지
+    imagePublicId: string | undefined; // 게시글 이미지 공개 ID
     title: string; // 게시글 제목 (제목, 내용, 태그)
     channel: Channel; // 게시글이 속한 채널
     author: User; // 게시글 작성자

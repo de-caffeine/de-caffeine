@@ -1,15 +1,15 @@
-import axios from "axios";
+import axios from 'axios';
 
 const api = axios.create({
-  baseURL: "http://13.125.208.179:5010",
+  baseURL: 'http://13.125.208.179:5010',
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
 // 요청 보낼 때 자동으로 JWT 토큰 붙이기
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("accessToken"); // 저장된 토큰 불러오기
+  const token = localStorage.getItem('accessToken'); // 저장된 토큰 불러오기
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -24,9 +24,9 @@ api.interceptors.response.use(
     const msg = err.response?.data || err.message;
 
     if (status === 401) {
-      alert("인증이 필요합니다. 로그인 해주세요.");
+      alert('인증이 필요합니다. 로그인 해주세요.');
     } else if (status >= 500) {
-      alert("서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
+      alert('서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
     } else if (status === 400) {
       alert(`잘못된 요청입니다: ${msg}`);
     } else {
@@ -34,7 +34,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(err);
-  }
+  },
 );
 
 export default api;

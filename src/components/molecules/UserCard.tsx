@@ -1,24 +1,4 @@
-import Tag from '../atoms/Tag';
-import UserAvatar from '../atoms/UserAvatar';
-import UserName from '../atoms/UserName';
-
-interface UserCardProps {
-  UName: string;
-  followCount?: number;
-  followerCount?: number;
-  tags?: string[];
-  imgUrl?: string;
-  loginStatus?: 'offline' | 'online';
-}
-
-export default function UserCard({
-  UName = '',
-  followCount = 0,
-  followerCount = 0,
-  tags = [],
-  imgUrl = '',
-  loginStatus = 'offline',
-}: UserCardProps) {
+export default function UserCard() {
   return (
     <>
       <div className="r-[5px] flex h-[140px] w-[310px] gap-4 rounded-[5px] border-[1px] border-[#d9d9d9] p-[20px]">
