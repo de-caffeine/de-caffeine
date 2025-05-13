@@ -109,11 +109,6 @@ export default function CommentBox({
               timestamp={c.createdAt}
             />
 
-            {/* 댓글 텍스트 */}
-            <p className="nanum-gothic-regular ml-4 flex-1 leading-relaxed whitespace-pre-line">
-              {c.comment}
-            </p>
-
             {/* 본인 댓글일 때만 삭제 버튼 */}
             {meId === c.author._id && (
               <div className="flex flex-col items-end gap-2">
@@ -126,6 +121,10 @@ export default function CommentBox({
               </div>
             )}
           </div>
+          {/* 댓글 텍스트 */}
+          <p className="nanum-gothic-regular flex-1 leading-relaxed whitespace-pre-line">
+            {c.comment}
+          </p>
 
           {/* 구분선 */}
           <hr className="mt-6 w-full border-t border-[#ABABAB]" />
