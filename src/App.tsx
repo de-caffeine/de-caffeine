@@ -10,7 +10,7 @@ import Search from './components/templates/Search';
 import Setting from './components/templates/Setting';
 import MyPage from './components/templates/MyPage';
 import Post from './components/templates/Post';
-import Writer from './components/templates/Writer';
+import Writer from './components/templates/Writer2';
 import UserPage from './components/templates/UserPage';
 
 export default function App() {
@@ -46,7 +46,6 @@ export default function App() {
               <Route path="liked" element={<MyPage />} />
             </Route>
 
-
             <Route path="/:userId" element={<SubNavigation channel="userId" />}>
               <Route index element={<UserPage />} />
               <Route path="question" element={<UserPage />} />
@@ -61,7 +60,7 @@ export default function App() {
             </Route>
 
             <Route path="/post/:postId" element={<Post />} />
-            <Route path="/writer" element={<Writer />} />
+            <Route path="writer/:postId?" element={<Writer />} />
 
             <Route path="/search/:keyword" element={<Search />} />
             <Route path="/setting" element={<Setting />} />
