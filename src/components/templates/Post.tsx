@@ -130,7 +130,11 @@ export default function Post() {
       />
 
       {/* 댓글 입력/목록 */}
-      <CommentBox postId={postId} initialComments={comments} />
+      <CommentBox
+        postId={postId}
+        initialComments={comments}
+        postAuthorId={post.author._id}
+      />
 
       {/* 좋아요 FloatingButton */}
       <div className="fixed top-100 right-40">
