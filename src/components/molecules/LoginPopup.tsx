@@ -26,7 +26,8 @@ export default function LoginPopup({
 
     try {
       const res = await login(email, password);
-      saveLoginInfo(res, res.token); // 로그인 성공 시 전역 변수, 로컬 스토리지에 내 유저 정보, 토큰 저장
+      localStorage.setItem('accessToken', res.token); // 로그인 성공 시 토큰 저장
+      saveLoginInfo(res); // 전역 변수에 내 유저 정보 저장
       onClose(); // 팝업 닫기
     } catch (err) {
       let msg = '알 수 없는 오류가 발생했습니다.';
@@ -55,7 +56,7 @@ export default function LoginPopup({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50">
       <div className="nanum-gothic-regular relative rounded-[15px] bg-white p-7 shadow-inner">
         <button
           onClick={onClose}
