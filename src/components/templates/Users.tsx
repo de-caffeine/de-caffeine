@@ -47,7 +47,15 @@ export default function Users() {
   if (error) {
     return <p className="py-8 text-center text-red-500">{error}</p>;
   }
-  if (!users.length) {
+
+  //유저 상황에 따라 안내 메시지
+  if (filteredUsers.length === 0) {
+    if (location.pathname.endsWith('/online')) {
+      return <p className="py-8 text-center">온라인 유저가 없습니다.</p>;
+    }
+    if (location.pathname.endsWith('/offline')) {
+      return <p className="py-8 text-center">오프라인 유저가 없습니다.</p>;
+    }
     return <p className="py-8 text-center">등록된 유저가 없습니다.</p>;
   }
   return (
@@ -58,7 +66,7 @@ export default function Users() {
             UName={user.fullName}
             followCount={user.following.length}
             followerCount={user.followers.length}
-            // tags={user.tag}
+            tags={user.username ? JSON.parse(user.username).tags : []}
             imgUrl={user.image}
             loginStatus={user.isOnline ? 'online' : 'offline'}
           />
