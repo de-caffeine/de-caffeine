@@ -16,8 +16,8 @@ interface UserProps {
   github?: string;
   velog?: string;
   homepage?: string;
-  // pageUserId: string;
-  // currentUserId: string;
+  isMe?: boolean;
+
   followHandler?: () => void;
 }
 
@@ -32,11 +32,9 @@ export default function User({
   github = '',
   velog = '',
   homepage = '',
-  // pageUserId,
-  // currentUserId,
+  isMe = false,
   followHandler,
 }: UserProps) {
-  // const isMe = pageUserId === currentUserId;
   return (
     <>
       <div className="flex min-h-[184px] w-[1128px] items-center justify-between border-b-[1px] border-b-[#ababab] px-[30px] py-[10px]">
@@ -88,15 +86,15 @@ export default function User({
           </div>
         </div>
         <div className="nanum-gothic-regular mb-1 flex flex-col items-end gap-1 self-end text-[12px]">
-          {/* {!isMe && (
+          {!isMe && (
             <Button full size="s" onClick={() => followHandler?.()}>
               팔로우
             </Button>
-          )} */}
+          )}
 
-          <Button full size="s" onClick={() => followHandler?.()}>
+          {/* <Button full size="s" onClick={() => followHandler?.()}>
             팔로우
-          </Button>
+          </Button> */}
           <div className="flex gap-4">
             <span>팔로우 {followCount}</span>
             <span>팔로워 {followerCount}</span>
