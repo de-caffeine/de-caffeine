@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import imageicon from '../../assets/images/free-icon-image-565801.png';
 
 export default function Writer() {
   const [title, setTitle] = useState('');
@@ -97,6 +98,9 @@ ${selected}
             >
               {'<>'}
             </button>
+            <button className="rounded border px-2 py-1 hover:bg-gray-100">
+              <img className="h-5 w-5" src={imageicon} alt="그림삽입 이미지" />
+            </button>
           </div>
           <textarea
             ref={textareaRef}
@@ -112,6 +116,7 @@ ${selected}
           </button>
         </div>
       </div>
+      {/* 미리보기 페이지 */}
       <div className="flex-1 overflow-auto rounded-[5px] border border-[#ABABAB] p-4">
         <h1 className="mb-2 text-3xl font-bold">{title}</h1>
         {tagList.length > 0 && (
@@ -152,7 +157,7 @@ ${selected}
                   return (
                     <SyntaxHighlighter
                       {...rest}
-                      language="textile"
+                      language="tsx"
                       style={materialLight}
                       PreTag="div"
                     >

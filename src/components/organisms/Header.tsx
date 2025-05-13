@@ -1,7 +1,7 @@
-
 import { useState } from 'react';
 import SignupPopup from '../molecules/SignupPopup';
 import LoginPopup from '../molecules/LoginPopup';
+import { Outlet } from 'react-router-dom';
 
 export default function Header() {
   const [showLogin, setShowLogin] = useState(false);
@@ -33,6 +33,7 @@ export default function Header() {
           onSwitchToLogin={openLogin}
         />
       )}
+      <Outlet />
     </>
     // 고쳐야 할 것: 에러메시지 올바르게 띄우기
   );

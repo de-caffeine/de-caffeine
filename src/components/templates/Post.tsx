@@ -80,7 +80,7 @@ export default function Post() {
   };
 
   if (loading) return <p>로딩 중…</p>;
-  if (error) return <p style={{ color: 'red' }}>에러: {error}</p>;
+  if (error) return <Navigate to="*" replace />;
   if (!post) return null;
 
   // 5) title/body/tags JSON 파싱 (임시 방편)
