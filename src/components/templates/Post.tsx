@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { getPost, deletePost } from '../../api/posts';
 import { getAuthUser } from '../../api/auth'; // 로그인 사용자 정보 불러오기
 import { likePost, unlikePost } from '../../api/likes'; // 좋아요 생성/취소 API
@@ -15,9 +14,9 @@ interface Like {
   createdAt: string;
 }
 
-export default function PostPage() {
-  // const { postId } = useParams<{ postId: string }>(); // 나중에 params 사용
-  const postId = '681c4426e932182b47edad9d';
+export default function Post() {
+  const { postId } = useParams<{ postId: string }>(); // 나중에 params 사용
+  // const postId = '6821a6ca4a4df65ad1268b46';
   const navigate = useNavigate();
 
   // --- 상태 정의 ---
@@ -61,6 +60,10 @@ export default function PostPage() {
       }
     })();
   }, [postId]);
+  // postid가 없을시에 에러404
+  if (!postId) {
+    return <Navigate to="*" replace />;
+  }
 
   // 4) 포스트 삭제 핸들러
   const handleDeletePost = async () => {

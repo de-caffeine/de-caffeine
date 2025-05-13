@@ -1,6 +1,10 @@
 import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom'; // 추가: useNavigate, useParams import
 import TimeAgo from '../atoms/TimeAgo';
 import UserName from '../atoms/UserName';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
+import '../../css/PostCard.css';
 
 interface PostCardProps {
   title: string;
@@ -23,6 +27,15 @@ export default function PostCard({
   onDelete,
   canDelete,
 }: PostCardProps) {
+  const navigate = useNavigate();
+  const { postId } = useParams<{ postId: string }>(); // 현 URL에서 postId 꺼내기
+
+  const handleEdit = () => {
+    if (postId) {
+      navigate(`/writer/${postId}`); // writer/:postId 경로로 이동
+    }
+  };
+
   return (
     <div className="h-auto w-[979px] rounded-[5px] border border-[#ABABAB] bg-white px-25 py-8">
       <div className="items-left flex flex-col text-sm">
@@ -31,7 +44,6 @@ export default function PostCard({
 
         {/* 작성자 이름 + 생성 시간 */}
         <div className="mb-2 flex items-center justify-between">
-          {/* 좌측: 이름 + 시간 */}
           <div className="flex items-center gap-2">
             <UserName name={authorName} className="nanum-gothic-bold" />
             <TimeAgo timestamp={createdAt} />
@@ -56,10 +68,13 @@ export default function PostCard({
 
         <div className="flex gap-2">
           {canDelete && (
-            <button className="text-sm hover:text-gray-600">수정</button>
+            <button
+              onClick={handleEdit} // 수정 버튼에 클릭 핸들러 연결
+              className="text-sm hover:text-gray-600"
+            >
+              수정
+            </button>
           )}
-
-          {/* canDelete가 true일 때만 노출 */}
           {canDelete && (
             <button
               onClick={() => onDelete?.()}
@@ -84,9 +99,13 @@ export default function PostCard({
       )}
 
       {/* 본문 */}
-      <p className="nanum-gothic-regular leading-relaxed whitespace-pre-line">
-        {body}
-      </p>
+      <ReactQuill
+        value={body}
+        readOnly={true}
+        theme="snow"
+        modules={{ toolbar: false }}
+        className="post-readonly-editor"
+      />
     </div>
   );
 }
