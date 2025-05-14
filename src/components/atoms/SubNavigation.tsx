@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 const getTabData = (
   userId: string | undefined,
+  fullName: string | undefined,
 ): Record<string, { name: string; path: string }[]> => ({
   community: [
     { name: '전체', path: '/community' },
@@ -24,7 +25,7 @@ const getTabData = (
   ],
   userId: [
     { name: '프로필', path: `/${userId}` },
-    { name: `${userId}의 질문`, path: `/${userId}/question` },
+    { name: `${fullName}의 질문`, path: `/${userId}/question` },
     { name: '작성한 댓글', path: `/${userId}/comments` },
     { name: '좋아요 누른 글', path: `/${userId}/liked` },
   ],
@@ -49,7 +50,8 @@ export default function SubNavigation({ channel }: { channel: string }) {
       .then((data) => setFullName(data.fullName))
       .catch(console.error);
   }, [userId]);
-  const tabs = getTabData(fullName || userId)[channel];
+  const tabData = getTabData(userId, fullName);
+  const tabs = tabData[channel];
 
   return (
     <>
