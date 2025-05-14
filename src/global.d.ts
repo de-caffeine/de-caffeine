@@ -51,7 +51,7 @@ declare global {
   interface Like {
     _id: string; // 좋아요 ID
     user: string; // 좋아요를 누른 사용자 ID
-    post: string; // 좋아요가 눌린 게시글 ID
+    post: string | Post; // 좋아요가 눌린 게시글 ID
     createdAt: string; // 좋아요 생성일
     updatedAt: string; // 좋아요 수정일
   }
@@ -61,7 +61,7 @@ declare global {
     _id: string; // 댓글 ID
     comment: string; // 댓글 내용
     author: User; // 댓글 작성자
-    post: string; // 댓글이 달린 게시글 ID
+    post: string | Post; // 댓글이 달린 게시글 ID
     createdAt: string; // 댓글 생성일
     updatedAt: string; // 댓글 수정일
   }
@@ -72,9 +72,10 @@ declare global {
     _id: string; // 알림 ID
     author: User; // 알림 작성자
     user: User | string; // 알림 대상 사용자
-    post: string | null; // 알림이 달린 게시글 ID
+    post: string; // 알림이 달린 게시글 ID
     follow: string | null; // 알림이 달린 팔로우 ID
     comment: Comment; // 알림이 달린 댓글
+    like: Like; // 알림이 달린 좋아요
     message: string | null; // 알림이 달린 메시지
     createdAt: string; // 알림 생성일
     updatedAt: string; // 알림 수정일

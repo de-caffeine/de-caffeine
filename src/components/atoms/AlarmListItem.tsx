@@ -1,37 +1,33 @@
-export default function AlarmListItem({
-    userName,
-    action,
-    post,
-    date,
-}: {
-    userName: string;
-    action: "comment" | "liked" | "follow" | "message";
-    post?: {
-        title: string;
-        link: string;
-    };
-    date: string;
-}) {
-    return (
-        <>
-            <div className="px-[10px]">
-                <p className="w-[100%] nanum-gothic-regular text-[12px] line-clamp-2">
-                    <span className="nanum-gothic-bold">{userName}</span>님
-                    {action === "comment" && (
-                        <>이 "{post!.title}" 게시글에 답글을 남겼습니다.</>
-                    )}
-                    {action === "liked" && (
-                        <>이 "{post!.title}" 게시글을 좋아합니다.</>
-                    )}
-                    {action === "follow" && <>이 당신을 팔로우 했습니다.</>}
-                    {action === "message" && (
-                        <>에게서 새로운 메세지가 도착했습니다.</>
-                    )}
-                </p>
-                <p className="nanum-gothic-regular text-[12px] text-[#ababab] mt-[5px]">
-                    {date}
-                </p>
-            </div>
-        </>
-    );
+import { Link } from 'react-router-dom';
+import TimeAgo from './TimeAgo';
+
+export default function AlarmListItem({ alarm }: { alarm: Notification }) {
+  return (
+    <>
+      <div className="py-[10px]">
+        <p className="nanum-gothic-regular line-clamp-2 w-[100%] text-sm">
+          <Link to={`/${alarm.author._id}`}>
+            <span className="nanum-gothic-bold">{alarm.author.fullName}</span>님
+          </Link>
+          {alarm.comment && (
+            <Link to={`/post/${alarm.post}`}>
+              이 "{JSON.parse((alarm.comment.post as Post).title).title}"
+              게시글에 답글을 남겼습니다.
+            </Link>
+          )}
+          {alarm.like && (
+            <Link to={`/post/${alarm.post}`}>
+              이 "{JSON.parse((alarm.like.post as Post).title).title}" 게시글을
+              좋아합니다.
+            </Link>
+          )}
+          {/* {action === 'follow' && <>이 당신을 팔로우 했습니다.</>} */}
+          {/* {action === 'message' && <>에게서 새로운 메세지가 도착했습니다.</>} */}
+        </p>
+        <p className="nanum-gothic-regular mt-[5px] cursor-default text-[12px] text-[#ababab]">
+          <TimeAgo timestamp={alarm.createdAt} />
+        </p>
+      </div>
+    </>
+  );
 }
