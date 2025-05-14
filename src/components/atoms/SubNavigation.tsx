@@ -1,4 +1,6 @@
 import { NavLink, Outlet, useParams } from 'react-router-dom';
+import { getUserById } from '../../api/users';
+import { useEffect, useState } from 'react';
 
 const getTabData = (
   userId: string | undefined,
@@ -36,8 +38,18 @@ const getTabData = (
 
 export default function SubNavigation({ channel }: { channel: string }) {
   const { userId } = useParams(); // URL 파라미터에서 유저 이름 추출
-  const tabData = getTabData(userId);
-  const tabs = tabData[channel];
+  // const tabData = getTabData(userId);
+
+  //FACTOR: userId 값을 user fullname으로 받아 렌더링
+  const [fullName, setFullName] = useState<string>();
+
+  useEffect(() => {
+    if (!userId) return;
+    getUserById(userId)
+      .then((data) => setFullName(data.fullName))
+      .catch(console.error);
+  }, [userId]);
+  const tabs = getTabData(fullName || userId)[channel];
 
   return (
     <>
