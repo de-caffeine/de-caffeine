@@ -8,7 +8,7 @@ import 'react-quill-new/dist/quill.snow.css';
 import '../../css/PostCard.css';
 import completeIcon from '../../assets/images/completeIcon.png';
 import completeNotIcon from '../../assets/images/completeNotIcon.png';
-import { updatePost } from '../../api/posts'; // ← 추가
+import { updatePost } from '../../api/posts';
 
 interface PostCardProps {
   title: string;
@@ -52,7 +52,6 @@ export default function PostCard({
     });
   };
 
-  // 채널 ID 상수
   const UNRESOLVED = '681da0447ffa911fa118e4ca'; // 미해결 채널
   const RESOLVED = '681da03c7ffa911fa118e4c6'; // 해결 채널
   // 버튼 노출 대상 채널
@@ -74,14 +73,7 @@ export default function PostCard({
 
     try {
       // 포스트 채널만 바꿔서 업데이트
-      await updatePost(
-        postId,
-        title,
-        body,
-        newChannel,
-        tags,
-        undefined, // coverFile 없을 때
-      );
+      await updatePost(postId, title, body, newChannel, tags, undefined);
     } catch (err) {
       console.error('채널 변경 실패', err);
       // 실패 시 롤백
