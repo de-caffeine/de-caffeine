@@ -91,7 +91,7 @@ export default function PostCard({
         {isCodeQuestion && (
           <button
             onClick={handleToggleResolved}
-            className="nanum-gothic-regular flex items-center text-sm"
+            className="nanum-gothic-regular flex flex-shrink-0 items-center text-sm"
           >
             {isResolved ? (
               <>
