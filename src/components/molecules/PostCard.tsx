@@ -1,11 +1,14 @@
 // src/components/organisms/PostCard.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import TimeAgo from '../atoms/TimeAgo';
 import UserName from '../atoms/UserName';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import '../../css/PostCard.css';
+import completeIcon from '../../assets/images/completeIcon.png';
+import completeNotIcon from '../../assets/images/completeNotIcon.png';
+import { updatePost } from '../../api/posts';
 
 interface PostCardProps {
   title: string;
@@ -16,6 +19,7 @@ interface PostCardProps {
   tags?: string[];
   onDelete?: () => void;
   canDelete?: boolean;
+  channelId: string;
 }
 
 export default function PostCard({
@@ -27,10 +31,14 @@ export default function PostCard({
   tags = [],
   onDelete,
   canDelete,
+  channelId,
 }: PostCardProps) {
   const navigate = useNavigate();
   const { postId } = useParams<{ postId: string }>();
+  console.log(title);
+  console.log(channelId);
 
+  // 수정 네비게이트
   const handleEdit = () => {
     if (!postId) return;
 
@@ -44,10 +52,61 @@ export default function PostCard({
     });
   };
 
+  const UNRESOLVED = '681da0447ffa911fa118e4ca'; // 미해결 채널
+  const RESOLVED = '681da03c7ffa911fa118e4c6'; // 해결 채널
+  // 버튼 노출 대상 채널
+  const codeQuestionChannels = [UNRESOLVED, RESOLVED];
+
+  // 1) 로컬 상태로 현재 해결 여부 관리
+  const [isResolved, setIsResolved] = useState(channelId === RESOLVED);
+
+  // 2) 버튼 노출 여부
+  const isCodeQuestion = codeQuestionChannels.includes(channelId);
+
+  // 3) 해결/미해결 토글 핸들러
+  const handleToggleResolved = async () => {
+    if (!postId) return;
+    const newChannel = isResolved ? UNRESOLVED : RESOLVED;
+
+    // Optimistic UI: 일단 토글
+    setIsResolved(!isResolved);
+
+    try {
+      // 포스트 채널만 바꿔서 업데이트
+      await updatePost(postId, title, body, newChannel, tags, undefined);
+    } catch (err) {
+      console.error('채널 변경 실패', err);
+      // 실패 시 롤백
+      setIsResolved((prev) => !prev);
+    }
+  };
+
   return (
     <div className="h-auto w-[979px] rounded-[5px] border border-[#ABABAB] bg-white px-25 py-8">
-      {/* 제목 */}
-      <div className="nanum-gothic-bold mb-4 text-[32px]">{title}</div>
+      <div className="mb-6 flex items-center justify-between">
+        {/* 제목 */}
+        <div className="nanum-gothic-bold text-[32px]">{title}</div>
+
+        {/* 해결/미해결 버튼: 코드질문 채널일 때만 노출 */}
+        {isCodeQuestion && (
+          <button
+            onClick={handleToggleResolved}
+            className="nanum-gothic-regular flex flex-shrink-0 items-center text-sm"
+          >
+            {isResolved ? (
+              <>
+                해결
+                <img src={completeIcon} alt="해결" className="ml-1" />
+              </>
+            ) : (
+              <>
+                미해결
+                <img src={completeNotIcon} alt="미해결" className="ml-1" />
+              </>
+            )}
+          </button>
+        )}
+      </div>
 
       {/* 작성자 + 시간 */}
       <div className="mb-2 flex items-center justify-between">

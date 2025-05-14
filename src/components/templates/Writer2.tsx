@@ -10,7 +10,6 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 // import { useAuth } from '../../contexts/AuthContext'; // 나중에 전역 로그인 관리용
-import { login } from '../../api/auth';
 import { createPost, getPost, updatePost } from '../../api/posts';
 
 interface LocationState {
@@ -20,17 +19,32 @@ interface LocationState {
   imageUrl?: string;
 }
 
-interface Writer2Props {
-  channelId?: string;
-}
-
-export default function Writer2({
-  channelId = '681da0077ffa911fa118e4ba', // default 테스트 채널 ID
-}: Writer2Props) {
+export default function Writer2() {
   const { postId } = useParams<{ postId?: string }>();
   const navigate = useNavigate();
   const location = useLocation();
   const state = location.state as LocationState | null;
+
+  // 1) 카테고리 목록 & 맵 정의
+  const categories = [
+    '일상공유',
+    '개발일지',
+    '취업정보',
+    '팀원모집',
+    '코드질문',
+  ] as const;
+  type Category = (typeof categories)[number];
+
+  const channelMap: Record<Category, string> = {
+    일상공유: '681d9fee7ffa911fa118e4b5',
+    개발일지: '681da0077ffa911fa118e4ba',
+    취업정보: '681da0247ffa911fa118e4be',
+    팀원모집: '681da0307ffa911fa118e4c2',
+    코드질문: '681da0447ffa911fa118e4ca',
+  };
+
+  // 2) 선택된 카테고리 상태
+  const [category, setCategory] = useState<Category>('일상공유');
 
   // 입력 필드의 초기값
   const [title, setTitle] = useState(state?.title ?? '');
@@ -122,6 +136,7 @@ export default function Writer2({
     [],
   );
 
+  // 3) 제출 핸들러: channelMap[category] 사용
   const handleSubmit = useCallback(async () => {
     if (!title.trim() || !editor.trim()) {
       alert('제목과 내용을 모두 입력해주세요.');
@@ -130,13 +145,13 @@ export default function Writer2({
 
     setLoading(true);
     try {
-      // 임시 테스트용 로그인
-      await login('lhw971103@gmail.com', 'fnskq787!');
-
       const tagArray = tags
         .split(',')
         .map((t) => t.trim())
         .filter(Boolean);
+
+      // ▶ 여기서 선택된 카테고리의 채널ID를 꺼냅니다
+      const selectedChannelId = channelMap[category];
 
       if (postId) {
         // 수정 모드
@@ -144,7 +159,7 @@ export default function Writer2({
           postId,
           title,
           editor,
-          channelId!,
+          selectedChannelId,
           tagArray,
           coverFile,
         );
@@ -152,7 +167,7 @@ export default function Writer2({
         navigate(`/post/${postId}`);
       } else {
         // 새 글 작성 모드
-        await createPost(title, editor, channelId!, tagArray, coverFile);
+        await createPost(title, editor, selectedChannelId, tagArray, coverFile);
         alert('포스트가 성공적으로 생성되었습니다!');
         // 입력값 초기화
         setTitle('');
@@ -167,95 +182,114 @@ export default function Writer2({
     } finally {
       setLoading(false);
     }
-  }, [postId, title, editor, tags, coverFile, channelId, navigate]);
+  }, [postId, title, editor, tags, coverFile, category, navigate]);
 
   return (
-    <div className="nanum-gothic-regular flex min-h-[700px] w-[1200px] gap-4 px-30 py-5">
-      <div className="flex flex-1 flex-col gap-4 rounded-[5px] border border-[#ABABAB] p-4">
-        <h2 className="mb-4 text-2xl">
-          {postId ? '게시글 수정' : '새 게시글 작성'}
-        </h2>
-
-        {/* 제목 입력 */}
-        <input
-          type="text"
-          placeholder="제목을 작성해주세요"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="h-18 w-full rounded px-2 py-1 text-[32px]"
-        />
-
-        {/* 태그 입력 */}
-        <input
-          type="text"
-          placeholder="태그를 입력해주세요 (콤마로 구분)"
-          value={tags}
-          onChange={(e) => setTags(e.target.value)}
-          className="w-full rounded px-2 py-1 text-[16px]"
-        />
-        <div className="flex flex-wrap gap-2">
-          {tags
-            .split(',')
-            .map((t) => t.trim())
-            .filter(Boolean)
-            .map((tag, idx) => (
-              <span
-                key={idx}
-                className="rounded-[2px] bg-[#D7CAB9] px-2 py-0.5 text-sm text-black"
-              >
-                {tag}
-              </span>
-            ))}
-        </div>
-
-        <hr className="mb-4 border-t border-[#ABABAB]" />
-
-        {/* 커버 이미지 업로드 */}
-        <div>
-          <label className="mb-1 block text-sm">커버 이미지 업로드</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setCoverFile(e.target.files?.[0])}
-          />
-          {coverPreviewUrl && (
-            <img
-              src={coverPreviewUrl}
-              alt="커버 이미지 미리보기"
-              className="mt-2 max-h-[200px] max-w-[200px] rounded-[5px] object-cover"
-            />
-          )}
-        </div>
-
-        {/* 본문 에디터 */}
-        <ReactQuill
-          ref={quillRef}
-          value={editor}
-          onChange={setEditor}
-          modules={modules}
-          formats={formats}
-          theme="snow"
-          placeholder="내용을 입력해주세요"
-          className="flex-1"
-        />
-
-        {/* 제출 버튼 */}
-        <div className="mt-9 flex justify-end">
+    <div>
+      {/* 카테고리 버튼 그룹 (가로 중앙 정렬) */}
+      <div className="flex w-full justify-center gap-5">
+        {categories.map((cat) => (
           <button
-            onClick={handleSubmit}
-            disabled={loading}
-            className={`nanum-gothic-regular h-[40px] w-[100px] rounded-[5px] text-white ${
-              loading ? 'cursor-not-allowed bg-gray-400' : 'bg-[#6B4C36]'
+            key={cat}
+            type="button"
+            onClick={() => setCategory(cat)}
+            className={`rounded px-4 py-2 ${
+              category === cat ? 'text-black opacity-100' : 'opacity-50'
             }`}
           >
-            {loading
-              ? postId
-                ? '수정 중…'
-                : '작성 중…'
-              : postId
-                ? '수정 완료'
-                : '작성 완료'}
+            {cat}
           </button>
+        ))}
+      </div>
+
+      <div className="nanum-gothic-regular flex min-h-[700px] w-[1200px] gap-4 px-30 py-5">
+        <div className="flex flex-1 flex-col gap-4 rounded-[5px] border border-[#ABABAB] p-4">
+          <h2 className="mb-4 text-2xl">
+            {postId ? '게시글 수정' : '새 게시글 작성'}
+          </h2>
+
+          {/* 제목 입력 */}
+          <input
+            type="text"
+            placeholder="제목을 작성해주세요"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="h-18 w-full rounded px-2 py-1 text-[32px]"
+          />
+
+          {/* 태그 입력 */}
+          <input
+            type="text"
+            placeholder="태그를 입력해주세요 (콤마로 구분)"
+            value={tags}
+            onChange={(e) => setTags(e.target.value)}
+            className="w-full rounded px-2 py-1 text-[16px]"
+          />
+          <div className="flex flex-wrap gap-2">
+            {tags
+              .split(',')
+              .map((t) => t.trim())
+              .filter(Boolean)
+              .map((tag, idx) => (
+                <span
+                  key={idx}
+                  className="rounded-[2px] bg-[#D7CAB9] px-2 py-0.5 text-sm text-black"
+                >
+                  {tag}
+                </span>
+              ))}
+          </div>
+
+          <hr className="mb-4 border-t border-[#ABABAB]" />
+
+          {/* 커버 이미지 업로드 */}
+          <div>
+            <label className="mb-1 block text-sm">커버 이미지 업로드</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setCoverFile(e.target.files?.[0])}
+              className="cursor-pointer"
+            />
+            {coverPreviewUrl && (
+              <img
+                src={coverPreviewUrl}
+                alt="커버 이미지 미리보기"
+                className="mt-2 max-h-[200px] max-w-[200px] rounded-[5px] object-cover"
+              />
+            )}
+          </div>
+
+          {/* 본문 에디터 */}
+          <ReactQuill
+            ref={quillRef}
+            value={editor}
+            onChange={setEditor}
+            modules={modules}
+            formats={formats}
+            theme="snow"
+            placeholder="내용을 입력해주세요"
+            className="flex-1"
+          />
+
+          {/* 제출 버튼 */}
+          <div className="mt-9 flex justify-end">
+            <button
+              onClick={handleSubmit}
+              disabled={loading}
+              className={`nanum-gothic-regular h-[40px] w-[100px] cursor-pointer rounded-[5px] text-white ${
+                loading ? 'cursor-not-allowed bg-gray-400' : 'bg-[#6B4C36]'
+              }`}
+            >
+              {postId
+                ? loading
+                  ? '수정 중…'
+                  : '수정 완료'
+                : loading
+                  ? '작성 중…'
+                  : '작성 완료'}
+            </button>
+          </div>
         </div>
       </div>
     </div>
