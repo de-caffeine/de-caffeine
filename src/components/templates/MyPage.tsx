@@ -67,20 +67,19 @@ export default function MyPage() {
     post.likes.some((like) => like.user === userInfo._id),
   );
 
+  const communityLiked = likedPosts.filter(
+    (c) =>
+      c.channel._id === '681d9fee7ffa911fa118e4b5' ||
+      c.channel._id === '681da0077ffa911fa118e4ba' ||
+      c.channel._id === '681da0247ffa911fa118e4be' ||
+      c.channel._id === '681da0307ffa911fa118e4c2',
+  );
+
+  const questionLiked = likedPosts.filter(
+    (q) => q.channel.name === 'solved' || q.channel.name === 'unsolved',
+  );
   // console.log(channelPosts[0].likes);
 
-  const wrapClass = `
-  mx-auto
-  w-full
-  max-w-[1128px]
-  grid
-  gap-4
-  pt-[17px]
-  /* ① minmax(270px,1fr) 칸을 auto-fit: 
-        화면에 270px씩 들어갈 만큼만 채우고,
-        여유공간은 1fr 로 분배 → 반응형 컬럼 수 자동 감소 */
-  [grid-template-columns:repeat(auto-fit,minmax(270px,1fr))]
-`;
   const currentUserId = userInfo?._id;
 
   if (userDataLoading) return <div>로딩중 ... </div>;
@@ -139,7 +138,7 @@ export default function MyPage() {
 
         {/* 내가 쓴 글 */}
         {tab === 'me' && (
-          <div className={wrapClass}>
+          <div className="mx-auto flex w-[1128px] flex-wrap justify-start gap-4 pt-[17px]">
             {posts.length === 0 ? (
               <div>아직 작성된 게시글이 없습니다.</div>
             ) : (
@@ -157,7 +156,7 @@ export default function MyPage() {
                 post.channel.name === 'unsolved',
             );
             return (
-              <div className="w-[980px] pt-[22px]">
+              <div className="flex w-[980px] flex-col gap-4 pt-[22px]">
                 {questionPosts.length === 0 ? (
                   <div>아직 작성된 질문이 없습니다.</div>
                 ) : (
@@ -178,14 +177,40 @@ export default function MyPage() {
           </div>
         )} */}
 
-        {/*  좋아요 누른 글 */}
         {tab === 'liked' && (
-          <div className={wrapClass}>
-            {likedPosts.length === 0 ? (
+          <div className="mx-auto w-[1128px] pt-4 text-left">
+            <p>
+              커뮤니티{' '}
+              <span className="text-[#3bb900]">{communityLiked.length}</span>
+            </p>
+          </div>
+        )}
+        {tab === 'liked' && (
+          <div className="mx-auto flex w-[1128px] flex-wrap justify-start gap-4 pt-[17px]">
+            {communityLiked.length === 0 ? (
               <div>아직 좋아요를 누른 글이 없습니다.</div>
             ) : (
               likedPosts.map((post) => (
-                <CommunityCard key={post._id} post={post} />
+                <QuestionCard key={post._id} post={post} />
+              ))
+            )}
+          </div>
+        )}
+        {tab === 'liked' && (
+          <div className="mx-auto w-[1128px] pt-4 text-left">
+            <p className="justify-start pt-4">
+              질문{' '}
+              <span className="text-[#3bb900]">{communityLiked.length}</span>
+            </p>
+          </div>
+        )}
+        {parts[2] === 'liked' && (
+          <div className="mx-auto flex w-[1128px] flex-wrap justify-start gap-4 pt-[17px]">
+            {questionLiked.length === 0 ? (
+              <div>아직 좋아요를 누른 글이 없습니다.</div>
+            ) : (
+              questionLiked.map((post) => (
+                <QuestionCard key={post._id} post={post} />
               ))
             )}
           </div>
