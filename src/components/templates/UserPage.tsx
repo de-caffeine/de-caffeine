@@ -6,7 +6,7 @@ import { getPostsByAuthor, getPostsByChannel } from '../../api/posts';
 import { useLocation } from 'react-router-dom';
 import QuestionCard from '../molecules/QuestionCard';
 import { followUser, unfollowUser } from '../../api/follow';
-import { useLoginStore } from '../../loginStore';
+// import { useLoginStore } from '../../loginStore';
 import FloatingButton from '../atoms/FloatingButton';
 import { createNotification } from '../../api/notifications';
 // import PostCard from '../molecules/PostCard';
@@ -27,12 +27,13 @@ export default function UserPage() {
   const parts = location.pathname.split('/');
   const id = parts[1];
 
-  const loginUser = useLoginStore.getState().myInfo!;
+  // const loginUser = useLoginStore.getState().myInfo!;
 
   // 로그인 유저 id
-  const loginUserId = loginUser._id;
+  const loginUserId = localStorage.getItem('myId');
   // 로그인 유저와 path id 값 비교
   const isMe = loginUserId === id;
+  console.log(loginUserId);
 
   useEffect(() => {
     async function loadUserData() {
@@ -71,11 +72,11 @@ export default function UserPage() {
 
   //로그인 유저와 현재 페이지 Id를 받아온 후 초기화
   useEffect(() => {
-    if (loginUser && id) {
-      const already = loginUser.following.some((rel) => rel.user === id);
+    if (userData && id) {
+      const already = userData.following.some((rel) => rel.user === id);
       setIsFollowing(already);
     }
-  }, [loginUser, id]);
+  }, [userData, id]);
 
   // 내 좋아요가 달린 포스트만 뽑기
   const likedPosts = channelPosts.filter((post) =>
@@ -97,7 +98,7 @@ export default function UserPage() {
   const handleFollow = async () => {
     try {
       if (isFollowing) {
-        const rel = loginUser.following.find((r) => r.user === id);
+        const rel = userData!.following.find((r) => r.user === id);
         if (!rel) return;
         //언팔
         await unfollowUser(rel._id);
