@@ -180,7 +180,15 @@ export default function UserPage() {
             {posts.length === 0 ? (
               <div>아직 작성된 게시글이 없습니다.</div>
             ) : (
-              posts.map((post) => <CommunityCard key={post._id} post={post} />)
+              posts
+                .filter(
+                  (p) =>
+                    p.channel._id === '681d9fee7ffa911fa118e4b5' ||
+                    p.channel._id === '681da0077ffa911fa118e4ba' ||
+                    p.channel._id === '681da0307ffa911fa118e4c2' ||
+                    p.channel._id === '681da0247ffa911fa118e4be',
+                )
+                .map((post) => <CommunityCard key={post._id} post={post} />)
             )}
           </div>
         )}
