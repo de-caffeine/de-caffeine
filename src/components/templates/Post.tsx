@@ -127,7 +127,7 @@ export default function Post() {
   };
 
   // 7) 로그인된 사용자가 작성자인지 비교
-  const canDelete = me?._id === post.author._id;
+  const canDelete = me?._id === post.author?._id;
 
   return (
     <div className="relative flex flex-col items-center gap-4 py-8">
@@ -135,7 +135,7 @@ export default function Post() {
         title={parsedTitle}
         body={parsedBody}
         imageUrl={post.image}
-        authorName={post.author.fullName}
+        authorName={post.author?.fullName || '탈퇴한 사용자'}
         createdAt={post.createdAt}
         tags={parsedTags}
         canDelete={canDelete}
@@ -146,7 +146,7 @@ export default function Post() {
       <CommentBox
         postId={postId}
         initialComments={comments}
-        postAuthorId={post.author._id}
+        postAuthorId={post.author?._id || '탈퇴한 사용자'}
       />
 
       {/* 좋아요 FloatingButton */}
