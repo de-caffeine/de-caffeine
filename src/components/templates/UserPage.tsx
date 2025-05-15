@@ -1,16 +1,16 @@
 // src/pages/UserPage.tsx
 import User from '../molecules/User';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getUserById } from '../../api/users';
 import CommunityCard from '../molecules/CommunityCard';
 import { getPostsByAuthor, getPostsByChannel } from '../../api/posts';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import QuestionCard from '../molecules/QuestionCard';
 import { followUser, unfollowUser } from '../../api/follow';
 import FloatingButton from '../atoms/FloatingButton';
 import { createNotification } from '../../api/notifications';
 // 변경: 메시지 API import 추가
-import { createMessage, getConversations } from '../../api/messages'; // 변경: 메시지 전송 및 목록 조회
+import { createMessage } from '../../api/messages'; // 변경: 메시지 전송 및 목록 조회
 // 변경: ChatWindow import 추가
 import ChatWindow from '../organisms/ChatWindow'; // 변경: 채팅창 컴포넌트
 // 변경: Conversation 타입 import 추가
@@ -300,13 +300,14 @@ export default function UserPage() {
             <div>아직 댓글이 없습니다.</div>
           ) : (
             communityComments.map(({ postId, postTitle, comment }) => (
-              <div
+              <Link
+                to={`/post/${postId}`}
                 key={postId}
                 className="w-[100%] gap-2 rounded border border-[#d9d9d9] p-4"
               >
                 <h3 className="mb-1 font-semibold">“{postTitle}” 글의 댓글</h3>
-                <p>{comment}</p>
-              </div>
+                <p className="text-[16px]">{comment}</p>
+              </Link>
             ))
           )}
         </div>
@@ -327,13 +328,14 @@ export default function UserPage() {
             <div>아직 댓글이 없습니다.</div>
           ) : (
             fileteredQuestionComments.map(({ postId, postTitle, comment }) => (
-              <div
+              <Link
+                to={`/post/${postId}`}
                 key={postId}
                 className="w-[100%] gap-2 rounded border border-[#d9d9d9] p-4 pt-4"
               >
                 <h3 className="mb-1 font-semibold">“{postTitle}” 글의 댓글</h3>
-                <p>{comment}</p>
-              </div>
+                <p className="text-[16px]">{comment}</p>
+              </Link>
             ))
           )}
         </div>
