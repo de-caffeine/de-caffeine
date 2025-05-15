@@ -8,7 +8,6 @@ import Question from './components/templates/Question';
 import Users from './components/templates/Users';
 import Search from './components/templates/Search';
 import Setting from './components/templates/Setting';
-import MyPage from './components/templates/MyPage';
 import Post from './components/templates/Post';
 import Writer from './components/templates/Writer2';
 import UserPage from './components/templates/UserPage';
@@ -38,12 +37,6 @@ export default function App() {
               <Route index element={<Question />} />
               <Route path="solved" element={<Question />} />
               <Route path="unsolved" element={<Question />} />
-            </Route>
-            <Route path="/me" element={<SubNavigation channel="me" />}>
-              <Route index element={<MyPage />} />
-              <Route path="question" element={<MyPage />} />
-              <Route path="comments" element={<MyPage />} />
-              <Route path="liked" element={<MyPage />} />
             </Route>
 
             <Route path="/:userId" element={<SubNavigation channel="userId" />}>

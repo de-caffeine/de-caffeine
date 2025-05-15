@@ -17,7 +17,7 @@ interface UserProps {
   velog?: string;
   homepage?: string;
   isMe?: boolean;
-
+  isFollowing?: boolean;
   followHandler?: () => void;
 }
 
@@ -33,6 +33,7 @@ export default function User({
   velog = '',
   homepage = '',
   isMe = false,
+  isFollowing = false,
   followHandler,
 }: UserProps) {
   return (
@@ -85,10 +86,12 @@ export default function User({
             </div>
           </div>
         </div>
+
+        {/* 팔로우 기능 */}
         <div className="nanum-gothic-regular mb-1 flex flex-col items-end gap-1 self-end text-[12px]">
           {!isMe && (
             <Button full size="s" onClick={() => followHandler?.()}>
-              팔로우
+              {isFollowing ? '팔로우 취소' : '팔로우'}
             </Button>
           )}
 
