@@ -54,7 +54,7 @@ export default function ChatWindow({
   };
 
   return (
-    <div className="fixed bottom-0 left-0 z-50 flex h-[471px] w-[318px] flex-col rounded-lg bg-white shadow-lg">
+    <div className="fixed right-0 bottom-0 z-50 flex h-[471px] w-[318px] flex-col rounded-lg bg-white shadow-lg">
       <header className="flex items-center justify-between border-b px-4 py-2">
         {selectedChat ? (
           <>
