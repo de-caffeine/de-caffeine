@@ -61,7 +61,7 @@ export default function Users() {
   return (
     <div className="grid grid-cols-1 gap-6 p-6 lg:grid-cols-3">
       {filteredUsers.map((user) => (
-        <Link key={user._id} to={`/users/${user._id}`} className="block">
+        <Link key={user._id} to={`/${user._id}`} className="block">
           <UserCard
             UName={user.fullName}
             followCount={user.following.length}

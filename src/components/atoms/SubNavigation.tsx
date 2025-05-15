@@ -1,7 +1,10 @@
 import { NavLink, Outlet, useParams } from 'react-router-dom';
+import { getUserById } from '../../api/users';
+import { useEffect, useState } from 'react';
 
 const getTabData = (
   userId: string | undefined,
+  fullName: string | undefined,
 ): Record<string, { name: string; path: string }[]> => ({
   community: [
     { name: '전체', path: '/community' },
@@ -21,10 +24,10 @@ const getTabData = (
     { name: '오프라인', path: '/users/offline' },
   ],
   userId: [
-    { name: '프로필', path: `/user/${userId}` },
-    { name: `${userId}의 질문`, path: `/user/${userId}/question` },
-    { name: '작성한 댓글', path: `/user/${userId}/comments` },
-    { name: '좋아요 누른 글', path: `/user/${userId}/liked` },
+    { name: '프로필', path: `/${userId}` },
+    { name: `${fullName}의 질문`, path: `/${userId}/question` },
+    { name: '작성한 댓글', path: `/${userId}/comments` },
+    { name: '좋아요 누른 글', path: `/${userId}/liked` },
   ],
   me: [
     { name: '전체', path: '/me' },
@@ -36,7 +39,18 @@ const getTabData = (
 
 export default function SubNavigation({ channel }: { channel: string }) {
   const { userId } = useParams(); // URL 파라미터에서 유저 이름 추출
-  const tabData = getTabData(userId);
+  // const tabData = getTabData(userId);
+
+  //FACTOR: userId 값을 user fullname으로 받아 렌더링
+  const [fullName, setFullName] = useState<string>();
+
+  useEffect(() => {
+    if (!userId) return;
+    getUserById(userId)
+      .then((data) => setFullName(data.fullName))
+      .catch(console.error);
+  }, [userId]);
+  const tabData = getTabData(userId, fullName);
   const tabs = tabData[channel];
 
   return (

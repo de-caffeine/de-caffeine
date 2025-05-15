@@ -7,15 +7,13 @@ import Navigation from '../atoms/Navigation';
 import SearchBar from '../atoms/SearchBar';
 import Icon from '../atoms/Icon';
 import UserAvatar from '../atoms/UserAvatar';
-import { getAuthUser, logout } from '../../api/auth';
-import { useLoginStore } from '../../loginStore';
+import { logout } from '../../api/auth';
+import AlarmIcon from '../molecules/AlarmIcon';
 
 export default function Header() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { myInfo, deleteLoginInfo, saveLoginInfo } = useLoginStore();
-  const isLoggedIn = !!myInfo && Object.keys(myInfo).length > 0;
+  const isLoggedIn = !!localStorage.getItem('accessToken');
   const [showDropdown, setShowDropdown] = useState(false);
   const avatarRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -53,23 +51,15 @@ export default function Header() {
       console.error('Logout failed:', e);
     }
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('myId');
+    localStorage.removeItem('myImage');
 
-    deleteLoginInfo();
     setShowDropdown(false);
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      getAuthUser()
-        .then((user) => saveLoginInfo(user))
-        .catch(() => deleteLoginInfo());
-    }
-  }, [showLogin, showSignup]); // 로그인/회원가입 팝업 열고 닫힐 때 상태 재확인
-  console.log(isLoggedIn, showDropdown);
   return (
     <>
-      <div className="nanum-gothic-regular flex w-full max-w-[1300px] items-center p-7">
+      <div className="nanum-gothic-regular flex h-[80px] w-full max-w-[1300px] items-center px-7">
         <div className="flex flex-shrink-0 items-center space-x-7">
           <Link to="/">
             <Logo />
@@ -86,10 +76,10 @@ export default function Header() {
             {isLoggedIn ? (
               <>
                 <div className="ml-3 cursor-pointer">
-                  <Icon name="alarmIcon" size={32} />
+                  <AlarmIcon />
                 </div>
                 <div className="ml-3 cursor-pointer">
-                  <Icon name="chatIcon" size={22} />
+                  <Icon name="chatIcon" size={26} />
                 </div>
                 <div className="relative ml-3 inline-block">
                   <div
@@ -99,7 +89,10 @@ export default function Header() {
                     }}
                     className="flex cursor-pointer"
                   >
-                    <UserAvatar />
+                    <UserAvatar
+                      imageUrl={localStorage.getItem('myImage') || undefined}
+                      size={30}
+                    />
                   </div>
 
                   {showDropdown && (

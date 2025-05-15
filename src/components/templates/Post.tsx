@@ -140,6 +140,7 @@ export default function Post() {
         tags={parsedTags}
         canDelete={canDelete}
         onDelete={handleDeletePost}
+        channelId={post.channel._id}
       />
 
       {/* 댓글 입력/목록 */}
