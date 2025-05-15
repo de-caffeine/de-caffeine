@@ -6,6 +6,7 @@ import ArrowRightIcon from '../../assets/images/arrow_right_icon.svg';
 import ArrowLeftIcon from '../../assets/images/arrow_left_icon.svg';
 import alarmIcon from '../../assets/images/alarmIcon.svg';
 import chatIcon from '../../assets/images/chatIcon.svg';
+import darkModeIcon from '../../assets/images/solar_moon-line-duotone.svg';
 
 import mailIcon from '../../assets/images/mailIcon.png';
 import githubIcon from '../../assets/images/githubIcon.png';
@@ -52,7 +53,9 @@ export default function Icon({
                             ? CommentIcon
                             : name === 'likeIcon'
                               ? HeartFillIcon
-                              : HeartIcon;
+                              : name === 'darkModeIcon'
+                                ? darkModeIcon
+                                : HeartIcon;
 
   return (
     <>

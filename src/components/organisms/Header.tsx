@@ -64,7 +64,7 @@ export default function Header() {
           <Link to="/">
             <Logo />
           </Link>
-          <div className="hidden lg:flex">
+          <div className="hidden sm:flex">
             <Navigation />
           </div>
         </div>
