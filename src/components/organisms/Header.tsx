@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+// src/components/organisms/Header.tsx
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import Logo from '../atoms/Logo';
 import SignupPopup from '../molecules/SignupPopup';
@@ -9,17 +10,20 @@ import Icon from '../atoms/Icon';
 import UserAvatar from '../atoms/UserAvatar';
 import { logout } from '../../api/auth';
 import AlarmIcon from '../molecules/AlarmIcon';
+import ChatWindow from './ChatWindow'; // 변경: ChatWindow import 추가
 
 export default function Header() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const isLoggedIn = !!localStorage.getItem('accessToken');
   const [showDropdown, setShowDropdown] = useState(false);
+
   const avatarRef = useRef(null);
   const dropdownRef = useRef(null);
   const storedImage = localStorage.getItem('myImage');
   const validImageUrl =
     storedImage && storedImage !== 'undefined' ? storedImage : undefined;
+
 
   const openLogin = () => {
     setShowSignup(false);
@@ -37,8 +41,8 @@ export default function Header() {
       if (
         dropdownRef.current &&
         avatarRef.current &&
-        !(dropdownRef.current as HTMLElement).contains(event.target as Node) &&
-        !(avatarRef.current as HTMLElement).contains(event.target as Node)
+        !dropdownRef.current.contains(event.target as Node) &&
+        !avatarRef.current.contains(event.target as Node)
       ) {
         setShowDropdown(false);
       }
@@ -49,14 +53,13 @@ export default function Header() {
 
   const handleLogout = async () => {
     try {
-      await logout(); // 서버에서 세션 무효화
+      await logout(); // 서버 세션 무효화
     } catch (e) {
       console.error('Logout failed:', e);
     }
     localStorage.removeItem('accessToken');
     localStorage.removeItem('myId');
     localStorage.removeItem('myImage');
-
     setShowDropdown(false);
   };
 
@@ -71,25 +74,28 @@ export default function Header() {
             <Navigation />
           </div>
         </div>
+
         <div className="flex min-w-[150px] flex-grow items-center">
           <div className="mr-5 ml-auto max-w-[350px] min-w-[120px] flex-1">
             <SearchBar />
           </div>
+
           <div className="flex flex-shrink-0 items-center space-x-6">
             {isLoggedIn ? (
               <>
                 <div className="ml-3 cursor-pointer">
                   <AlarmIcon />
                 </div>
-                <div className="ml-3 cursor-pointer">
+                <div
+                  className="ml-3 cursor-pointer"
+                  onClick={() => setShowChatWindow(true)} // 변경: 채팅 아이콘 클릭 시 채팅창 열기
+                >
                   <Icon name="chatIcon" size={26} />
                 </div>
                 <div className="relative ml-3 inline-block">
                   <div
                     ref={avatarRef}
-                    onClick={() => {
-                      setShowDropdown(!showDropdown);
-                    }}
+                    onClick={() => setShowDropdown(!showDropdown)}
                     className="flex cursor-pointer"
                   >
                     <UserAvatar imageUrl={validImageUrl} size={30} />
@@ -114,13 +120,12 @@ export default function Header() {
                       >
                         설정
                       </Link>
-                      <Link
-                        className="block w-full px-4 py-2 text-left text-red-600 hover:text-red-900"
+                      <button
                         onClick={handleLogout}
-                        to="/"
+                        className="block w-full px-4 py-2 text-left text-red-600 hover:text-red-900"
                       >
                         로그아웃
-                      </Link>
+                      </button>
                     </div>
                   )}
                 </div>
@@ -157,6 +162,13 @@ export default function Header() {
           )}
         </div>
       </div>
+
+      {showChatWindow && (
+        <ChatWindow
+          onClose={() => setShowChatWindow(false)} // 변경: 채팅창 닫기 핸들러
+        />
+      )}
+
       <Outlet />
     </>
   );
