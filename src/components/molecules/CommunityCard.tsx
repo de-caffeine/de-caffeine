@@ -12,8 +12,8 @@ export default function CommunityCard({ post }: { post: Post }) {
 
   const asdf = async () => {
     if (typeof post.author === 'object') {
-      userName = post.author.fullName;
-      userImage = post.author.image;
+      userName = post.author?.fullName;
+      userImage = post.author?.image;
     } else {
       const user = await getUserById(post.author);
       userName = user.fullName;
