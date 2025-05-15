@@ -1,1 +1,8 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+.wrapper {
+  @apply w-[270px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px];
+}
+.card-list {
+  @apply flex flex-wrap justify-center gap-[15px];
+}
