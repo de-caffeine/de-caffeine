@@ -194,7 +194,7 @@ export default function UserPage() {
   const handleFollow = async () => {
     try {
       if (isFollowing) {
-        const rel = userData!.following.find((r) => r.user === id);
+        const rel = userData!.followers.find((r) => r.user === id);
         if (!rel) return;
         await unfollowUser(rel._id);
         setFollowerCount((count) => count - 1);
