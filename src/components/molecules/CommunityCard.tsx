@@ -12,8 +12,8 @@ export default function CommunityCard({ post }: { post: Post }) {
 
   const asdf = async () => {
     if (typeof post.author === 'object') {
-      userName = post.author.fullName;
-      userImage = post.author.image;
+      userName = post.author?.fullName;
+      userImage = post.author?.image;
     } else {
       const user = await getUserById(post.author);
       userName = user.fullName;
@@ -64,11 +64,9 @@ export default function CommunityCard({ post }: { post: Post }) {
         <div className="mx-[10px] flex flex-row items-center justify-between border-t border-[#d9d9d9] px-[5px] py-[10px]">
           <Info
             size={30}
-
-            userName={post.author?.fullName || '탈퇴한 사용자'}
+            userName={userName || '탈퇴한 사용자'}
             timestamp={post.createdAt}
-            imageUrl={post.author?.image}
-
+            imageUrl={userImage}
           />
           <Interest
             commentCount={post.comments.length}

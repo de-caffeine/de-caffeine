@@ -59,7 +59,10 @@ export default function SubNavigation({ channel }: { channel: string }) {
         <nav>
           <ul className="flex gap-5">
             {tabs.map(({ name, path }) => (
-              <li key={path} className="cursor-pointer">
+              <li
+                key={path}
+                className="nanum-gothic-regular mx-2 my-[30px] cursor-pointer"
+              >
                 <NavLink
                   to={path}
                   end={path === `/${channel}` || path === `/${userId}`} // '전체'일 때만 end 처리, '프로필'

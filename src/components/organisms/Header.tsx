@@ -17,9 +17,13 @@ export default function Header() {
   const [showSignup, setShowSignup] = useState(false);
   const isLoggedIn = !!localStorage.getItem('accessToken');
   const [showDropdown, setShowDropdown] = useState(false);
-  const [showChatWindow, setShowChatWindow] = useState(false); // 변경: 채팅창 토글 상태 추가
-  const avatarRef = useRef<HTMLDivElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const avatarRef = useRef(null);
+  const dropdownRef = useRef(null);
+  const storedImage = localStorage.getItem('myImage');
+  const validImageUrl =
+    storedImage && storedImage !== 'undefined' ? storedImage : undefined;
+
 
   const openLogin = () => {
     setShowSignup(false);
@@ -94,10 +98,7 @@ export default function Header() {
                     onClick={() => setShowDropdown(!showDropdown)}
                     className="flex cursor-pointer"
                   >
-                    <UserAvatar
-                      imageUrl={localStorage.getItem('myImage') || undefined}
-                      size={30}
-                    />
+                    <UserAvatar imageUrl={validImageUrl} size={30} />
                   </div>
 
                   {showDropdown && (
@@ -108,7 +109,7 @@ export default function Header() {
                       <Link
                         to={`/${localStorage.getItem('myId')}`}
                         onClick={() => setShowDropdown(false)}
-                        className="block px-4 py-2 hover:text-[#6B4C36]"
+                        className="block px-4 py-2 hover:text-[#4b4744]"
                       >
                         마이페이지
                       </Link>

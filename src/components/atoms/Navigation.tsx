@@ -12,15 +12,15 @@ export default function Navigation() {
       {menu.map(({ name, path }) => (
         <NavLink key={name} to={path}>
           {({ isActive }) => (
-            <div
-              className={`relative text-base ${
-                isActive ? 'font-semibold text-[#6B4C36]' : ''
-              }`}
-            >
-              {name}
-              {isActive && (
-                <span className="absolute -bottom-[0px] left-0 h-[2px] w-full bg-[#6B4C36]" />
-              )}
+            <div className="group relative cursor-pointer text-base font-medium">
+              <span className={isActive ? 'font-semibold text-[#6B4C36]' : ''}>
+                {name}
+              </span>
+              <span
+                className={`absolute -bottom-[0px] left-0 h-[2px] w-0 bg-[#6B4C36] transition-discrete duration-200 ${
+                  isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                }`}
+              />
             </div>
           )}
         </NavLink>
