@@ -35,7 +35,10 @@ export default function ChatRoom({ chatId, reloadTrigger = 0 }: ChatRoomProps) {
           // 내 메시지면 "me", 아니면 "user"
           sender={msg.sender._id === myId ? 'me' : 'user'}
           // 예: "오전 10:23" 형태로
-          date={new Date(msg.createdAt).toLocaleTimeString()}
+          date={new Date(msg.createdAt).toLocaleTimeString('ko-KR', {
+            hour: 'numeric',
+            minute: 'numeric',
+          })}
         >
           {msg.message}
         </ChattingBubble>
