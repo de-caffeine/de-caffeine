@@ -1,5 +1,8 @@
 import Icon from '../atoms/Icon';
 import UserAvatar from '../atoms/UserAvatar';
+import { updateUser, uploadPhoto } from '../../api/users';
+import { getAuthUser } from '../../api/auth';
+import { deletePost, getPostsByAuthor } from '../../api/posts';
 
 export default function Setting() {
   return (
