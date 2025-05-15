@@ -44,9 +44,9 @@ export default function QuestionCard({ post }: { post: Post }) {
       <div className="mx-[10px] flex flex-row items-center justify-between border-t border-[#d9d9d9] px-[5px] py-[10px]">
         <Info
           size={30}
-          userName={post.author.fullName}
+          userName={getAuthorName()}
           timestamp={post.createdAt}
-          imageUrl={post.author.image}
+          imageUrl={getAuthorImage()}
         />
         <Interest
           commentCount={post.comments.length}
