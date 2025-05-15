@@ -284,7 +284,6 @@ export default function UserPage() {
       {chatOpen && initialConv && (
         <ChatWindow
           onClose={() => setChatOpen(false)} // 변경: 채팅창 닫기 핸들러
-          initialConversation={initialConv} // 변경: 초기 대화 전달
         />
       )}
     </>
