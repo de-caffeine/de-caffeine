@@ -101,7 +101,7 @@ export default function Header() {
                       className="absolute right-0 z-50 mt-2 w-25 rounded-[5px] bg-white text-[14px] shadow drop-shadow-sm"
                     >
                       <Link
-                        to="/me"
+                        to={`/${localStorage.getItem('myId')}`}
                         onClick={() => setShowDropdown(false)}
                         className="block px-4 py-2 hover:text-[#6B4C36]"
                       >
