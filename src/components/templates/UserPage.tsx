@@ -18,17 +18,28 @@ import type { Conversation } from '../organisms/ChatList'; // 변경: 대화 타
 
 // import PostCard from '../molecules/PostCard';
 // import CommentCard from '../molecules/CommentCard';
+import { useMemo } from 'react';
+
+interface CommentItem {
+  post: string;
+  comment: string;
+}
 
 export default function UserPage() {
   const [userDataLoading, setUserDataLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [userData, setUserData] = useState<User | null>(null);
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [channelPosts, setChannelPosts] = useState<Post[]>([]);
-  const [userData, setUserData] = useState<User | null>(null);
+
   const [followCount, setFollowCount] = useState<number>(0);
   const [followerCount, setFollowerCount] = useState<number>(0);
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
+
+  const [commentData, setCommentData] = useState<
+    { postId: string; comment: string; postTitle: string }[]
+  >([]);
 
   const location = useLocation();
   // "/id", "/id/question", "/id/comments", "/id/liked"
@@ -39,7 +50,16 @@ export default function UserPage() {
   const loginUserId = localStorage.getItem('myId');
   // 로그인 유저와 path id 값 비교
   const isMe = loginUserId === id;
-  console.log(loginUserId);
+
+  //질문게시글 필터링
+  const questionPosts = useMemo(
+    () =>
+      posts.filter(
+        (post) =>
+          post.channel.name === 'solved' || post.channel.name === 'unsolved',
+      ),
+    [posts],
+  );
 
   // 변경: 채팅창 열림 상태 및 초기 대화 저장용 state 추가
   const [chatOpen, setChatOpen] = useState(false); // 변경: 채팅창 열림 상태
@@ -50,13 +70,13 @@ export default function UserPage() {
     try {
       // 1) 메시지 전송 및 받아온 데이터 확인
       const newMsg = await createMessage('안녕하세요!', id);
-      console.log('createMessage response ▶', newMsg);
+      console.log('createMessage response', newMsg);
       // Assume newMsg = { _id: '...', message: '안녕하세요!', chatRoomId: '68229f0e04101073e04876ca', ... }
 
       // 2) chatRoomId 만 뽑아서
       const chatRoomId = newMsg._id;
       if (!chatRoomId) {
-        console.error('⚠️ chatRoomId가 응답에 없습니다.');
+        console.error('chatRoomId가 응답에 없습니다.');
         return;
       }
 
@@ -113,11 +133,41 @@ export default function UserPage() {
 
   useEffect(() => {
     if (userData && id) {
-      const already = userData.following.some((rel) => rel.user === id);
+      const already = userData.followers.some((rel) => rel.user === id);
       setIsFollowing(already);
     }
   }, [userData, id]);
 
+  //내가 단 댓글 가져오기
+  useEffect(() => {
+    if (!userData?.comments.length) {
+      setCommentData([]);
+      return;
+    }
+
+    const comments = userData.comments as unknown as CommentItem[];
+    const allPosts = [...channelPosts, ...questionPosts];
+    const combined = comments.map((c) => {
+      const post = allPosts.find((p) => p._id === c.post);
+      let titleText = '제목없음';
+      if (post) {
+        try {
+          const parsed = JSON.parse(post.title);
+          titleText = parsed.title ?? '제목없음';
+        } catch {
+          titleText = post.title;
+        }
+      }
+      return {
+        postId: c.post,
+        postTitle: titleText,
+        comment: c.comment,
+      };
+    });
+    setCommentData(combined);
+  }, [userData?.comments, channelPosts, questionPosts]);
+
+  // 내 좋아요가 달린 포스트 필터링
   const likedPosts = channelPosts.filter((post) =>
     post.likes.some((like) => like.user === id),
   );
@@ -128,11 +178,19 @@ export default function UserPage() {
       c.channel._id === '681da0247ffa911fa118e4be' ||
       c.channel._id === '681da0307ffa911fa118e4c2',
   );
-
   const questionLiked = likedPosts.filter(
     (q) => q.channel.name === 'solved' || q.channel.name === 'unsolved',
   );
 
+  // 댓글 커뮤니티/질문 포스트 필터링
+  const communityComments = commentData.filter((data) =>
+    channelPosts.some((p) => p._id === data.postId),
+  );
+  const fileteredQuestionComments = commentData.filter((data) =>
+    questionPosts.some((p) => p._id === data.postId),
+  );
+
+  //follow 핸들
   const handleFollow = async () => {
     try {
       if (isFollowing) {
@@ -195,6 +253,7 @@ export default function UserPage() {
         />
       )}
 
+      {/* 내가 쓴 글 */}
       {!parts[2] && (
         <div className="mx-auto flex w-[1128px] flex-wrap justify-start gap-4 pt-[17px]">
           {posts.length === 0 ? (
@@ -213,26 +272,74 @@ export default function UserPage() {
         </div>
       )}
 
-      {parts[2] === 'question' &&
-        (() => {
-          const questionPosts = posts.filter(
-            (post) =>
-              post.channel.name === 'solved' ||
-              post.channel.name === 'unsolved',
-          );
-          return (
-            <div className="flex w-[980px] flex-col gap-4 pt-[22px]">
-              {questionPosts.length === 0 ? (
-                <div>아직 작성된 질문이 없습니다.</div>
-              ) : (
-                questionPosts.map((post) => (
-                  <QuestionCard key={post._id} post={post} />
-                ))
-              )}
-            </div>
-          );
-        })()}
+      {/* 내가 한 질문 */}
+      {parts[2] === 'question' && (
+        <div className="flex w-[1128px] flex-col gap-4 pt-[22px]">
+          {questionPosts.length === 0 ? (
+            <div>아직 작성된 질문이 없습니다.</div>
+          ) : (
+            questionPosts.map((post) => (
+              <QuestionCard key={post._id} post={post} />
+            ))
+          )}
+        </div>
+      )}
 
+      {/* 내가 쓴 댓글  */}
+      {parts[2] === 'comments' && (
+        <div className="mx-auto w-[1128px] pt-4 text-left">
+          <p>
+            커뮤니티
+            <span className="text-[#3bb900]"> {communityComments.length}</span>
+          </p>
+        </div>
+      )}
+      {parts[2] === 'comments' && (
+        <div className="nanum-gothic-regular mx-auto flex w-[1128px] flex-wrap gap-4 pt-4">
+          {communityComments.length === 0 ? (
+            <div>아직 댓글이 없습니다.</div>
+          ) : (
+            communityComments.map(({ postId, postTitle, comment }) => (
+              <div
+                key={postId}
+                className="w-[100%] gap-2 rounded border border-[#d9d9d9] p-4"
+              >
+                <h3 className="mb-1 font-semibold">“{postTitle}” 글의 댓글</h3>
+                <p>{comment}</p>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+      {parts[2] === 'comments' && (
+        <div className="mx-auto w-[1128px] pt-8 text-left">
+          <p>
+            질문{' '}
+            <span className="text-[#3bb900]">
+              {fileteredQuestionComments.length}
+            </span>
+          </p>
+        </div>
+      )}
+      {parts[2] === 'comments' && (
+        <div className="nanum-gothic-regular mx-auto flex w-[1128px] flex-wrap gap-2 pt-4">
+          {fileteredQuestionComments.length === 0 ? (
+            <div>아직 댓글이 없습니다.</div>
+          ) : (
+            fileteredQuestionComments.map(({ postId, postTitle, comment }) => (
+              <div
+                key={postId}
+                className="w-[100%] gap-2 rounded border border-[#d9d9d9] p-4 pt-4"
+              >
+                <h3 className="mb-1 font-semibold">“{postTitle}” 글의 댓글</h3>
+                <p>{comment}</p>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
+      {/*  좋아요 누른 글 */}
       {parts[2] === 'liked' && (
         <div className="mx-auto w-[1128px] pt-4 text-left">
           <p>

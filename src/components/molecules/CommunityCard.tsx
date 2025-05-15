@@ -64,9 +64,11 @@ export default function CommunityCard({ post }: { post: Post }) {
         <div className="mx-[10px] flex flex-row items-center justify-between border-t border-[#d9d9d9] px-[5px] py-[10px]">
           <Info
             size={30}
-            userName={userName}
+
+            userName={post.author?.fullName || '탈퇴한 사용자'}
             timestamp={post.createdAt}
-            imageUrl={userImage}
+            imageUrl={post.author?.image}
+
           />
           <Interest
             commentCount={post.comments.length}

@@ -113,14 +113,14 @@ export default function CommentBox({
         <div key={c._id} className="mb-10 flex flex-col">
           <div className="flex items-start justify-between">
             <Info
-              imageUrl={c.author.image}
+              imageUrl={c.author?.image}
               size={32}
-              userName={c.author.fullName}
+              userName={c.author?.fullName || '탈퇴한 사용자'}
               timestamp={c.createdAt}
             />
 
             {/* 본인 댓글일 때만 삭제 버튼 */}
-            {meId === c.author._id && (
+            {meId === c.author?._id && (
               <div className="flex flex-col items-end gap-2">
                 <button
                   onClick={() => handleDelete(c._id)}

@@ -90,8 +90,12 @@ export default function User({
         {/* 팔로우 기능 */}
         <div className="nanum-gothic-regular mb-1 flex flex-col items-end gap-1 self-end text-[12px]">
           {!isMe && (
-            <Button full size="s" onClick={() => followHandler?.()}>
-              {isFollowing ? '팔로우 취소' : '팔로우'}
+            <Button
+              full={!isFollowing}
+              size="s"
+              onClick={() => followHandler?.()}
+            >
+              {isFollowing ? '언팔로우' : '팔로우'}
             </Button>
           )}
 
