@@ -9,11 +9,12 @@ import Icon from '../atoms/Icon';
 import UserAvatar from '../atoms/UserAvatar';
 import { logout } from '../../api/auth';
 import AlarmIcon from '../molecules/AlarmIcon';
+import { useLoginStore } from '../../loginStore';
 
 export default function Header() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
-  const isLoggedIn = !!localStorage.getItem('accessToken');
+  const isLoggedIn = useLoginStore((state) => state.isLoggedIn);
   const [showDropdown, setShowDropdown] = useState(false);
   const avatarRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -53,6 +54,7 @@ export default function Header() {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('myId');
     localStorage.removeItem('myImage');
+    useLoginStore.getState().logout();
 
     setShowDropdown(false);
   };

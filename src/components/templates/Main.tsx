@@ -6,12 +6,14 @@ import { Link } from 'react-router-dom';
 import FloatingButton from '../atoms/FloatingButton';
 import Icon from '../atoms/Icon';
 import { getAuthUser } from '../../api/auth';
+import { useLoginStore } from '../../loginStore';
 
 export default function Main() {
   const [communityPosts, setCommunityPosts] = useState<Post[]>([]); // 출력할 커뮤니티 posts
   const [questionPosts, setQuestionPosts] = useState<Post[]>([]); // 출력할 코드질문 posts
   const [myInfo, setMyInfo] = useState<User | null>(); // 사용자 정보
   const [width, setWidth] = useState(window.innerWidth); // 반응형 width
+  const isLoggedIn = useLoginStore((state) => state.isLoggedIn);
 
   /* 최초 실행때 myInfo 저장, posts fetch */
   useEffect(() => {
@@ -47,7 +49,8 @@ export default function Main() {
 
     fetchCommunityPosts();
     fetchQuestionPosts();
-  }, []);
+    console.log(isLoggedIn);
+  }, [isLoggedIn]);
 
   /* 반응형 출력 */
   useEffect(() => {
@@ -120,9 +123,24 @@ export default function Main() {
         </div>
       </div>
 
-      <Link to="/writer" className="fixed right-[10%] bottom-[5%]">
-        <FloatingButton buttonType="write" />
-      </Link>
+      {isLoggedIn ? (
+        <>
+          <Link to="/writer" className="fixed right-[10%] bottom-[5%]">
+            <FloatingButton buttonType="write" />
+          </Link>
+        </>
+      ) : (
+        <>
+          <div
+            className="fixed right-[10%] bottom-[5%]"
+            onClick={() => {
+              alert('로그인 후에 이용 가능합니다.');
+            }}
+          >
+            <FloatingButton buttonType="write" />
+          </div>
+        </>
+      )}
     </>
   );
 }
