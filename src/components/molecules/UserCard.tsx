@@ -30,21 +30,25 @@ export default function UserCard({
           status={loginStatus}
         />
       </div>
-      <div className="flex min-w-0 flex-1 flex-col gap-2">
-        <UserName name={UName} className="nanum-gothic-bold text-[16px]" />
-        <div className="nanum-gothic-regular mb-2 flex items-baseline gap-4 text-[12px]">
+      <div className="flex flex-col justify-evenly gap-3">
+        <div className="flex flex-col">
+          <UserName name={UName} className="nanum-gothic-bold text-[16px]" />
+          <div className="flex flex-col gap-0.5">
+            <ul className="flex flex-wrap gap-1 leading-none">
+              {tags.slice(0, 2).map((t) =>
+                t.trim() !== '' ? (
+                  <li key={t.trim().toUpperCase()}>
+                    <Tag>{t.trim().toUpperCase()}</Tag>
+                  </li>
+                ) : null,
+              )}
+            </ul>
+          </div>
+        </div>
+        <div className="nanum-gothic-regular flex items-baseline gap-4 text-[12px]">
           <span>팔로우 {followCount}</span>
           <span>팔로워 {followerCount}</span>
         </div>
-        <ul className="flex flex-wrap gap-1">
-          {tags.slice(0, 2).map((t) =>
-            t.trim() !== '' ? (
-              <li key={t.trim().toUpperCase()}>
-                <Tag>{t.trim().toUpperCase()}</Tag>
-              </li>
-            ) : null,
-          )}
-        </ul>
       </div>
     </div>
   );

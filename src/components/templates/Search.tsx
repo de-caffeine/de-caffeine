@@ -8,6 +8,7 @@ import CommunityCard from '../molecules/CommunityCard';
 import QuestionCard from '../molecules/QuestionCard';
 import UserCard from '../molecules/UserCard';
 import { getUsers } from '../../api/users';
+import { getAuthUser } from '../../api/auth';
 
 export default function Search() {
   const location = useLocation();
@@ -16,6 +17,15 @@ export default function Search() {
   const [questionPosts, setQuestionPosts] = useState<Post[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [width, setWidth] = useState(window.innerWidth);
+  const [myInfo, setMyInfo] = useState<User | null>(); // 사용자 정보
+
+  /* 최초 실행때 myInfo 저장 */
+  useEffect(() => {
+    const getMyInfo = async () => {
+      setMyInfo(await getAuthUser());
+    };
+    getMyInfo();
+  }, []);
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
@@ -41,7 +51,9 @@ export default function Search() {
           .filter(
             (post) =>
               JSON.parse(post.title).title.includes(keyword) ||
-              JSON.parse(post.title).body.includes(keyword),
+              JSON.parse(post.title)
+                .body.replace(/<[^>]*>?/g, '')
+                .includes(keyword),
           )
           .sort(
             (a, b) =>
@@ -57,7 +69,9 @@ export default function Search() {
           .filter(
             (post) =>
               JSON.parse(post.title).title.includes(keyword) ||
-              JSON.parse(post.title).body.includes(keyword),
+              JSON.parse(post.title)
+                .body.replace(/<[^>]*>?/g, '')
+                .includes(keyword),
           )
           .sort(
             (a, b) =>
@@ -82,16 +96,33 @@ export default function Search() {
           <div className="w-[270px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px]">
             <div className="flex flex-col">
               <div className="nanum-gothic-regular flex justify-between py-[5px]">
-                <h2>"{keyword}" 커뮤니티 검색 결과</h2>
+                <h2>
+                  "{keyword}" 커뮤니티 검색 결과
+                  <span className="text-[#3bb900]">
+                    &nbsp;
+                    {communityPosts.length}
+                  </span>
+                </h2>
                 <Link to={`/search/${keyword}/community`}>
                   <Icon name="rightIcon"></Icon>
                 </Link>
               </div>
               <div className="flex flex-wrap justify-center gap-[15px]">
-                {printCommunityPosts.length !== 0 ? (
-                  printCommunityPosts.map((post) => (
-                    <CommunityCard key={post._id} post={post} />
-                  ))
+                {communityPosts.length !== 0 ? (
+                  printCommunityPosts.map((post) => {
+                    const like = myInfo?.likes?.find(
+                      (like) => like.post === post._id,
+                    );
+                    const likeId = like ? like._id : null;
+
+                    return (
+                      <CommunityCard
+                        key={post._id}
+                        post={post}
+                        likeId={likeId}
+                      />
+                    );
+                  })
                 ) : (
                   <p className="nanum-gothic-regular text-base text-[#ababab]">
                     앗! "{keyword}"을 포함한 게시물이 없어요!
@@ -102,16 +133,33 @@ export default function Search() {
 
             <div className="my-[20px] flex flex-col">
               <div className="nanum-gothic-regular flex justify-between py-[5px]">
-                <h2>"{keyword}" 코드질문 검색 결과</h2>
+                <h2>
+                  "{keyword}" 코드질문 검색 결과
+                  <span className="text-[#3bb900]">
+                    &nbsp;
+                    {questionPosts.length}
+                  </span>
+                </h2>
                 <Link to={`/search/${keyword}/question`}>
                   <Icon name="rightIcon"></Icon>
                 </Link>
               </div>
               <div className="flex flex-wrap justify-center gap-[15px]">
                 {questionPosts.length !== 0 ? (
-                  questionPosts.map((post) => (
-                    <QuestionCard key={post._id} post={post} />
-                  ))
+                  questionPosts.map((post) => {
+                    const like = myInfo?.likes?.find(
+                      (like) => like.post === post._id,
+                    );
+                    const likeId = like ? like._id : null;
+
+                    return (
+                      <QuestionCard
+                        key={post._id}
+                        post={post}
+                        likeId={likeId}
+                      />
+                    );
+                  })
                 ) : (
                   <p className="nanum-gothic-regular text-base text-[#ababab]">
                     앗! "{keyword}"을 포함한 게시물이 없어요!
@@ -122,7 +170,10 @@ export default function Search() {
 
             <div className="my-[20px] flex flex-col">
               <div className="nanum-gothic-regular flex justify-between py-[5px]">
-                <h2>"{keyword}" 유저 검색 결과</h2>
+                <h2>
+                  "{keyword}" 유저 검색 결과
+                  <span className="text-[#3bb900]">&nbsp;{users.length}</span>
+                </h2>
                 <Link to={`/search/${keyword}/user`}>
                   <Icon name="rightIcon"></Icon>
                 </Link>
@@ -167,13 +218,29 @@ export default function Search() {
           <div className="w-[270px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px]">
             <div className="flex flex-col">
               <div className="nanum-gothic-regular flex justify-between py-[5px]">
-                <h2>"{keyword}" 커뮤니티 검색 결과</h2>
+                <h2>
+                  "{keyword}" 커뮤니티 검색 결과
+                  <span className="text-[#3bb900]">
+                    &nbsp;{communityPosts.length}
+                  </span>
+                </h2>
               </div>
               <div className="flex flex-wrap justify-center gap-[15px]">
-                {printCommunityPosts.length !== 0 ? (
-                  printCommunityPosts.map((post) => (
-                    <CommunityCard key={post._id} post={post} />
-                  ))
+                {communityPosts.length !== 0 ? (
+                  communityPosts.map((post) => {
+                    const like = myInfo?.likes?.find(
+                      (like) => like.post === post._id,
+                    );
+                    const likeId = like ? like._id : null;
+
+                    return (
+                      <CommunityCard
+                        key={post._id}
+                        post={post}
+                        likeId={likeId}
+                      />
+                    );
+                  })
                 ) : (
                   <p className="nanum-gothic-regular text-base text-[#ababab]">
                     앗! 아직 작성된 게시물이 없어요!
@@ -198,9 +265,20 @@ export default function Search() {
               </div>
               <div className="flex flex-wrap justify-center gap-[15px]">
                 {questionPosts.length !== 0 ? (
-                  questionPosts.map((post) => (
-                    <QuestionCard key={post._id} post={post} />
-                  ))
+                  questionPosts.map((post) => {
+                    const like = myInfo?.likes?.find(
+                      (like) => like.post === post._id,
+                    );
+                    const likeId = like ? like._id : null;
+
+                    return (
+                      <QuestionCard
+                        key={post._id}
+                        post={post}
+                        likeId={likeId}
+                      />
+                    );
+                  })
                 ) : (
                   <p className="nanum-gothic-regular text-base text-[#ababab]">
                     앗! 아직 작성된 게시물이 없어요!

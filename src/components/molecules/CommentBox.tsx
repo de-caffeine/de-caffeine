@@ -1,5 +1,5 @@
 // src/components/molecules/CommentBox.tsx
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Info from '../atoms/Info';
 import { getAuthUser } from '../../api/auth';
 import { createComment, deleteComment } from '../../api/comments';
@@ -116,6 +116,7 @@ export default function CommentBox({
               imageUrl={c.author?.image}
               size={32}
               userName={c.author?.fullName || '탈퇴한 사용자'}
+              userId={c.author._id || 'user'}
               timestamp={c.createdAt}
             />
 

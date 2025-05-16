@@ -21,8 +21,9 @@ export default function AlarmListItem({ alarm }: { alarm: Notification }) {
               좋아합니다.
             </Link>
           )}
-          {/* {action === 'follow' && <>이 당신을 팔로우 했습니다.</>} */}
-          {/* {action === 'message' && <>에게서 새로운 메세지가 도착했습니다.</>} */}
+          {alarm.follow && (
+            <Link to={`/${alarm.author._id}`}>이 나를 팔로우합니다.</Link>
+          )}
         </p>
         <p className="nanum-gothic-regular mt-[5px] cursor-default text-[12px] text-[#ababab] dark:text-[#e0e0e0]">
           <TimeAgo timestamp={alarm.createdAt} />

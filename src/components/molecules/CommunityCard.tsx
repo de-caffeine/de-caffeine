@@ -3,25 +3,14 @@ import Info from '../atoms/Info';
 import Interest from '../atoms/Interest';
 import Tag from '../atoms/Tag';
 import LogoImage from '../../assets/images/logo.png';
-import { getUserById } from '../../api/users';
 
-// todo : Login 연결 후 isLike 동적으로 변경 필요함
-export default function CommunityCard({ post }: { post: Post }) {
-  let userName = '';
-  let userImage = '';
-
-  const asdf = async () => {
-    if (typeof post.author === 'object') {
-      userName = post.author?.fullName;
-      userImage = post.author?.image;
-    } else {
-      const user = await getUserById(post.author);
-      userName = user.fullName;
-      userImage = user.image;
-    }
-  };
-  asdf();
-
+export default function CommunityCard({
+  post,
+  likeId,
+}: {
+  post: Post;
+  likeId: string | null;
+}) {
   return (
     <div className="rounded-top-[6px] h-[340px] w-[270px] rounded-[6px] border border-[#d9d9d9] dark:border-[#505050] dark:bg-[#1e1e1e]">
       <Link to={`/post/${post._id}`}>
@@ -64,13 +53,16 @@ export default function CommunityCard({ post }: { post: Post }) {
         <div className="mx-[10px] flex flex-row items-center justify-between border-t border-[#d9d9d9] px-[5px] py-[10px] dark:border-[#505050]">
           <Info
             size={30}
-            userName={userName || '탈퇴한 사용자'}
+            userName={
+              (post.author && (post.author as User).fullName) || '탈퇴한 사용자'
+            }
             timestamp={post.createdAt}
-            imageUrl={userImage}
+            imageUrl={post.author && (post.author as User).image}
+            userId={(post.author && (post.author as User)._id) || 'user'}
           />
           <Interest
             commentCount={post.comments.length}
-            like={{ likeCount: post.likes.length, isLike: false }}
+            like={{ likeCount: post.likes.length, likeId: likeId }}
             _id={post._id}
           />
         </div>

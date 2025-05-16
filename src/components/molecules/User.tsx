@@ -19,6 +19,7 @@ interface UserProps {
   homepage?: string;
   isMe?: boolean;
   isFollowing?: boolean;
+  isLogin?: boolean;
   followHandler?: () => void;
 }
 
@@ -35,8 +36,11 @@ export default function User({
   homepage = '',
   isMe = false,
   isFollowing = false,
+  isLogin = false,
   followHandler,
 }: UserProps) {
+  const ensureProtocol = (url: string) =>
+    url.match(/^https?:\/\//i) ? url : `https://${url}`;
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
@@ -49,21 +53,37 @@ export default function User({
       <div className="flex min-h-[184px] w-[1128px] items-center justify-between border-b-[1px] border-b-[#ababab] px-[30px] py-[10px] dark:border-[#505050] dark:text-[#e0e0e0]">
         <div className="flex items-center justify-center">
           <UserAvatar size={150} imageUrl={imgUrl} />
-          <div className="ml-8 flex flex-col gap-1 self-end">
-            <UserName name={name} className="nanum-gothic-bold text-[28px]" />
+          <div className="ml-8 flex flex-col gap-1">
+            <UserName
+              name={name}
+              className="nanum-gothic-bold pl-[1px] text-[28px]"
+            />
             {/* tags 배열로 정보 받아와서 맵핑 */}
-            <ul className="flex w-[580px] flex-wrap gap-1 leading-none">
-              {techStack.map(
-                (t) =>
-                  // Tag value 값이 없을 경우 렌더링 하지 않음
-                  t.trim() !== '' && (
-                    <li key={t.trim().toUpperCase()}>
-                      <Tag>{t.trim().toUpperCase()}</Tag>
-                    </li>
-                  ),
+            {techStack.length === 0 ? (
+              <span className="pl-[1px] text-[#d9d9d9]">
+                기술 스택을 입력하지 않았습니다.
+              </span>
+            ) : (
+              <ul className="flex w-[580px] flex-wrap gap-1 leading-none">
+                {techStack.map(
+                  (t) =>
+                    // Tag value 값이 없을 경우 렌더링 하지 않음
+                    t.trim() !== '' && (
+                      <li key={t.trim().toUpperCase()}>
+                        <Tag>{t.trim().toUpperCase()}</Tag>
+                      </li>
+                    ),
+                )}
+              </ul>
+            )}
+
+            <p className="min-h-[24px] pl-[1px] text-[16px]">
+              {introduction !== '' ? (
+                introduction
+              ) : (
+                <span className="text-[#d9d9d9]">자기소개가 없습니다.</span>
               )}
-            </ul>
-            <p className="pt-1 text-[16px]">{introduction}</p>
+            </p>
             <div className="flex items-center justify-start gap-3">
               <span className="flex justify-center gap-1 leading-5 tracking-wide text-[#767676]">
                 <img
@@ -76,34 +96,34 @@ export default function User({
               {/* github, velog 주소값 여부에 따라 아이콘 렌더링 */}
               {github !== '' && (
                 <span>
-                  <a href={github} target="_blank">
-                    <Icon
-                      name="githubIcon"
-                      size={18}
-                      color={isDarkMode ? 'white' : 'black'}
-                    />
+                  <a
+                    href={ensureProtocol(github)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Icon name="githubIcon" size={18} />
                   </a>
                 </span>
               )}
               {velog !== '' && (
                 <span>
-                  <a href={velog} target="_blank">
-                    <Icon
-                      name="velogIcon"
-                      size={18}
-                      color={isDarkMode ? 'white' : 'black'}
-                    />
+                  <a
+                    href={ensureProtocol(velog)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Icon name="velogIcon" size={18} />
                   </a>
                 </span>
               )}
               {homepage !== '' && (
                 <span>
-                  <a href={homepage} target="_blank">
-                    <Icon
-                      name="homepageIcon"
-                      size={18}
-                      color={isDarkMode ? 'white' : 'black'}
-                    />
+                  <a
+                    href={ensureProtocol(homepage)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Icon name="homepageIcon" size={18} />
                   </a>
                 </span>
               )}
@@ -113,7 +133,7 @@ export default function User({
 
         {/* 팔로우 기능 */}
         <div className="nanum-gothic-regular mb-1 flex flex-col items-end gap-1 self-end text-[12px]">
-          {!isMe && (
+          {isLogin && !isMe && (
             <Button
               full={!isFollowing}
               size="s"

@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { login } from '../../api/auth'; // 로그인 API
 import { AxiosError } from 'axios';
+
 import coffeeBean from '../../assets/images/CoffeeBean.png';
+import { useLoginStore } from '../../loginStore';
 
 export default function LoginPopup({
   onClose,
@@ -27,6 +29,7 @@ export default function LoginPopup({
       localStorage.setItem('accessToken', res.token); // 로그인 성공 시 토큰 저장
       localStorage.setItem('myId', res.user._id);
       localStorage.setItem('myImage', res.user.image);
+      useLoginStore.getState().login();
       onClose(); // 팝업 닫기
     } catch (err) {
       let msg = '알 수 없는 오류가 발생했습니다.';

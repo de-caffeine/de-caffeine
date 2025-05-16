@@ -50,6 +50,10 @@ export default function SubNavigation({ channel }: { channel: string }) {
       .then((data) => setFullName(data.fullName))
       .catch(console.error);
   }, [userId]);
+
+  // if (fullName === undefined) return <div>로딩중...</div>;
+  // if (fullName === null)
+  //   return <div className="text-gray-600">탈퇴한 회원입니다.</div>;
   const tabData = getTabData(userId, fullName);
   const tabs = tabData[channel];
 

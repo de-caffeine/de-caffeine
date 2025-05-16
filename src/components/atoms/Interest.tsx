@@ -1,5 +1,5 @@
 import Icon from './Icon';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { likePost, unlikePost } from '../../api/likes';
 
 export default function Interest({
@@ -11,55 +11,42 @@ export default function Interest({
   commentCount: number;
   like: {
     likeCount: number;
-    isLike: boolean;
+    likeId: string | null;
   };
 }) {
-  const [isLike, setIsLike] = useState(like.isLike);
+  const [likeId, setlikeId] = useState(like.likeId);
   const [likeCount, setLikeCount] = useState(like.likeCount);
-  const [isDarkMode, setIsDarkMode] = useState(false);
 
-  useEffect(() => {
-    // 다크모드 클래스 감지
-    const dark = document.documentElement.classList.contains('dark');
-    setIsDarkMode(dark);
-  }, []);
-
-  const LikeEventHandler = () => {
-    if (isLike) {
-      likePost(_id);
-      setLikeCount((likeCount) => likeCount - 1);
-    } else {
-      unlikePost(_id);
+  const LikeEventHandler = async () => {
+    if (!likeId) {
+      const newLikeId = await likePost(_id);
+      setlikeId(newLikeId);
       setLikeCount((likeCount) => likeCount + 1);
+    } else {
+      await unlikePost(likeId!);
+      setlikeId(null);
+      setLikeCount((likeCount) => likeCount - 1);
     }
-    setIsLike((isLike) => !isLike);
   };
 
   return (
-    <div className="flex items-center space-x-2 text-xs dark:text-[#e0e0e0]">
-      <div className="flex items-center space-x-1">
-        <Icon
-          name="commentIcon"
-          size={20}
-          color={isDarkMode ? 'white' : 'black'}
-        />
-        <span>{commentCount}</span>
+    <>
+      <div className="flex items-center space-x-2 text-xs">
+        <div className="flex items-center space-x-1">
+          <Icon name="commentIcon" size={20} /> <span>{commentCount}</span>
+        </div>
+        <button
+          className="flex cursor-pointer items-center space-x-1"
+          onClick={LikeEventHandler}
+        >
+          {likeId ? (
+            <Icon name="likeIcon" size={20} color="red" />
+          ) : (
+            <Icon name="unlikeIcon" size={20} />
+          )}
+          <span>{likeCount}</span>
+        </button>
       </div>
-      <button
-        className="flex cursor-pointer items-center space-x-1"
-        onClick={LikeEventHandler}
-      >
-        {isLike ? (
-          <Icon name="likeIcon" size={20} color="red" />
-        ) : (
-          <Icon
-            name="unlikeIcon"
-            size={20}
-            color={isDarkMode ? 'white' : 'black'}
-          />
-        )}
-        <span>{likeCount}</span>
-      </button>
-    </div>
+    </>
   );
 }
