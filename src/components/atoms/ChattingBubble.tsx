@@ -19,7 +19,7 @@ export default function ChattingBubble({
       className={`relative flex gap-[5px] ${sender === 'me' ? 'justify-end' : ''}`}
     >
       {sender === 'user' && (
-        <div className="nanum-gothic-regular max-w-[60%] rounded-tl-[23px] rounded-r-[23px] bg-[#D7CAB9] px-[23px] py-[13px] text-[16px] break-all">
+        <div className="nanum-gothic-regular max-w-[60%] rounded-tl-[23px] rounded-r-[23px] bg-[#D7CAB9] px-[23px] py-[13px] text-[16px] break-all dark:text-black">
           {children}
         </div>
       )}
@@ -30,7 +30,7 @@ export default function ChattingBubble({
       </div>
 
       {sender === 'me' && (
-        <div className="nanum-gothic-regular max-w-[60%] rounded-l-[23px] rounded-tr-[23px] border border-[#D7CAB9] px-[23px] py-[13px] text-[16px] break-all">
+        <div className="dark:bg-dark-button dark:border-dark-border nanum-gothic-regular max-w-[60%] rounded-l-[23px] rounded-tr-[23px] border border-[#D7CAB9] px-[23px] py-[13px] text-[16px] break-all">
           {children}
         </div>
       )}

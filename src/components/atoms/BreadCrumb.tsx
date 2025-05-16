@@ -8,7 +8,7 @@ export default function BreadCrumb({ communityTitle }: BreadCrumbProps) {
   const { pathname } = useLocation();
   return (
     <>
-      <div className="dark:text-[#e0e0e0]">
+      <div className="dark:text-dark-text">
         <span className="nanum-gothic-regular">
           <Link to="/">홈 {'>'}</Link>
         </span>

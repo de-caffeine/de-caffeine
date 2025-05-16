@@ -83,10 +83,10 @@ export default function PostCard({
   };
 
   return (
-    <div className="h-auto w-[979px] rounded-[5px] border border-[#ABABAB] bg-white px-25 py-8 dark:bg-[#1e1e1e]">
+    <div className="dark:bg-dark-card h-auto w-[979px] rounded-[5px] border border-[#ABABAB] bg-white px-25 py-8">
       <div className="mb-6 flex items-center justify-between">
         {/* 제목 */}
-        <div className="nanum-gothic-bold text-[32px] dark:text-[#e0e0e0]">
+        <div className="nanum-gothic-bold dark:text-dark-text text-[32px]">
           {title}
         </div>
 
@@ -94,7 +94,7 @@ export default function PostCard({
         {isCodeQuestion && (
           <button
             onClick={handleToggleResolved}
-            className="nanum-gothic-regular flex flex-shrink-0 items-center text-sm dark:text-[#e0e0e0]"
+            className="nanum-gothic-regular dark:text-dark-text flex flex-shrink-0 items-center text-sm"
           >
             {isResolved ? (
               <>
@@ -112,7 +112,7 @@ export default function PostCard({
       </div>
 
       {/* 작성자 + 시간 */}
-      <div className="mb-2 flex items-center justify-between dark:text-[#e0e0e0]">
+      <div className="dark:text-dark-text mb-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Link to={`/${authorId}`}>
             <UserName name={authorName} className="nanum-gothic-bold" />
@@ -154,7 +154,7 @@ export default function PostCard({
         </div>
       )}
 
-      <hr className="mb-6 border-t border-[#ABABAB] dark:border-[#505050]" />
+      <hr className="dark:border-dark-border mb-6 border-t border-[#ABABAB]" />
 
       {/* 커버 이미지 포스트에서 보이게 */}
       {/* {imageUrl && (
@@ -171,7 +171,7 @@ export default function PostCard({
         readOnly={true}
         theme="snow"
         modules={{ toolbar: false }}
-        className="post-readonly-editor dark:text-[#e0e0e0]"
+        className="post-readonly-editor dark:text-dark-text"
       />
     </div>
   );

@@ -89,7 +89,7 @@ export default function Header() {
                   <AlarmIcon />
                 </div>
                 <div
-                  className="ml-3 cursor-pointer dark:contrast-60 dark:invert"
+                  className="ml-3 cursor-pointer dark:contrast-70 dark:invert"
                   onClick={() => setShowChatWindow(true)} // 변경: 채팅 아이콘 클릭 시 채팅창 열기
                 >
                   <Icon name="chatIcon" size={26} />
@@ -106,7 +106,7 @@ export default function Header() {
                   {showDropdown && (
                     <div
                       ref={dropdownRef}
-                      className="absolute right-0 z-50 mt-2 w-25 rounded-[5px] bg-white text-[14px] shadow drop-shadow-sm dark:bg-[#1e1e1e] dark:text-[#e0e0e0]"
+                      className="dark:bg-dark-card dark:text-dark-text absolute right-0 z-50 mt-2 w-25 rounded-[5px] bg-white text-[14px] shadow drop-shadow-sm"
                     >
                       <Link
                         to={`/${localStorage.getItem('myId')}`}

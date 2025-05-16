@@ -12,7 +12,7 @@ export default function QuestionCard({
   likeId: string | null;
 }) {
   return (
-    <div className="dark: flex h-[190px] w-[100%] flex-col justify-between rounded-[5px] border border-[#d9d9d9] dark:border-[#505050] dark:bg-[#1e1e1e] dark:text-[#e0e0e0]">
+    <div className="dark:border-dark-border dark:bg-dark-card dark:text-dark-text flex h-[190px] w-[100%] flex-col justify-between rounded-[5px] border border-[#d9d9d9]">
       <Link to={`/post/${post._id}`}>
         <div className="items-between flex flex-col">
           <div className="flex h-[91px] flex-col p-[15px]">
@@ -32,12 +32,12 @@ export default function QuestionCard({
             {JSON.parse(post.title).tags.map((t: string, index: number) => (
               <Tag key={index}>{t}</Tag>
             ))}
-            <div className="absolute right-[15px] h-[30px] w-[15px] bg-linear-to-r from-transparent to-white dark:to-[#1e1e1e]" />
-            <div className="absolute right-0 h-[30px] w-[15px] bg-white dark:bg-[#1e1e1e]" />
+            <div className="dark:to-dark-card absolute right-[15px] h-[30px] w-[15px] bg-linear-to-r from-transparent to-white" />
+            <div className="dark:bg-dark-card absolute right-0 h-[30px] w-[15px] bg-white" />
           </div>
         </div>
       </Link>
-      <div className="mx-[10px] flex flex-row items-center justify-between border-t border-[#d9d9d9] px-[5px] py-[10px] dark:border-[#505050]">
+      <div className="dark:border-dark-border mx-[10px] flex flex-row items-center justify-between border-t border-[#d9d9d9] px-[5px] py-[10px]">
         <Info
           size={30}
           userName={

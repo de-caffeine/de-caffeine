@@ -59,7 +59,7 @@ export default function LoginPopup({
 
   return (
     <div className="fixed inset-0 z-10 flex items-center justify-center bg-black/50">
-      <div className="nanum-gothic-regular relative rounded-[15px] bg-white p-7 shadow-inner dark:bg-[#1e1e1e] dark:text-[#e0e0e0] dark:placeholder-[#e0e0e0]">
+      <div className="nanum-gothic-regular dark:bg-dark-card dark:text-dark-text dark:placeholder-dark-text relative rounded-[15px] bg-white p-7 shadow-inner">
         <button
           onClick={onClose}
           className="absolute top-2 right-2 h-5 w-5 cursor-pointer"
@@ -102,7 +102,7 @@ export default function LoginPopup({
           </button>
           <button
             onClick={onSwitchToSignup}
-            className="h-[50px] w-full cursor-pointer rounded-[5px] border text-[20px] dark:border-[#505050] dark:bg-[#505050] dark:text-[#000]"
+            className="dark:border-dark-border dark:bg-dark-border h-[50px] w-full cursor-pointer rounded-[5px] border text-[20px] dark:text-[#000]"
           >
             회원가입
           </button>

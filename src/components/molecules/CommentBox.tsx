@@ -82,7 +82,7 @@ export default function CommentBox({
   };
 
   return (
-    <div className="h-auto w-[979px] rounded-[5px] border border-[#ABABAB] bg-white px-25 py-8 dark:border-[#505050] dark:bg-[#1e1e1e] dark:text-[#e0e0e0]">
+    <div className="dark:border-dark-border dark:bg-dark-card dark:text-dark-text h-auto w-[979px] rounded-[5px] border border-[#ABABAB] bg-white px-25 py-8">
       {/* 댓글 개수 */}
       <p className="nanum-gothic-regular mb-4 text-sm">
         댓글 {comments.length}개
@@ -116,7 +116,7 @@ export default function CommentBox({
               imageUrl={c.author?.image}
               size={32}
               userName={c.author?.fullName || '탈퇴한 사용자'}
-              userId={c.author._id || 'user'}
+              userId={c.author?._id || 'user'}
               timestamp={c.createdAt}
             />
 

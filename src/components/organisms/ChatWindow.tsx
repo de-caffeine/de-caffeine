@@ -48,13 +48,16 @@ export default function ChatWindow({
   };
 
   return (
-    <div className="nanum-gothic-regular fixed right-5 bottom-5 z-50 flex h-[471px] w-[318px] flex-col rounded-lg bg-white shadow-[0_10px_15px_-3px_rgba(0,0,0,0.5),0_4px_6px_-2px_rgba(0,0,0,0.3)] dark:bg-[#1e1e1e] dark:text-[#e0e0e0]">
+    <div className="nanum-gothic-regular dark:bg-dark-card dark:text-dark-text fixed right-5 bottom-5 z-50 flex h-[471px] w-[318px] flex-col rounded-lg bg-white shadow-[0_10px_15px_-3px_rgba(0,0,0,0.5),0_4px_6px_-2px_rgba(0,0,0,0.3)]">
       <header className="flex items-center justify-between border-b border-[#D9D9D9] px-4 py-2">
         {selectedChat ? (
           <>
             {/* 왼쪽 그룹: 뒤로가기 + 아바타 + 이름 */}
             <div className="flex items-center space-x-2">
-              <button onClick={handleBack} className="cursor-pointer">
+              <button
+                onClick={handleBack}
+                className="cursor-pointer dark:contrast-75 dark:invert"
+              >
                 <img src={ArrowLeft} alt="뒤로가기" />
               </button>
               <UserAvatar
@@ -69,7 +72,10 @@ export default function ChatWindow({
             </div>
 
             {/* 오른쪽: 닫기 버튼 */}
-            <button onClick={onClose} className="cursor-pointer">
+            <button
+              onClick={onClose}
+              className="cursor-pointer dark:contrast-75 dark:invert"
+            >
               <img src={XIcon} alt="닫기" />
             </button>
           </>

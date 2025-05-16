@@ -17,6 +17,11 @@ export default function Interest({
   const [likeId, setlikeId] = useState(like.likeId);
   const [likeCount, setLikeCount] = useState(like.likeCount);
 
+  // 다크모드 감지 (선택 사항)
+  const isDarkMode = window.matchMedia?.(
+    '(prefers-color-scheme: dark)',
+  ).matches;
+
   const LikeEventHandler = async () => {
     if (!likeId) {
       const newLikeId = await likePost(_id);
@@ -30,23 +35,26 @@ export default function Interest({
   };
 
   return (
-    <>
-      <div className="flex items-center space-x-2 text-xs">
-        <div className="flex items-center space-x-1">
-          <Icon name="commentIcon" size={20} /> <span>{commentCount}</span>
-        </div>
-        <button
-          className="flex cursor-pointer items-center space-x-1"
-          onClick={LikeEventHandler}
-        >
-          {likeId ? (
-            <Icon name="likeIcon" size={20} color="red" />
-          ) : (
-            <Icon name="unlikeIcon" size={20} />
-          )}
-          <span>{likeCount}</span>
-        </button>
+    <div className="dark:text-dark-text flex items-center space-x-2 text-xs">
+      <div className="flex items-center space-x-1">
+        <Icon
+          name="commentIcon"
+          size={20}
+          color={isDarkMode ? 'white' : 'black'}
+        />
+        <span>{commentCount}</span>
       </div>
-    </>
+      <button
+        className="flex cursor-pointer items-center space-x-1"
+        onClick={LikeEventHandler}
+      >
+        <Icon
+          name={likeId ? 'likeIcon' : 'unlikeIcon'}
+          size={20}
+          color={isDarkMode ? 'white' : 'black'}
+        />
+        <span>{likeCount}</span>
+      </button>
+    </div>
   );
 }

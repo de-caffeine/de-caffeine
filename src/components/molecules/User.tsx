@@ -1,5 +1,4 @@
 //  user name, imgUrl, tag-기술스택, 한줄 소개, 소셜정보, 팔로우, 팔로워 정보, 팔로우 버튼
-import { useEffect, useState } from 'react';
 import Button from '../atoms/Button';
 import Icon from '../atoms/Icon';
 import Tag from '../atoms/Tag';
@@ -41,16 +40,10 @@ export default function User({
 }: UserProps) {
   const ensureProtocol = (url: string) =>
     url.match(/^https?:\/\//i) ? url : `https://${url}`;
-  const [isDarkMode, setIsDarkMode] = useState(false);
 
-  useEffect(() => {
-    // 다크모드 클래스 감지
-    const dark = document.documentElement.classList.contains('dark');
-    setIsDarkMode(dark);
-  }, []);
   return (
     <>
-      <div className="flex min-h-[184px] w-[1128px] items-center justify-between border-b-[1px] border-b-[#ababab] px-[30px] py-[10px] dark:border-[#505050] dark:text-[#e0e0e0]">
+      <div className="dark:border-dark-border dark:text-dark-text flex min-h-[184px] w-[1128px] items-center justify-between border-b-[1px] border-b-[#ababab] px-[30px] py-[10px]">
         <div className="flex items-center justify-center">
           <UserAvatar size={150} imageUrl={imgUrl} />
           <div className="ml-8 flex flex-col gap-1">
@@ -95,7 +88,7 @@ export default function User({
               </span>
               {/* github, velog 주소값 여부에 따라 아이콘 렌더링 */}
               {github !== '' && (
-                <span>
+                <span className="dark:contrast-50 dark:invert">
                   <a
                     href={ensureProtocol(github)}
                     target="_blank"
@@ -106,7 +99,7 @@ export default function User({
                 </span>
               )}
               {velog !== '' && (
-                <span>
+                <span className="dark:contrast-50 dark:invert">
                   <a
                     href={ensureProtocol(velog)}
                     target="_blank"
@@ -117,7 +110,7 @@ export default function User({
                 </span>
               )}
               {homepage !== '' && (
-                <span>
+                <span className="dark:contrast-50 dark:invert">
                   <a
                     href={ensureProtocol(homepage)}
                     target="_blank"

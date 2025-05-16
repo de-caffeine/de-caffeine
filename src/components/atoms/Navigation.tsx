@@ -12,7 +12,7 @@ export default function Navigation() {
       {menu.map(({ name, path }) => (
         <NavLink key={name} to={path}>
           {({ isActive }) => (
-            <div className="group relative cursor-pointer text-base dark:text-[#e0e0e0]">
+            <div className="group dark:text-dark-text relative cursor-pointer text-base">
               <span className={isActive ? 'font-semibold text-[#6B4C36]' : ''}>
                 {name}
               </span>
