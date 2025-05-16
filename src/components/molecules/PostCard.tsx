@@ -1,6 +1,5 @@
-// src/components/organisms/PostCard.tsx
-import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import TimeAgo from '../atoms/TimeAgo';
 import UserName from '../atoms/UserName';
 import ReactQuill from 'react-quill-new';
@@ -15,6 +14,7 @@ interface PostCardProps {
   body: string;
   imageUrl?: string;
   authorName: string;
+  authorId: string;
   createdAt: string | number | Date;
   tags?: string[];
   onDelete?: () => void;
@@ -27,6 +27,7 @@ export default function PostCard({
   body,
   imageUrl,
   authorName,
+  authorId,
   createdAt,
   tags = [],
   onDelete,
@@ -111,7 +112,10 @@ export default function PostCard({
       {/* 작성자 + 시간 */}
       <div className="mb-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <UserName name={authorName} className="nanum-gothic-bold" />
+          <Link to={`/${authorId}`}>
+            <UserName name={authorName} className="nanum-gothic-bold" />
+          </Link>
+          <span className="text-[#979797]">·</span>
           <TimeAgo timestamp={createdAt} />
         </div>
 

@@ -1,33 +1,33 @@
 import Icon from './Icon';
-import { useState } from "react";
-import { likePost, unlikePost } from "../../api/likes";
+import { useState } from 'react';
+import { likePost, unlikePost } from '../../api/likes';
 
 export default function Interest({
   _id,
   commentCount = 0,
-  like
+  like,
 }: {
   _id: string;
   commentCount: number;
   like: {
     likeCount: number;
-    isLike: boolean;
-  }
+    likeId: string | null;
+  };
 }) {
-  const [isLike, setIsLike] = useState(like.isLike);
+  const [likeId, setlikeId] = useState(like.likeId);
   const [likeCount, setLikeCount] = useState(like.likeCount);
 
-  const LikeEventHandler = () => {
-    if (isLike) {
-      likePost(_id);
+  const LikeEventHandler = async () => {
+    if (!likeId) {
+      const newLikeId = await likePost(_id);
+      setlikeId(newLikeId);
+      setLikeCount((likeCount) => likeCount + 1);
+    } else {
+      await unlikePost(likeId!);
+      setlikeId(null);
       setLikeCount((likeCount) => likeCount - 1);
     }
-    else {
-      unlikePost(_id);
-      setLikeCount((likeCount) => likeCount + 1);
-    }
-    setIsLike((isLike) => !isLike);
-  }
+  };
 
   return (
     <>
@@ -35,9 +35,15 @@ export default function Interest({
         <div className="flex items-center space-x-1">
           <Icon name="commentIcon" size={20} /> <span>{commentCount}</span>
         </div>
-        <button className="flex items-center space-x-1 cursor-pointer" onClick={LikeEventHandler}>
-          {isLike && <Icon name="likeIcon" size={20} color="red"/>}
-          {isLike === false && <Icon name="unlikeIcon" size={20} />}
+        <button
+          className="flex cursor-pointer items-center space-x-1"
+          onClick={LikeEventHandler}
+        >
+          {likeId ? (
+            <Icon name="likeIcon" size={20} color="red" />
+          ) : (
+            <Icon name="unlikeIcon" size={20} />
+          )}
           <span>{likeCount}</span>
         </button>
       </div>

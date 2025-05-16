@@ -4,17 +4,13 @@ import Info from '../atoms/Info';
 import Interest from '../atoms/Interest';
 import { Link } from 'react-router-dom';
 
-export default function QuestionCard({ post }: { post: Post }) {
-  const getAuthorName = () => {
-    if (typeof post.author !== 'object' || !post.author?.fullName)
-      return '탈퇴한 사용자';
-    return post.author.fullName;
-  };
-
-  const getAuthorImage = () => {
-    if (typeof post.author !== 'object' || !post.author?.image) return '';
-    return post.author.image;
-  };
+export default function QuestionCard({
+  post,
+  likeId,
+}: {
+  post: Post;
+  likeId: string | null;
+}) {
   return (
     <div className="flex h-[190px] w-[100%] flex-col justify-between rounded-[5px] border border-[#d9d9d9]">
       <Link to={`/post/${post._id}`}>
@@ -44,13 +40,16 @@ export default function QuestionCard({ post }: { post: Post }) {
       <div className="mx-[10px] flex flex-row items-center justify-between border-t border-[#d9d9d9] px-[5px] py-[10px]">
         <Info
           size={30}
-          userName={getAuthorName()}
+          userName={
+            (post.author && (post.author as User).fullName) || '탈퇴한 사용자'
+          }
           timestamp={post.createdAt}
-          imageUrl={getAuthorImage()}
+          imageUrl={post.author && (post.author as User).image}
+          userId={(post.author && (post.author as User)._id) || 'user'}
         />
         <Interest
           commentCount={post.comments.length}
-          like={{ likeCount: post.likes.length, isLike: false }}
+          like={{ likeCount: post.likes.length, likeId: likeId }}
           _id={post._id}
         />
       </div>
