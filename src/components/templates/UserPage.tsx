@@ -23,6 +23,7 @@ import { useMemo } from 'react';
 interface CommentItem {
   post: string;
   comment: string;
+  _id: string;
 }
 
 export default function UserPage() {
@@ -42,7 +43,7 @@ export default function UserPage() {
   const [relationId, setRelationId] = useState<string | null>(null);
 
   const [commentData, setCommentData] = useState<
-    { postId: string; comment: string; postTitle: string }[]
+    { postId: string; comment: string; postTitle: string; commentId: string }[]
   >([]);
 
   const location = useLocation();
@@ -188,6 +189,7 @@ export default function UserPage() {
         postId: c.post,
         postTitle: titleText,
         comment: c.comment,
+        commentId: c._id,
       };
     });
     setCommentData(combined);
@@ -339,16 +341,20 @@ export default function UserPage() {
           {communityComments.length === 0 ? (
             <div>아직 댓글이 없습니다.</div>
           ) : (
-            communityComments.map(({ postId, postTitle, comment }) => (
-              <Link
-                to={`/post/${postId}`}
-                key={postId}
-                className="w-[100%] gap-2 rounded border border-[#d9d9d9] p-4"
-              >
-                <h3 className="mb-1 font-semibold">“{postTitle}” 글의 댓글</h3>
-                <p className="text-[16px]">{comment}</p>
-              </Link>
-            ))
+            communityComments.map(
+              ({ postId, postTitle, comment, commentId }) => (
+                <Link
+                  to={`/post/${postId}`}
+                  key={commentId}
+                  className="w-[100%] gap-2 rounded border border-[#d9d9d9] p-4"
+                >
+                  <h3 className="mb-1 font-semibold">
+                    “{postTitle}” 글의 댓글
+                  </h3>
+                  <p className="text-[16px]">{comment}</p>
+                </Link>
+              ),
+            )
           )}
         </div>
       )}
@@ -367,16 +373,20 @@ export default function UserPage() {
           {fileteredQuestionComments.length === 0 ? (
             <div>아직 댓글이 없습니다.</div>
           ) : (
-            fileteredQuestionComments.map(({ postId, postTitle, comment }) => (
-              <Link
-                to={`/post/${postId}`}
-                key={postId}
-                className="w-[100%] gap-2 rounded border border-[#d9d9d9] p-4 pt-4"
-              >
-                <h3 className="mb-1 font-semibold">“{postTitle}” 글의 댓글</h3>
-                <p className="text-[16px]">{comment}</p>
-              </Link>
-            ))
+            fileteredQuestionComments.map(
+              ({ postId, postTitle, comment, commentId }) => (
+                <Link
+                  to={`/post/${postId}`}
+                  key={commentId}
+                  className="w-[100%] gap-2 rounded border border-[#d9d9d9] p-4 pt-4"
+                >
+                  <h3 className="mb-1 font-semibold">
+                    “{postTitle}” 글의 댓글
+                  </h3>
+                  <p className="text-[16px]">{comment}</p>
+                </Link>
+              ),
+            )
           )}
         </div>
       )}
