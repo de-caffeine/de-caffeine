@@ -209,7 +209,7 @@ export default function Writer2() {
       </div>
 
       <div className="nanum-gothic-regular flex min-h-[700px] w-[1200px] gap-4 px-30 py-5">
-        <div className="flex flex-1 flex-col gap-4 rounded-[5px] border border-[#ABABAB] p-4">
+        <div className="flex flex-1 flex-col gap-4 rounded-[5px] border border-[#ABABAB] px-10 py-10">
           <div className="flex items-center justify-between gap-4">
             {/* 제목 입력 */}
             <input
@@ -309,7 +309,7 @@ export default function Writer2() {
             formats={formats}
             theme="snow"
             placeholder="내용을 입력해주세요"
-            className="post-readonly-editor flex-1"
+            className="post-readonly-editor nanum-gothic-regular flex-1"
           />
 
           {/* 제출 버튼 */}
