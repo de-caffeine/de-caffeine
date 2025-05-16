@@ -136,6 +136,7 @@ export default function Post() {
         body={parsedBody}
         imageUrl={post.image}
         authorName={post.author?.fullName || '탈퇴한 사용자'}
+        authorId={post.author?._id || 'user'}
         createdAt={post.createdAt}
         tags={parsedTags}
         canDelete={canDelete}

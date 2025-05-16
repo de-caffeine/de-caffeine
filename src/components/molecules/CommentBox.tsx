@@ -116,6 +116,7 @@ export default function CommentBox({
               imageUrl={c.author?.image}
               size={32}
               userName={c.author?.fullName || '탈퇴한 사용자'}
+              userId={c.author._id || 'user'}
               timestamp={c.createdAt}
             />
 

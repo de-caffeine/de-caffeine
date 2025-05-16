@@ -55,7 +55,7 @@ export default function CommunityCard({
           <Info
             size={30}
             userName={
-              (post.author && (post.author as User).fullName) || '탈퇴한 유저'
+              (post.author && (post.author as User).fullName) || '탈퇴한 사용자'
             }
             timestamp={post.createdAt}
             imageUrl={post.author && (post.author as User).image}
