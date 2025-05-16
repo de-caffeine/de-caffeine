@@ -75,7 +75,7 @@ export default function Header() {
           <div className="flex flex-shrink-0 items-center space-x-6">
             {isLoggedIn ? (
               <>
-                <div className="ml-3 cursor-pointer">
+                <div className="mt-[5px] ml-3 cursor-pointer">
                   <AlarmIcon />
                 </div>
                 <div className="ml-3 cursor-pointer">

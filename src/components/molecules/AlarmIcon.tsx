@@ -12,24 +12,26 @@ export default function AlarmIcon() {
   const modalRef = useRef<HTMLDivElement>(null);
 
   const fetchAlarms = async () => {
-    const res = await getNotifications();
-    setAlarms(res ?? []);
+    const res: Notification[] = await getNotifications();
+    setAlarms(
+      res
+        ? res.filter(
+            (alarm) => !alarm.seen && alarm.follow !== null && !alarm.message,
+          )
+        : [],
+    );
   };
 
   useEffect(() => {
-    if (ismodalOpen) fetchAlarms();
-  }, [ismodalOpen]);
-
-  useEffect(() => {
+    fetchAlarms();
     const handleClickOutside = (e: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(e.target as Node))
         setIsmodalOpen(false);
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [alarms]);
 
-  const displayAlarms = alarms.filter((alarm) => !alarm.seen);
   const deleteAlarms = async () => {
     await markNotificationsSeen();
     fetchAlarms();
@@ -37,12 +39,15 @@ export default function AlarmIcon() {
 
   return (
     <div className="relative inline-block" ref={modalRef}>
-      <div className="mt-[5px]">
+      <div className="relative mt-[5px]">
         <Icon
           size={40}
           name="alarmIcon"
           onClick={() => setIsmodalOpen(!ismodalOpen)}
         />
+        {alarms.length > 0 && (
+          <div className="absolute top-0 right-0 h-[10px] w-[10px] rounded-full bg-red-600" />
+        )}
       </div>
 
       {ismodalOpen && (
@@ -57,8 +62,8 @@ export default function AlarmIcon() {
             className="max-h-[330px] overflow-y-auto pr-[5px] pl-[20px]"
             style={{ scrollbarGutter: 'stable' }}
           >
-            {displayAlarms.length !== 0 ? (
-              displayAlarms.map((alarm) => (
+            {alarms.length !== 0 ? (
+              alarms.map((alarm) => (
                 <AlarmListItem key={alarm._id} alarm={alarm} />
               ))
             ) : (
