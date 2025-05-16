@@ -6,6 +6,8 @@ import Icon from '../atoms/Icon';
 import UserAvatar from '../atoms/UserAvatar';
 import { updateUser, uploadPhoto } from '../../api/users';
 import { getAuthUser } from '../../api/auth';
+import * as React from 'react';
+import Switch from '@mui/material/Switch';
 
 export default function Setting() {
   const [user, setUser] = useState<User | null>(null); // 사용자 데이터
@@ -19,7 +21,14 @@ export default function Setting() {
     velog: '',
     homepage: '',
   });
-  const [darkModeToggle, setDarkModeToggle] = useState(false);
+  const [darkModeToggle, setDarkModeToggle] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('darkMode') === 'true';
+    }
+    return false;
+  });
+
+  const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -57,13 +66,6 @@ export default function Setting() {
       console.log('light');
     }
   }, [darkModeToggle]);
-
-  // 최초 mount 시 localStorage 값 반영
-  useEffect(() => {
-    const saved = localStorage.getItem('darkMode') === 'true';
-    setDarkModeToggle(saved);
-    document.documentElement.classList.toggle('dark', saved);
-  }, []);
 
   useEffect(() => {
     localStorage.setItem('darkMode', String(darkModeToggle));
@@ -207,17 +209,13 @@ export default function Setting() {
             이미지 삭제
           </button>
 
-          <div className="ml-[130px] h-[30px] w-[59px] rounded-4xl border transition-colors">
-            <button
-              className={`h-[28px] w-[28px] transform rounded-2xl bg-[#A9907E] transition-transform duration-300 ease-in-out ${
-                darkModeToggle ? 'translate-x-[29px]' : 'translate-x-0'
-              }`}
-              onClick={() => setDarkModeToggle((prev) => !prev)}
-            >
-              <div className="ml-[3px]">
-                <Icon name="darkModeIcon" size={20} />
-              </div>
-            </button>
+          <div className="ml-[100px] flex items-center text-[13px]">
+            <Switch
+              {...label}
+              checked={darkModeToggle}
+              onChange={(e) => setDarkModeToggle(e.target.checked)}
+            />
+            다크모드
           </div>
         </div>
 
