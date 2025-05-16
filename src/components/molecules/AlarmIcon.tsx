@@ -34,7 +34,7 @@ export default function AlarmIcon() {
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [alarms]);
+  }, []);
 
   const deleteAlarms = async () => {
     await markNotificationsSeen();
