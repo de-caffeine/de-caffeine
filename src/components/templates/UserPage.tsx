@@ -1,5 +1,5 @@
 import User from '../molecules/User';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getUserById } from '../../api/users';
 import CommunityCard from '../molecules/CommunityCard';
 import { getPostsByAuthor, getPostsByChannel } from '../../api/posts';
@@ -9,6 +9,7 @@ import { followUser, unfollowUser } from '../../api/follow';
 import FloatingButton from '../atoms/FloatingButton';
 import { createNotification } from '../../api/notifications';
 import { useMemo } from 'react';
+import { getAuthUser } from '../../api/auth';
 
 interface CommentItem {
   post: string;
@@ -50,6 +51,14 @@ export default function UserPage() {
       ),
     [posts],
   );
+
+  const [myInfo, setMyInfo] = useState<User | null>(); // 사용자 정보
+  useEffect(() => {
+    const getMyInfo = async () => {
+      setMyInfo(await getAuthUser());
+    };
+    getMyInfo();
+  }, []);
 
   useEffect(() => {
     async function loadUserData() {
@@ -239,7 +248,16 @@ export default function UserPage() {
                     p.channel._id === '681da0307ffa911fa118e4c2' ||
                     p.channel._id === '681da0247ffa911fa118e4be',
                 )
-                .map((post) => <CommunityCard key={post._id} post={post} />)
+                .map((post) => {
+                  const like = userData?.likes?.find(
+                    (like) => like.post === post._id,
+                  );
+                  const likeId = like ? like._id : null;
+
+                  return (
+                    <CommunityCard key={post._id} post={post} likeId={likeId} />
+                  );
+                })
             )}
           </div>
         )}
@@ -250,9 +268,16 @@ export default function UserPage() {
             {questionPosts.length === 0 ? (
               <div>아직 작성된 질문이 없습니다.</div>
             ) : (
-              questionPosts.map((post) => (
-                <QuestionCard key={post._id} post={post} />
-              ))
+              questionPosts.map((post) => {
+                const like = myInfo?.likes?.find(
+                  (like) => like.post === post._id,
+                );
+                const likeId = like ? like._id : null;
+
+                return (
+                  <QuestionCard key={post._id} post={post} likeId={likeId} />
+                );
+              })
             )}
           </div>
         )}
@@ -334,9 +359,16 @@ export default function UserPage() {
             {communityLiked.length === 0 ? (
               <div>아직 좋아요를 누른 글이 없습니다.</div>
             ) : (
-              likedPosts.map((post) => (
-                <QuestionCard key={post._id} post={post} />
-              ))
+              likedPosts.map((post) => {
+                const like = myInfo?.likes?.find(
+                  (like) => like.post === post._id,
+                );
+                const likeId = like ? like._id : null;
+
+                return (
+                  <CommunityCard key={post._id} post={post} likeId={likeId} />
+                );
+              })
             )}
           </div>
         )}
@@ -353,9 +385,16 @@ export default function UserPage() {
             {questionLiked.length === 0 ? (
               <div>아직 좋아요를 누른 글이 없습니다.</div>
             ) : (
-              questionLiked.map((post) => (
-                <QuestionCard key={post._id} post={post} />
-              ))
+              questionLiked.map((post) => {
+                const like = myInfo?.likes?.find(
+                  (like) => like.post === post._id,
+                );
+                const likeId = like ? like._id : null;
+
+                return (
+                  <QuestionCard key={post._id} post={post} likeId={likeId} />
+                );
+              })
             )}
           </div>
         )}

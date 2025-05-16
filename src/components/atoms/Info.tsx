@@ -3,19 +3,19 @@ import TimeAgo from '../atoms/TimeAgo';
 import UserAvatar from '../atoms/UserAvatar';
 
 interface InfoProps {
-  imageUrl?: string;
+  imageUrl: string | undefined;
   size?: number;
   timestamp: string | number | Date;
   userName: string;
-  userId: string;
+  userId?: string;
 }
 
 export default function Info({
-  imageUrl,
+  imageUrl = undefined,
   size = 24,
   timestamp,
-  userName,
-  userId,
+  userName = '탈퇴한 사용자',
+  userId = 'user',
 }: InfoProps) {
   return (
     <>

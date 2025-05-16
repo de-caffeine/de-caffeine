@@ -1,5 +1,4 @@
-// src/components/organisms/PostCard.tsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import TimeAgo from '../atoms/TimeAgo';
 import UserName from '../atoms/UserName';

@@ -1,5 +1,5 @@
 // src/components/molecules/CommentBox.tsx
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Info from '../atoms/Info';
 import { getAuthUser } from '../../api/auth';
 import { createComment, deleteComment } from '../../api/comments';

@@ -1,5 +1,3 @@
-// src/components/molecules/ChattingListItem.tsx
-import React from 'react';
 import { Link } from 'react-router-dom';
 import TimeAgo from '../atoms/TimeAgo';
 import UserAvatar from '../atoms/UserAvatar';

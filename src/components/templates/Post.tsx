@@ -1,5 +1,5 @@
 // src/components/pages/Post.tsx
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { getPost, deletePost } from '../../api/posts';
 import { getAuthUser } from '../../api/auth'; // 로그인 사용자 정보 불러오기
