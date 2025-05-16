@@ -73,7 +73,7 @@ export default function Post() {
     try {
       await deletePost(postId);
       alert('삭제되었습니다.');
-      navigate('/posts');
+      navigate('/');
     } catch (err) {
       console.error(err);
       alert('삭제 중 오류가 발생했습니다.');
