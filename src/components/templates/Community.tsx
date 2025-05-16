@@ -3,17 +3,30 @@ import { getPostsByChannel } from '../../api/posts';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import FloatingButton from '../atoms/FloatingButton';
+import { getAuthUser } from '../../api/auth';
 
 export default function Community() {
-  const location = useLocation();
-  const [posts, setPosts] = useState<Post[]>([]);
+  const location = useLocation(); // subChannel
+  const [posts, setPosts] = useState<Post[]>([]); // 출력할 posts
+  const [myInfo, setMyInfo] = useState<User | null>(); // 사용자 정보
 
+  /* 최초 실행때 myInfo 저장 */
   useEffect(() => {
+    const getMyInfo = async () => {
+      setMyInfo(await getAuthUser());
+    };
+    getMyInfo();
+  }, []);
+
+  /* subChannel에 따라 fetch */
+  useEffect(() => {
+    /* 포스트 fetch 메소드 */
     const fetchPosts = async (channelId: string) => {
       const posts = await getPostsByChannel(channelId);
       setPosts(posts);
     };
 
+    /* 전체 포스트 fetch 메소드 */
     const fetchAllPosts = async () => {
       const daily = await getPostsByChannel('681d9fee7ffa911fa118e4b5');
       const develop = await getPostsByChannel('681da0077ffa911fa118e4ba');
@@ -53,9 +66,14 @@ export default function Community() {
 
   return (
     <>
-      <div className="mb-[20px] flex w-[270px] flex-wrap justify-center gap-[15px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px]">
+      <div className="wrapper card-list">
         {posts.length !== 0 ? (
-          posts.map((post) => <CommunityCard key={post._id} post={post} />)
+          posts.map((post) => {
+            const like = myInfo?.likes?.find((like) => like.post === post._id);
+            const likeId = like ? like._id : null;
+
+            return <CommunityCard key={post._id} post={post} likeId={likeId} />;
+          })
         ) : (
           <p className="nanum-gothic-regular text-base text-[#ababab]">
             앗! 아직 작성된 게시물이 없어요!

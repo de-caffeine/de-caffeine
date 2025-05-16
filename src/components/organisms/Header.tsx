@@ -1,5 +1,5 @@
 // src/components/organisms/Header.tsx
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import Logo from '../atoms/Logo';
 import SignupPopup from '../molecules/SignupPopup';
@@ -10,12 +10,13 @@ import Icon from '../atoms/Icon';
 import UserAvatar from '../atoms/UserAvatar';
 import { logout } from '../../api/auth';
 import AlarmIcon from '../molecules/AlarmIcon';
+import { useLoginStore } from '../../loginStore';
 import ChatWindow from './ChatWindow'; // 변경: ChatWindow import 추가
 
 export default function Header() {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
-  const isLoggedIn = !!localStorage.getItem('accessToken');
+  const isLoggedIn = useLoginStore((state) => state.isLoggedIn);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showChatWindow, setShowChatWindow] = useState(false); // 변경: 채팅창 토글 상태 추가
   const avatarRef = useRef(null);
@@ -59,6 +60,8 @@ export default function Header() {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('myId');
     localStorage.removeItem('myImage');
+    useLoginStore.getState().logout();
+
     setShowDropdown(false);
   };
 
@@ -82,7 +85,7 @@ export default function Header() {
           <div className="flex flex-shrink-0 items-center space-x-6">
             {isLoggedIn ? (
               <>
-                <div className="ml-3 cursor-pointer">
+                <div className="mt-[5px] ml-3 cursor-pointer">
                   <AlarmIcon />
                 </div>
                 <div
