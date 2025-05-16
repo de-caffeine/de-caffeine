@@ -60,9 +60,22 @@ export default function Writer2() {
   const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | undefined>(
     state?.imageUrl,
   );
+  // ▶ 추가: 커버 파일명 상태
+  const [coverFileName, setCoverFileName] = useState<string>('');
 
   const [loading, setLoading] = useState(false);
   const quillRef = useRef<ReactQuill>(null);
+
+  // ▶ 추가: 커스텀 파일 선택 핸들러
+  const onCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setCoverFile(file);
+      setCoverFileName(file.name);
+      const url = URL.createObjectURL(file);
+      setCoverPreviewUrl(url);
+    }
+  };
 
   // state가 없고 postId만 있을 때 백엔드에서 불러오기
   useEffect(() => {
@@ -79,14 +92,6 @@ export default function Writer2() {
         });
     }
   }, [postId, state]);
-
-  // 커버 파일 선택 시 미리보기 URL 생성
-  useEffect(() => {
-    if (!coverFile) return;
-    const url = URL.createObjectURL(coverFile);
-    setCoverPreviewUrl(url);
-    return () => URL.revokeObjectURL(url);
-  }, [coverFile]);
 
   // Quill 커스텀 이미지 핸들러 (커버 상태 건드리지 않음)
   const imageHandler = useCallback(() => {
@@ -174,6 +179,7 @@ export default function Writer2() {
         setTagsArray([]); // ▶ 수정: tagsArray 초기화
         setCoverFile(undefined);
         setCoverPreviewUrl(undefined);
+        setCoverFileName(''); // ▶ 추가: 커버 파일명 초기화
       }
     } catch (err: any) {
       console.error(err);
@@ -263,22 +269,31 @@ export default function Writer2() {
 
           <hr className="mb-4 border-t border-[#ABABAB]" />
 
-          {/* 커버 이미지 업로드 */}
+          {/* ▶ 커버 이미지 업로드 (커스텀) */}
           <div>
-            <label className="mb-1 block text-sm">커버 이미지 업로드</label>
+            {/* ▶ 숨긴 실제 input */}
             <input
+              id="cover-input"
               type="file"
               accept="image/*"
-              onChange={(e) => setCoverFile(e.target.files?.[0])}
-              className="cursor-pointer"
+              className="hidden"
+              onChange={onCoverChange}
             />
-            {coverPreviewUrl && (
+            {/* ▶ 클릭하면 파일 선택창 띄우는 버튼 */}
+            <label
+              htmlFor="cover-input"
+              className="inline-block cursor-pointer rounded px-3 py-1 text-sm"
+            >
+              {coverFileName || '커버 이미지 업로드'}
+            </label>
+            {/* ▶ 선택된 이미지 미리보기 */}
+            {/* {coverPreviewUrl && (
               <img
                 src={coverPreviewUrl}
                 alt="커버 이미지 미리보기"
                 className="mt-2 max-h-[200px] max-w-[200px] rounded-[5px] object-cover"
               />
-            )}
+            )} */}
           </div>
 
           {/* 본문 에디터 */}
