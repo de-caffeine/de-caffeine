@@ -1,16 +1,16 @@
 // src/pages/UserPage.tsx
 import User from '../molecules/User';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getUserById } from '../../api/users';
 import CommunityCard from '../molecules/CommunityCard';
 import { getPostsByAuthor, getPostsByChannel } from '../../api/posts';
-import { useLocation } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import QuestionCard from '../molecules/QuestionCard';
 import { followUser, unfollowUser } from '../../api/follow';
 import FloatingButton from '../atoms/FloatingButton';
 import { createNotification } from '../../api/notifications';
 // 변경: 메시지 API import 추가
-import { createMessage, getConversations } from '../../api/messages'; // 변경: 메시지 전송 및 목록 조회
+import { createMessage } from '../../api/messages'; // 변경: 메시지 전송 및 목록 조회
 // 변경: ChatWindow import 추가
 import ChatWindow from '../organisms/ChatWindow'; // 변경: 채팅창 컴포넌트
 // 변경: Conversation 타입 import 추가
@@ -26,16 +26,20 @@ interface CommentItem {
 }
 
 export default function UserPage() {
+  const [userInvalid, setUserInvalid] = useState(false);
+
   const [userDataLoading, setUserDataLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [userData, setUserData] = useState<User | null>(null);
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [channelPosts, setChannelPosts] = useState<Post[]>([]);
+  const [channelError, setChannelError] = useState<string | null>(null);
 
   const [followCount, setFollowCount] = useState<number>(0);
   const [followerCount, setFollowerCount] = useState<number>(0);
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const [relationId, setRelationId] = useState<string | null>(null);
 
   const [commentData, setCommentData] = useState<
     { postId: string; comment: string; postTitle: string }[]
@@ -50,6 +54,7 @@ export default function UserPage() {
   const loginUserId = localStorage.getItem('myId');
   // 로그인 유저와 path id 값 비교
   const isMe = loginUserId === id;
+  const isLogin = Boolean(loginUserId);
 
   //질문게시글 필터링
   const questionPosts = useMemo(
@@ -105,6 +110,14 @@ export default function UserPage() {
     async function loadUserData() {
       try {
         const data = await getUserById(id);
+        //유효하지 않은 값 (role: SuperAdmin, !data_id)
+        const notValid = data.role === 'SuperAdmin' || !data._id;
+
+        if (notValid) {
+          setUserInvalid(true);
+          setUserDataLoading(false);
+          return;
+        }
         setUserData(data);
         setFollowerCount(data.followers.length ?? 0);
         setFollowCount(data.following.length ?? 0);
@@ -122,11 +135,24 @@ export default function UserPage() {
 
   useEffect(() => {
     async function postsOfEachChannel() {
-      const daily = await getPostsByChannel('681d9fee7ffa911fa118e4b5');
-      const develop = await getPostsByChannel('681da0077ffa911fa118e4ba');
-      const employ = await getPostsByChannel('681da0247ffa911fa118e4be');
-      const recruit = await getPostsByChannel('681da0307ffa911fa118e4c2');
-      setChannelPosts([...daily, ...develop, ...employ, ...recruit]);
+      try {
+        const [daily, develop, employ, recruit] = await Promise.all([
+          getPostsByChannel('681d9fee7ffa911fa118e4b5'),
+          getPostsByChannel('681da0077ffa911fa118e4ba'),
+          getPostsByChannel('681da0247ffa911fa118e4be'),
+          getPostsByChannel('681da0307ffa911fa118e4c2'),
+        ]);
+        const all = [...daily, ...develop, ...employ, ...recruit];
+        const filtered = all.filter(
+          (p) => p.author !== null || p.author !== '',
+        );
+        setChannelPosts(filtered);
+      } catch (err) {
+        console.error('게시물 로드 실패', err);
+        setChannelError(
+          '채널 게시물을 불러오는 중 네트워크 오류가 발생했습니다.',
+        );
+      }
     }
     postsOfEachChannel();
   }, []);
@@ -167,6 +193,17 @@ export default function UserPage() {
     setCommentData(combined);
   }, [userData?.comments, channelPosts, questionPosts]);
 
+  //[Follow]userData가 로드될 때 존재하는 팔로우 관계 찾아서 relationId 세팅
+  useEffect(() => {
+    if (!userData || !id) return;
+    const checkRel = userData.following.find((rel) => rel.user === id);
+    setRelationId(checkRel?._id ?? null);
+  }, [userData, id]);
+  //[Follow]relationId 가 바뀔 때마다 isFollowing 갱신
+  useEffect(() => {
+    setIsFollowing(relationId !== null);
+  }, [relationId]);
+
   // 내 좋아요가 달린 포스트 필터링
   const likedPosts = channelPosts.filter((post) =>
     post.likes.some((like) => like.user === id),
@@ -193,11 +230,10 @@ export default function UserPage() {
   //follow 핸들
   const handleFollow = async () => {
     try {
-      if (isFollowing) {
-        const rel = userData!.following.find((r) => r.user === id);
-        if (!rel) return;
-        await unfollowUser(rel._id);
+      if (relationId) {
+        await unfollowUser(relationId);
         setFollowerCount((count) => count - 1);
+        setRelationId(null);
       } else {
         const newRel = await followUser(id);
         await createNotification({
@@ -206,17 +242,20 @@ export default function UserPage() {
           userId: id,
         });
         setFollowerCount((count) => count + 1);
+        setRelationId(newRel._id);
       }
-      setIsFollowing((prev) => !prev);
+      // setIsFollowing((prev) => !prev);
     } catch (err) {
       console.error(err);
     }
   };
 
+  if (userInvalid) return <Navigate to="/*" />;
   if (userDataLoading) return <div>로딩중 ... </div>;
   if (error) return <div>에러 : {error}</div>;
   if (userData === null) return <div>정보가 없습니다.</div>;
-
+  // if (id === 'user') return <div>탈퇴한 회원입니다.</div>;
+  if (channelError) return <div>{channelError}</div>;
   return (
     <>
       {!parts[2] && (
@@ -248,6 +287,7 @@ export default function UserPage() {
               : ''
           }
           isMe={isMe}
+          isLogin={isLogin}
           isFollowing={isFollowing}
           followHandler={handleFollow}
         />
@@ -300,13 +340,14 @@ export default function UserPage() {
             <div>아직 댓글이 없습니다.</div>
           ) : (
             communityComments.map(({ postId, postTitle, comment }) => (
-              <div
+              <Link
+                to={`/post/${postId}`}
                 key={postId}
                 className="w-[100%] gap-2 rounded border border-[#d9d9d9] p-4"
               >
                 <h3 className="mb-1 font-semibold">“{postTitle}” 글의 댓글</h3>
-                <p>{comment}</p>
-              </div>
+                <p className="text-[16px]">{comment}</p>
+              </Link>
             ))
           )}
         </div>
@@ -327,13 +368,14 @@ export default function UserPage() {
             <div>아직 댓글이 없습니다.</div>
           ) : (
             fileteredQuestionComments.map(({ postId, postTitle, comment }) => (
-              <div
+              <Link
+                to={`/post/${postId}`}
                 key={postId}
                 className="w-[100%] gap-2 rounded border border-[#d9d9d9] p-4 pt-4"
               >
                 <h3 className="mb-1 font-semibold">“{postTitle}” 글의 댓글</h3>
-                <p>{comment}</p>
-              </div>
+                <p className="text-[16px]">{comment}</p>
+              </Link>
             ))
           )}
         </div>
