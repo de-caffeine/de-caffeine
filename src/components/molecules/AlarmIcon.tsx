@@ -16,7 +16,11 @@ export default function AlarmIcon() {
     setAlarms(
       res
         ? res.filter(
-            (alarm) => !alarm.seen && alarm.follow !== null && !alarm.message,
+            (alarm) =>
+              !alarm.seen &&
+              alarm.follow !== null &&
+              !alarm.message &&
+              alarm.author._id !== localStorage.getItem('myId'),
           )
         : [],
     );
