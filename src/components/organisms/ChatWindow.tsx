@@ -54,19 +54,19 @@ export default function ChatWindow({
   };
 
   return (
-    <div className="fixed right-0 bottom-0 z-50 flex h-[471px] w-[318px] flex-col rounded-lg bg-white shadow-lg">
-      <header className="flex items-center justify-between border-b px-4 py-2">
+    <div className="nanum-gothic-regular fixed right-5 bottom-5 z-50 flex h-[471px] w-[318px] flex-col rounded-lg bg-white shadow-lg">
+      <header className="flex items-center justify-between border-b border-[#D9D9D9] px-4 py-2">
         {selectedChat ? (
           <>
-            <button onClick={handleBack}>←</button>
-            <h4 className="text-lg font-bold">
-              {selectedChat.partner.fullName}
-            </h4>
+            <button className="font-bold" onClick={handleBack}>
+              ←
+            </button>
+            <h4 className="text-lg">{selectedChat.partner.fullName}</h4>
           </>
         ) : (
           <>
-            <h4 className="text-lg font-bold">채팅 목록</h4>
-            <button onClick={onClose}>
+            <h4 className="text-lg text-[#6B4C36]">채팅 목록</h4>
+            <button className="cursor-pointer" onClick={onClose}>
               <img src={XIcon} alt="닫기" />
             </button>
           </>
@@ -90,13 +90,13 @@ export default function ChatWindow({
       </div>
 
       {selectedChat && (
-        <footer className="border-t p-2">
-          <div className="relative w-full">
+        <footer className="p-2">
+          <div className="relative w-full px-1">
             {/* 변경: draft 바인딩, onChange, Enter 키 전송 */}
             <input
               type="text"
               placeholder="메시지를 입력하세요"
-              className="w-full rounded border px-2 py-1 pr-10"
+              className="w-full rounded border border-[#D7CAB9] px-2 py-1 pr-10 focus:outline-none"
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               onKeyDown={(e) => {
@@ -108,7 +108,7 @@ export default function ChatWindow({
             />
             {/* 변경: onClick에 handleSend 연결 */}
             <button
-              className="absolute top-1/2 right-2 -translate-y-1/2"
+              className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer"
               onClick={handleSend}
             >
               <img src={chatimage} alt="전송" className="h-6 w-6" />
