@@ -371,7 +371,7 @@ export default function UserPage() {
             communityComments.map(({ postId, postTitle, comment }) => (
               <div
                 key={postId}
-                className="w-[100%] gap-2 rounded border border-[#d9d9d9] p-4"
+                className="dark:border-dark-border w-[100%] gap-2 rounded border border-[#d9d9d9] p-4"
               >
                 <h3 className="mb-1 font-semibold">“{postTitle}” 글의 댓글</h3>
                 <p>{comment}</p>
@@ -398,7 +398,7 @@ export default function UserPage() {
             fileteredQuestionComments.map(({ postId, postTitle, comment }) => (
               <div
                 key={postId}
-                className="w-[100%] gap-2 rounded border border-[#d9d9d9] p-4 pt-4"
+                className="dark:border-dark-border w-[100%] gap-2 rounded border border-[#d9d9d9] p-4 pt-4"
               >
                 <h3 className="mb-1 font-semibold">“{postTitle}” 글의 댓글</h3>
                 <p>{comment}</p>
