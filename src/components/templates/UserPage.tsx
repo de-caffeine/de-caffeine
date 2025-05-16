@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { getUserById } from '../../api/users';
 import CommunityCard from '../molecules/CommunityCard';
 import { getPostsByAuthor, getPostsByChannel } from '../../api/posts';
-import { Link, Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import QuestionCard from '../molecules/QuestionCard';
 import { followUser, unfollowUser } from '../../api/follow';
 import FloatingButton from '../atoms/FloatingButton';
@@ -15,6 +15,7 @@ import { createMessage } from '../../api/messages'; // 변경: 메시지 전송 
 import ChatWindow from '../organisms/ChatWindow'; // 변경: 채팅창 컴포넌트
 // 변경: Conversation 타입 import 추가
 import type { Conversation } from '../organisms/ChatList'; // 변경: 대화 타입
+import { getAuthUser } from '../../api/auth';
 
 // import PostCard from '../molecules/PostCard';
 // import CommentCard from '../molecules/CommentCard';
@@ -28,6 +29,7 @@ interface CommentItem {
 
 export default function UserPage() {
   const [userInvalid, setUserInvalid] = useState(false);
+  const [myInfo, setMyInfo] = useState<User | null>(); // 사용자 정보
 
   const [userDataLoading, setUserDataLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -106,6 +108,13 @@ export default function UserPage() {
       console.error('채팅방 생성 또는 열기 실패', e);
     }
   };
+
+  useEffect(() => {
+    const getMyInfo = async () => {
+      setMyInfo(await getAuthUser());
+    };
+    getMyInfo();
+  }, []);
 
   useEffect(() => {
     async function loadUserData() {
@@ -309,7 +318,16 @@ export default function UserPage() {
                   p.channel._id === '681da0307ffa911fa118e4c2' ||
                   p.channel._id === '681da0247ffa911fa118e4be',
               )
-              .map((post) => <CommunityCard key={post._id} post={post} />)
+              .map((post) => {
+                const like = userData?.likes?.find(
+                  (like) => like.post === post._id,
+                );
+                const likeId = like ? like._id : null;
+
+                return (
+                  <CommunityCard key={post._id} post={post} likeId={likeId} />
+                );
+              })
           )}
         </div>
       )}
@@ -320,9 +338,16 @@ export default function UserPage() {
           {questionPosts.length === 0 ? (
             <div>아직 작성된 질문이 없습니다.</div>
           ) : (
-            questionPosts.map((post) => (
-              <QuestionCard key={post._id} post={post} />
-            ))
+            questionPosts.map((post) => {
+              const like = myInfo?.likes?.find(
+                (like) => like.post === post._id,
+              );
+              const likeId = like ? like._id : null;
+
+              return (
+                <QuestionCard key={post._id} post={post} likeId={likeId} />
+              );
+            })
           )}
         </div>
       )}
@@ -341,20 +366,15 @@ export default function UserPage() {
           {communityComments.length === 0 ? (
             <div>아직 댓글이 없습니다.</div>
           ) : (
-            communityComments.map(
-              ({ postId, postTitle, comment, commentId }) => (
-                <Link
-                  to={`/post/${postId}`}
-                  key={commentId}
-                  className="w-[100%] gap-2 rounded border border-[#d9d9d9] p-4"
-                >
-                  <h3 className="mb-1 font-semibold">
-                    “{postTitle}” 글의 댓글
-                  </h3>
-                  <p className="text-[16px]">{comment}</p>
-                </Link>
-              ),
-            )
+            communityComments.map(({ postId, postTitle, comment }) => (
+              <div
+                key={postId}
+                className="w-[100%] gap-2 rounded border border-[#d9d9d9] p-4"
+              >
+                <h3 className="mb-1 font-semibold">“{postTitle}” 글의 댓글</h3>
+                <p>{comment}</p>
+              </div>
+            ))
           )}
         </div>
       )}
@@ -373,20 +393,15 @@ export default function UserPage() {
           {fileteredQuestionComments.length === 0 ? (
             <div>아직 댓글이 없습니다.</div>
           ) : (
-            fileteredQuestionComments.map(
-              ({ postId, postTitle, comment, commentId }) => (
-                <Link
-                  to={`/post/${postId}`}
-                  key={commentId}
-                  className="w-[100%] gap-2 rounded border border-[#d9d9d9] p-4 pt-4"
-                >
-                  <h3 className="mb-1 font-semibold">
-                    “{postTitle}” 글의 댓글
-                  </h3>
-                  <p className="text-[16px]">{comment}</p>
-                </Link>
-              ),
-            )
+            fileteredQuestionComments.map(({ postId, postTitle, comment }) => (
+              <div
+                key={postId}
+                className="w-[100%] gap-2 rounded border border-[#d9d9d9] p-4 pt-4"
+              >
+                <h3 className="mb-1 font-semibold">“{postTitle}” 글의 댓글</h3>
+                <p>{comment}</p>
+              </div>
+            ))
           )}
         </div>
       )}
@@ -405,9 +420,16 @@ export default function UserPage() {
           {communityLiked.length === 0 ? (
             <div>아직 좋아요를 누른 글이 없습니다.</div>
           ) : (
-            likedPosts.map((post) => (
-              <QuestionCard key={post._id} post={post} />
-            ))
+            likedPosts.map((post) => {
+              const like = myInfo?.likes?.find(
+                (like) => like.post === post._id,
+              );
+              const likeId = like ? like._id : null;
+
+              return (
+                <CommunityCard key={post._id} post={post} likeId={likeId} />
+              );
+            })
           )}
         </div>
       )}
@@ -423,17 +445,23 @@ export default function UserPage() {
           {questionLiked.length === 0 ? (
             <div>아직 좋아요를 누른 글이 없습니다.</div>
           ) : (
-            questionLiked.map((post) => (
-              <QuestionCard key={post._id} post={post} />
-            ))
+            questionLiked.map((post) => {
+              const like = myInfo?.likes?.find(
+                (like) => like.post === post._id,
+              );
+              const likeId = like ? like._id : null;
+
+              return (
+                <QuestionCard key={post._id} post={post} likeId={likeId} />
+              );
+            })
           )}
         </div>
       )}
-
       {!isMe && (
         <div
-          className="fixed right-[10%] bottom-[5%] cursor-pointer" // 변경: 클릭 가능 커서 추가
-          onClick={handleStartChat} // 변경: 클릭 시 채팅 시작
+          className="fixed right-[10%] bottom-[5%] cursor-pointer"
+          onClick={handleStartChat}
         >
           <FloatingButton buttonType="chat" />
         </div>
