@@ -177,13 +177,13 @@ export default function Setting() {
   };
 
   return (
-    <div className="nanum-gothic-regular ml-[42px] w-[950px] transition-colors duration-300 ease-in-out dark:bg-[#121212] dark:text-[#e0e0e0]">
+    <div className="nanum-gothic-regular dark:text-dark-text dark:border-dark-border ml-[42px] w-[950px] transition-colors duration-300 ease-in-out">
       <div className="mb-[10px] flex">
         <Icon name="leftIcon" />
         <div className="ml-[20px]">설정</div>
       </div>
 
-      <div className="rounded-[5px] border border-[#ababab] p-6 transition-colors duration-300 dark:border-[#2c2c2c] dark:bg-[#1e1e1e]">
+      <div className="dark:bg-dark-card dark:border-dark-border rounded-[5px] border border-[#ababab] p-6 transition-colors duration-300">
         <div className="ml-[28px] flex items-end gap-5">
           <UserAvatar size={120} imageUrl={user?.image} />
 
@@ -191,7 +191,7 @@ export default function Setting() {
             type="file"
             accept="image/*"
             onChange={handleFileChange}
-            className="cursor-pointer rounded-[5px] border text-[12px] transition-colors dark:border-[#505050] dark:bg-[#1e1e1e]"
+            className="dark:border-dark-border dark:bg-dark-card cursor-pointer rounded-[5px] border text-[12px] transition-colors"
           />
 
           <button
@@ -202,12 +202,12 @@ export default function Setting() {
           </button>
           <button
             onClick={handleDeleteImage}
-            className="h-[28px] w-[94px] cursor-pointer rounded-[5px] border text-[13px] transition-colors dark:border-[#505050] dark:bg-[#3a3a3a] dark:text-white"
+            className="dark:border-dark-border dark:bg-dark-button h-[28px] w-[94px] cursor-pointer rounded-[5px] border text-[13px] transition-colors dark:text-white"
           >
             이미지 삭제
           </button>
 
-          <div className="ml-[130px] h-[30px] w-[59px] rounded-4xl border transition-colors dark:border-[#505050] dark:bg-[#3a3a3a]">
+          <div className="ml-[130px] h-[30px] w-[59px] rounded-4xl border transition-colors">
             <button
               className={`h-[28px] w-[28px] transform rounded-2xl bg-[#A9907E] transition-transform duration-300 ease-in-out ${
                 darkModeToggle ? 'translate-x-[29px]' : 'translate-x-0'
@@ -221,7 +221,7 @@ export default function Setting() {
           </div>
         </div>
 
-        <hr className="my-5 border-t border-[#ababab] dark:border-[#505050]" />
+        <hr className="dark:border-dark-border my-5 border-t border-[#ababab]" />
 
         <div className="ml-[28px] space-y-6">
           <div>
@@ -231,7 +231,7 @@ export default function Setting() {
               value={form.fullName}
               onChange={(e) => handleInputChange(e, 'fullName')}
               placeholder="설정할 닉네임을 입력해주세요."
-              className="h-[38px] w-[255px] rounded-[5px] border p-3 text-[12px] transition-colors dark:border-[#505050] dark:bg-[#1e1e1e] dark:text-white"
+              className="dark:text-dark-text dark:border-dark-border dark:bg-dark-card h-[38px] w-[255px] rounded-[5px] border p-3 text-[12px] transition-colors"
             />
           </div>
 
@@ -242,7 +242,7 @@ export default function Setting() {
               value={form.introduction}
               onChange={(e) => handleInputChange(e, 'introduction')}
               placeholder="한 줄로 나를 소개해 보세요!"
-              className="h-[38px] w-[520px] rounded-[5px] border p-3 text-[12px] transition-colors dark:border-[#505050] dark:bg-[#1e1e1e] dark:text-white"
+              className="dark:text-dark-text dark:border-dark-border dark:bg-dark-card h-[38px] w-[520px] rounded-[5px] border p-3 text-[12px] transition-colors"
             />
           </div>
 
@@ -253,7 +253,7 @@ export default function Setting() {
               value={form.tags}
               onChange={(e) => handleInputChange(e, 'tags')}
               placeholder="예: React, TypeScript, Node.js"
-              className="h-[38px] w-[520px] rounded-[5px] border p-3 text-[12px] transition-colors dark:border-[#505050] dark:bg-[#1e1e1e] dark:text-white"
+              className="dark:text-dark-text dark:border-dark-border dark:bg-dark-card h-[38px] w-[520px] rounded-[5px] border p-3 text-[12px] transition-colors"
             />
           </div>
 
@@ -275,7 +275,7 @@ export default function Setting() {
                 },
               ].map(({ icon, key, placeholder }, i) => (
                 <div key={i} className="relative">
-                  <div className="absolute top-1/2 left-2 -translate-y-1/2">
+                  <div className="absolute top-1/2 left-2 -translate-y-1/2 dark:contrast-75 dark:invert">
                     <Icon name={icon} />
                   </div>
                   <input
@@ -285,7 +285,7 @@ export default function Setting() {
                       handleInputChange(e, key as keyof typeof form)
                     }
                     placeholder={`${placeholder}를 입력해주세요`}
-                    className="h-[38px] w-[200px] rounded-[5px] border pr-3 pl-[36px] text-[12px] transition-colors dark:border-[#505050] dark:bg-[#1e1e1e] dark:text-white"
+                    className="dark:text-dark-text dark:border-dark-border dark:bg-dark-card h-[38px] w-[200px] rounded-[5px] border pr-3 pl-[36px] text-[12px] transition-colors"
                   />
                 </div>
               ))}

@@ -75,7 +75,7 @@ export default function Community() {
             return <CommunityCard key={post._id} post={post} likeId={likeId} />;
           })
         ) : (
-          <p className="nanum-gothic-regular text-base text-[#ababab]">
+          <p className="nanum-gothic-regular dark:text-dark-text text-base text-[#ababab]">
             앗! 아직 작성된 게시물이 없어요!
           </p>
         )}

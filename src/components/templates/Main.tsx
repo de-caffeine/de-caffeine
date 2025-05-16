@@ -67,10 +67,10 @@ export default function Main() {
 
   return (
     <>
-      <div className="w-[270px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px] dark:bg-[#121212]">
+      <div className="dark:text-dark-text w-[270px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px]">
         <div className="flex flex-col">
           <div className="nanum-gothic-regular flex justify-between py-[5px]">
-            <h2 className="dark:text-[#e0e0e0]">커뮤니티 인기글 🔥</h2>
+            <h2>커뮤니티 인기글 🔥</h2>
             <Link to="/community">
               <Icon name="rightIcon"></Icon>
             </Link>
@@ -88,7 +88,7 @@ export default function Main() {
                 );
               })
             ) : (
-              <p className="nanum-gothic-regular text-base text-[#ababab] dark:text-[#e0e0e0]">
+              <p className="nanum-gothic-regular text-base text-[#ababab]">
                 앗! 아직 작성된 게시물이 없어요!
               </p>
             )}

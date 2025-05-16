@@ -1,5 +1,5 @@
+import { useEffect, useState } from 'react';
 import Icon from './Icon';
-import { useState } from 'react';
 import { likePost, unlikePost } from '../../api/likes';
 
 export default function Interest({
@@ -14,23 +14,25 @@ export default function Interest({
     likeId: string | null;
   };
 }) {
-  const [likeId, setlikeId] = useState(like.likeId);
+  const [likeId, setLikeId] = useState(like.likeId);
   const [likeCount, setLikeCount] = useState(like.likeCount);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // 다크모드 감지 (선택 사항)
-  const isDarkMode = window.matchMedia?.(
-    '(prefers-color-scheme: dark)',
-  ).matches;
+  // 다크모드 여부를 localStorage에서 가져오기
+  useEffect(() => {
+    const darkPref = localStorage.getItem('darkMode');
+    setIsDarkMode(darkPref === 'true');
+  }, [isDarkMode]);
 
   const LikeEventHandler = async () => {
     if (!likeId) {
       const newLikeId = await likePost(_id);
-      setlikeId(newLikeId);
-      setLikeCount((likeCount) => likeCount + 1);
+      setLikeId(newLikeId);
+      setLikeCount((count) => count + 1);
     } else {
       await unlikePost(likeId!);
-      setlikeId(null);
-      setLikeCount((likeCount) => likeCount - 1);
+      setLikeId(null);
+      setLikeCount((count) => count - 1);
     }
   };
 
@@ -51,7 +53,7 @@ export default function Interest({
         <Icon
           name={likeId ? 'likeIcon' : 'unlikeIcon'}
           size={20}
-          color={isDarkMode ? 'white' : 'black'}
+          color={likeId ? 'red' : isDarkMode ? 'white' : 'black'}
         />
         <span>{likeCount}</span>
       </button>

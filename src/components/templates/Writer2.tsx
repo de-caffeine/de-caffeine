@@ -187,14 +187,14 @@ export default function Writer2() {
   return (
     <div>
       {/* 카테고리 버튼 그룹 (가로 중앙 정렬) */}
-      <div className="flex w-full justify-center gap-5">
+      <div className="nanum-gothic-regular dark:text-dark-text flex w-full justify-center gap-5 pt-10">
         {categories.map((cat) => (
           <button
             key={cat}
             type="button"
             onClick={() => setCategory(cat)}
             className={`cursor-pointer rounded px-4 py-2 ${
-              category === cat ? 'text-black opacity-100' : 'opacity-50'
+              category === cat ? 'opacity-100' : 'opacity-50'
             }`}
           >
             {cat}
@@ -203,7 +203,7 @@ export default function Writer2() {
       </div>
 
       <div className="nanum-gothic-regular flex min-h-[700px] w-[1200px] gap-4 px-55 py-5">
-        <div className="flex flex-1 flex-col gap-4 rounded-[5px] border border-[#ABABAB] px-10 py-10">
+        <div className="dark:bg-dark-card dark:text-dark-text dark:border-dark-border flex flex-1 flex-col gap-4 rounded-[5px] border border-[#ABABAB] px-10 py-10">
           <div className="flex items-center justify-between gap-4">
             {/* 제목 입력 */}
             <input
@@ -228,7 +228,7 @@ export default function Writer2() {
               {/* ▶ 클릭하면 파일 선택창 띄우는 버튼 */}
               <label
                 htmlFor="cover-input"
-                className="inline-block cursor-pointer rounded px-3 py-1 text-sm text-[#ABABAB]"
+                className="dark:text-dark-text inline-block cursor-pointer rounded px-3 py-1 text-sm text-[#ABABAB]"
               >
                 {coverFileName || '커버 이미지 업로드'}
               </label>
@@ -251,7 +251,7 @@ export default function Writer2() {
             {tagsArray.map((tag, idx) => (
               <span
                 key={idx}
-                className="flex items-center gap-1 rounded bg-[#D7CAB9] px-2 py-0.5 text-sm"
+                className="flex items-center gap-1 rounded bg-[#D7CAB9] px-2 py-0.5 text-sm text-black"
               >
                 {tag}
                 <button
@@ -292,7 +292,7 @@ export default function Writer2() {
             />
           </div>
 
-          <hr className="mb-4 border-t border-[#ABABAB]" />
+          <hr className="dark:border-dark-border mb-4 border-t border-[#ABABAB]" />
 
           {/* 본문 에디터 */}
           <ReactQuill
