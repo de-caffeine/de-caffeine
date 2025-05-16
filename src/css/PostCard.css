@@ -3,3 +3,7 @@
   border: none !important;
   box-shadow: none !important;
 }
+.post-readonly-editor .ql-toolbar.ql-snow {
+  border: none !important;
+  box-shadow: none !important;
+}

@@ -11,6 +11,7 @@ import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 // import { useAuth } from '../../contexts/AuthContext'; // 나중에 전역 로그인 관리용
 import { createPost, getPost, updatePost } from '../../api/posts';
+import '../../css/PostCard.css';
 
 interface LocationState {
   title?: string;
@@ -34,7 +35,6 @@ export default function Writer2() {
     '코드질문',
   ] as const;
   type Category = (typeof categories)[number];
-
   const channelMap: Record<Category, string> = {
     일상공유: '681d9fee7ffa911fa118e4b5',
     개발일지: '681da0077ffa911fa118e4ba',
@@ -49,7 +49,11 @@ export default function Writer2() {
   // 입력 필드의 초기값
   const [title, setTitle] = useState(state?.title ?? '');
   const [editor, setEditor] = useState(state?.body ?? '');
-  const [tags, setTags] = useState(state?.tags?.join(',') ?? '');
+
+  // ▶ 추가: 태그 입력용 상태 (tagsArray: 현재 태그 목록, tagInput: 입력 중 텍스트)
+  const [tagsArray, setTagsArray] = useState<string[]>(state?.tags ?? []);
+  const [tagInput, setTagInput] = useState('');
+  const tagInputRef = useRef<HTMLInputElement>(null);
 
   // 커버용 상태 분리
   const [coverFile, setCoverFile] = useState<File>();
@@ -67,7 +71,7 @@ export default function Writer2() {
         .then((data) => {
           setTitle(data.title);
           setEditor(data.body);
-          setTags((data.tags ?? []).join(','));
+          setTagsArray(data.tags ?? []); // ▶ 수정: tagsArray로 세팅
           if (data.image) setCoverPreviewUrl(data.image);
         })
         .catch((err) => {
@@ -145,16 +149,12 @@ export default function Writer2() {
 
     setLoading(true);
     try {
-      const tagArray = tags
-        .split(',')
-        .map((t) => t.trim())
-        .filter(Boolean);
+      // ▶ 수정: tagsArray 사용
+      const tagArray = tagsArray.map((t) => t.trim()).filter(Boolean);
 
-      // ▶ 여기서 선택된 카테고리의 채널ID를 꺼냅니다
       const selectedChannelId = channelMap[category];
 
       if (postId) {
-        // 수정 모드
         await updatePost(
           postId,
           title,
@@ -166,13 +166,12 @@ export default function Writer2() {
         alert('포스트가 성공적으로 수정되었습니다!');
         navigate(`/post/${postId}`);
       } else {
-        // 새 글 작성 모드
         await createPost(title, editor, selectedChannelId, tagArray, coverFile);
         alert('포스트가 성공적으로 생성되었습니다!');
         // 입력값 초기화
         setTitle('');
         setEditor('');
-        setTags('');
+        setTagsArray([]); // ▶ 수정: tagsArray 초기화
         setCoverFile(undefined);
         setCoverPreviewUrl(undefined);
       }
@@ -182,7 +181,7 @@ export default function Writer2() {
     } finally {
       setLoading(false);
     }
-  }, [postId, title, editor, tags, coverFile, category, navigate]);
+  }, [postId, title, editor, tagsArray, coverFile, category, navigate]);
 
   return (
     <div>
@@ -204,40 +203,62 @@ export default function Writer2() {
 
       <div className="nanum-gothic-regular flex min-h-[700px] w-[1200px] gap-4 px-30 py-5">
         <div className="flex flex-1 flex-col gap-4 rounded-[5px] border border-[#ABABAB] p-4">
-          <h2 className="mb-4 text-2xl">
-            {postId ? '게시글 수정' : '새 게시글 작성'}
-          </h2>
-
           {/* 제목 입력 */}
           <input
             type="text"
             placeholder="제목을 작성해주세요"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="h-18 w-full rounded px-2 py-1 text-[32px]"
+            className="h-18 w-full rounded px-2 py-1 text-[32px] focus:outline-none"
           />
 
-          {/* 태그 입력 */}
-          <input
-            type="text"
-            placeholder="태그를 입력해주세요 (콤마로 구분)"
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
-            className="w-full rounded px-2 py-1 text-[16px]"
-          />
-          <div className="flex flex-wrap gap-2">
-            {tags
-              .split(',')
-              .map((t) => t.trim())
-              .filter(Boolean)
-              .map((tag, idx) => (
-                <span
-                  key={idx}
-                  className="rounded-[2px] bg-[#D7CAB9] px-2 py-0.5 text-sm text-black"
-                >
-                  {tag}
-                </span>
-              ))}
+          {/* ▶ 수정: 태그 입력/삭제 및 백스페이스 삭제 지원 */}
+          <div
+            className="flex flex-wrap items-center gap-1 rounded px-2 py-1"
+            onClick={() => tagInputRef.current?.focus()}
+          >
+            {tagsArray.map((tag, idx) => (
+              <span
+                key={idx}
+                className="flex items-center gap-1 rounded bg-[#D7CAB9] px-2 py-0.5 text-sm"
+              >
+                {tag}
+                <button
+                  type="button"
+                  onClick={() =>
+                    setTagsArray((prev) => prev.filter((_, i) => i !== idx))
+                  }
+                  className="text-xs font-bold"
+                ></button>
+              </span>
+            ))}
+            <input
+              ref={tagInputRef}
+              className="min-w-[100px] flex-1 focus:outline-none"
+              value={tagInput}
+              placeholder="태그를 입력해주세요"
+              onChange={(e) => setTagInput(e.target.value)}
+              onKeyDown={(e) => {
+                // 백스페이스/Del 누르고 입력값이 비어 있으면 마지막 태그 삭제
+                if (
+                  (e.key === 'Backspace' || e.key === 'Delete') &&
+                  tagInput === ''
+                ) {
+                  e.preventDefault();
+                  setTagsArray((prev) => prev.slice(0, -1));
+                  return;
+                }
+                // Enter 또는 쉼표로 태그 추가
+                if (e.key === 'Enter' || e.key === ',') {
+                  e.preventDefault();
+                  const val = tagInput.trim().replace(/,$/, '');
+                  if (val && !tagsArray.includes(val)) {
+                    setTagsArray((prev) => [...prev, val]);
+                  }
+                  setTagInput('');
+                }
+              }}
+            />
           </div>
 
           <hr className="mb-4 border-t border-[#ABABAB]" />
@@ -269,7 +290,7 @@ export default function Writer2() {
             formats={formats}
             theme="snow"
             placeholder="내용을 입력해주세요"
-            className="flex-1"
+            className="post-readonly-editor flex-1"
           />
 
           {/* 제출 버튼 */}
