@@ -54,7 +54,7 @@ export default function ChatWindow({
   };
 
   return (
-    <div className="fixed right-0 bottom-0 z-50 flex h-[471px] w-[318px] flex-col rounded-lg bg-white shadow-lg">
+    <div className="fixed right-0 bottom-0 z-50 flex h-[471px] w-[318px] flex-col rounded-lg bg-white shadow-lg dark:bg-[#1e1e1e] dark:text-[#e0e0e0]">
       <header className="flex items-center justify-between border-b px-4 py-2">
         {selectedChat ? (
           <>
@@ -66,7 +66,7 @@ export default function ChatWindow({
         ) : (
           <>
             <h4 className="text-lg font-bold">채팅 목록</h4>
-            <button onClick={onClose}>
+            <button onClick={onClose} className="dark:contrast-70 dark:invert">
               <img src={XIcon} alt="닫기" />
             </button>
           </>
@@ -108,7 +108,7 @@ export default function ChatWindow({
             />
             {/* 변경: onClick에 handleSend 연결 */}
             <button
-              className="absolute top-1/2 right-2 -translate-y-1/2"
+              className="absolute top-1/2 right-2 -translate-y-1/2 dark:contrast-75 dark:invert"
               onClick={handleSend}
             >
               <img src={chatimage} alt="전송" className="h-6 w-6" />

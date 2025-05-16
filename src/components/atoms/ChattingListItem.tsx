@@ -31,7 +31,7 @@ export default function ChattingListItem({
   return (
     <div
       onClick={onClick} // 변경: Link 대신 div 클릭
-      className="block w-[268px] cursor-pointer hover:bg-gray-50"
+      className="dark:border:[#505050] block w-[268px] cursor-pointer hover:bg-gray-50 dark:bg-[#1e1e1e] dark:text-[#e0e0e0] dark:hover:bg-[#121212]"
     >
       <div className="flex h-[70px] w-[268px] items-center justify-between border-t border-b border-[#D9D9D9] px-4">
         <div className="flex items-center space-x-2">

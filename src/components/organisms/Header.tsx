@@ -82,7 +82,7 @@ export default function Header() {
           <div className="flex flex-shrink-0 items-center space-x-4">
             {isLoggedIn ? (
               <>
-                <div className="ml-3 cursor-pointer dark:contrast-60 dark:invert">
+                <div className="cursor-pointe z-10 ml-3">
                   <AlarmIcon />
                 </div>
                 <div
@@ -103,7 +103,7 @@ export default function Header() {
                   {showDropdown && (
                     <div
                       ref={dropdownRef}
-                      className="absolute right-0 z-50 mt-2 w-25 rounded-[5px] bg-white text-[14px] shadow drop-shadow-sm"
+                      className="absolute right-0 z-50 mt-2 w-25 rounded-[5px] bg-white text-[14px] shadow drop-shadow-sm dark:bg-[#1e1e1e] dark:text-[#e0e0e0]"
                     >
                       <Link
                         to={`/${localStorage.getItem('myId')}`}
