@@ -199,7 +199,7 @@ export default function Writer2() {
             key={cat}
             type="button"
             onClick={() => setCategory(cat)}
-            className={`rounded px-4 py-2 ${
+            className={`cursor-pointer rounded px-4 py-2 ${
               category === cat ? 'text-black opacity-100' : 'opacity-50'
             }`}
           >
