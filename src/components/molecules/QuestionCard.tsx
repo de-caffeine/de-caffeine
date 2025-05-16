@@ -40,10 +40,12 @@ export default function QuestionCard({
       <div className="mx-[10px] flex flex-row items-center justify-between border-t border-[#d9d9d9] px-[5px] py-[10px]">
         <Info
           size={30}
-          userName={post.author && (post.author as User).fullName}
+          userName={
+            (post.author && (post.author as User).fullName) || '탈퇴한 유저'
+          }
           timestamp={post.createdAt}
           imageUrl={post.author && (post.author as User).image}
-          userId={post.author && (post.author as User)._id}
+          userId={(post.author && (post.author as User)._id) || 'user'}
         />
         <Interest
           commentCount={post.comments.length}
