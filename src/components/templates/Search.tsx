@@ -51,7 +51,9 @@ export default function Search() {
           .filter(
             (post) =>
               JSON.parse(post.title).title.includes(keyword) ||
-              JSON.parse(post.title).body.includes(keyword),
+              JSON.parse(post.title)
+                .body.replace(/<[^>]*>?/g, '')
+                .includes(keyword),
           )
           .sort(
             (a, b) =>
@@ -67,7 +69,9 @@ export default function Search() {
           .filter(
             (post) =>
               JSON.parse(post.title).title.includes(keyword) ||
-              JSON.parse(post.title).body.includes(keyword),
+              JSON.parse(post.title)
+                .body.replace(/<[^>]*>?/g, '')
+                .includes(keyword),
           )
           .sort(
             (a, b) =>
