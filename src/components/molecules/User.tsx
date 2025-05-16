@@ -18,6 +18,7 @@ interface UserProps {
   homepage?: string;
   isMe?: boolean;
   isFollowing?: boolean;
+  isLogin?: boolean;
   followHandler?: () => void;
 }
 
@@ -34,8 +35,11 @@ export default function User({
   homepage = '',
   isMe = false,
   isFollowing = false,
+  isLogin = false,
   followHandler,
 }: UserProps) {
+  const ensureProtocol = (url: string) =>
+    url.match(/^https?:\/\//i) ? url : `https://${url}`;
   return (
     <>
       <div className="flex min-h-[184px] w-[1128px] items-center justify-between border-b-[1px] border-b-[#ababab] px-[30px] py-[10px]">
@@ -64,21 +68,33 @@ export default function User({
               {/* github, velog 주소값 여부에 따라 아이콘 렌더링 */}
               {github !== '' && (
                 <span>
-                  <a href={github} target="_blank">
+                  <a
+                    href={ensureProtocol(github)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <Icon name="githubIcon" size={18} />
                   </a>
                 </span>
               )}
               {velog !== '' && (
                 <span>
-                  <a href={velog} target="_blank">
+                  <a
+                    href={ensureProtocol(velog)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <Icon name="velogIcon" size={18} />
                   </a>
                 </span>
               )}
               {homepage !== '' && (
                 <span>
-                  <a href={homepage} target="_blank">
+                  <a
+                    href={ensureProtocol(homepage)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <Icon name="homepageIcon" size={18} />
                   </a>
                 </span>
@@ -89,7 +105,7 @@ export default function User({
 
         {/* 팔로우 기능 */}
         <div className="nanum-gothic-regular mb-1 flex flex-col items-end gap-1 self-end text-[12px]">
-          {!isMe && (
+          {isLogin && !isMe && (
             <Button
               full={!isFollowing}
               size="s"
