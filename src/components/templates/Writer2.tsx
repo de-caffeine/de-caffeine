@@ -12,6 +12,7 @@ import 'react-quill-new/dist/quill.snow.css';
 // import { useAuth } from '../../contexts/AuthContext'; // 나중에 전역 로그인 관리용
 import { createPost, getPost, updatePost } from '../../api/posts';
 import '../../css/PostCard.css';
+import coverimage from '../../assets/images/coverimage.png';
 
 interface LocationState {
   title?: string;
@@ -209,14 +210,44 @@ export default function Writer2() {
 
       <div className="nanum-gothic-regular flex min-h-[700px] w-[1200px] gap-4 px-30 py-5">
         <div className="flex flex-1 flex-col gap-4 rounded-[5px] border border-[#ABABAB] p-4">
-          {/* 제목 입력 */}
-          <input
-            type="text"
-            placeholder="제목을 작성해주세요"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="h-18 w-full rounded px-2 py-1 text-[32px] focus:outline-none"
-          />
+          <div className="flex items-center justify-between gap-4">
+            {/* 제목 입력 */}
+            <input
+              type="text"
+              placeholder="제목을 작성해주세요"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="h-18 w-full flex-1 rounded px-2 py-1 text-[32px] focus:outline-none"
+            />
+
+            {/* ▶ 커버 이미지 업로드 (커스텀) */}
+            <div className="flex">
+              {/* ▶ 숨긴 실제 input */}
+              <img src={coverimage} alt="" />
+              <input
+                id="cover-input"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={onCoverChange}
+              />
+              {/* ▶ 클릭하면 파일 선택창 띄우는 버튼 */}
+              <label
+                htmlFor="cover-input"
+                className="inline-block cursor-pointer rounded px-3 py-1 text-sm text-[#ABABAB]"
+              >
+                {coverFileName || '커버 이미지 업로드'}
+              </label>
+              {/* ▶ 선택된 이미지 미리보기 */}
+              {/* {coverPreviewUrl && (
+              <img
+                src={coverPreviewUrl}
+                alt="커버 이미지 미리보기"
+                className="mt-2 max-h-[200px] max-w-[200px] rounded-[5px] object-cover"
+              />
+            )} */}
+            </div>
+          </div>
 
           {/* ▶ 수정: 태그 입력/삭제 및 백스페이스 삭제 지원 */}
           <div
@@ -268,33 +299,6 @@ export default function Writer2() {
           </div>
 
           <hr className="mb-4 border-t border-[#ABABAB]" />
-
-          {/* ▶ 커버 이미지 업로드 (커스텀) */}
-          <div>
-            {/* ▶ 숨긴 실제 input */}
-            <input
-              id="cover-input"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={onCoverChange}
-            />
-            {/* ▶ 클릭하면 파일 선택창 띄우는 버튼 */}
-            <label
-              htmlFor="cover-input"
-              className="inline-block cursor-pointer rounded px-3 py-1 text-sm"
-            >
-              {coverFileName || '커버 이미지 업로드'}
-            </label>
-            {/* ▶ 선택된 이미지 미리보기 */}
-            {/* {coverPreviewUrl && (
-              <img
-                src={coverPreviewUrl}
-                alt="커버 이미지 미리보기"
-                className="mt-2 max-h-[200px] max-w-[200px] rounded-[5px] object-cover"
-              />
-            )} */}
-          </div>
 
           {/* 본문 에디터 */}
           <ReactQuill
