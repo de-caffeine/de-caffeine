@@ -16,6 +16,7 @@ import ChatWindow from '../organisms/ChatWindow'; // 변경: 채팅창 컴포넌
 // 변경: Conversation 타입 import 추가
 import type { Conversation } from '../organisms/ChatList'; // 변경: 대화 타입
 import { getAuthUser } from '../../api/auth';
+import { useLoginStore } from '../../loginStore';
 
 // import PostCard from '../molecules/PostCard';
 // import CommentCard from '../molecules/CommentCard';
@@ -30,6 +31,7 @@ interface CommentItem {
 export default function UserPage() {
   const [userInvalid, setUserInvalid] = useState(false);
   const [myInfo, setMyInfo] = useState<User | null>(); // 사용자 정보
+  const isLoggedIn = useLoginStore((state) => state.isLoggedIn);
 
   const [userDataLoading, setUserDataLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -114,7 +116,7 @@ export default function UserPage() {
       setMyInfo(await getAuthUser());
     };
     getMyInfo();
-  }, []);
+  }, [isLoggedIn]);
 
   useEffect(() => {
     async function loadUserData() {
