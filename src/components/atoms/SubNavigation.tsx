@@ -50,6 +50,10 @@ export default function SubNavigation({ channel }: { channel: string }) {
       .then((data) => setFullName(data.fullName))
       .catch(console.error);
   }, [userId]);
+
+  // if (fullName === undefined) return <div>로딩중...</div>;
+  // if (fullName === null)
+  //   return <div className="text-gray-600">탈퇴한 회원입니다.</div>;
   const tabData = getTabData(userId, fullName);
   const tabs = tabData[channel];
 
@@ -59,7 +63,10 @@ export default function SubNavigation({ channel }: { channel: string }) {
         <nav>
           <ul className="flex gap-5">
             {tabs.map(({ name, path }) => (
-              <li key={path} className="cursor-pointer">
+              <li
+                key={path}
+                className="nanum-gothic-regular mx-2 my-[30px] cursor-pointer"
+              >
                 <NavLink
                   to={path}
                   end={path === `/${channel}` || path === `/${userId}`} // '전체'일 때만 end 처리, '프로필'

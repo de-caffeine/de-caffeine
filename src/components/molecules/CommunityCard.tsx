@@ -4,7 +4,6 @@ import Interest from '../atoms/Interest';
 import Tag from '../atoms/Tag';
 import LogoImage from '../../assets/images/logo.png';
 
-// todo : Login 연결 후 isLike 동적으로 변경 필요함
 export default function CommunityCard({
   post,
   likeId,
