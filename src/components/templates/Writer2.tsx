@@ -208,7 +208,7 @@ export default function Writer2() {
         ))}
       </div>
 
-      <div className="nanum-gothic-regular flex min-h-[700px] w-[1200px] gap-4 px-30 py-5">
+      <div className="nanum-gothic-regular flex min-h-[700px] w-[1200px] gap-4 px-55 py-5">
         <div className="flex flex-1 flex-col gap-4 rounded-[5px] border border-[#ABABAB] px-10 py-10">
           <div className="flex items-center justify-between gap-4">
             {/* 제목 입력 */}
