@@ -1,5 +1,5 @@
 // src/components/organisms/ChatWindow.tsx
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import XIcon from '../../assets/images/close.png';
 import ChatList, { Conversation } from './ChatList';
 import ChatRoom from './ChatRoom';
