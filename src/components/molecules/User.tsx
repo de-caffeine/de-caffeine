@@ -1,4 +1,5 @@
 //  user name, imgUrl, tag-기술스택, 한줄 소개, 소셜정보, 팔로우, 팔로워 정보, 팔로우 버튼
+import { useEffect, useState } from 'react';
 import Button from '../atoms/Button';
 import Icon from '../atoms/Icon';
 import Tag from '../atoms/Tag';
@@ -36,9 +37,16 @@ export default function User({
   isFollowing = false,
   followHandler,
 }: UserProps) {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    // 다크모드 클래스 감지
+    const dark = document.documentElement.classList.contains('dark');
+    setIsDarkMode(dark);
+  }, []);
   return (
     <>
-      <div className="flex min-h-[184px] w-[1128px] items-center justify-between border-b-[1px] border-b-[#ababab] px-[30px] py-[10px]">
+      <div className="flex min-h-[184px] w-[1128px] items-center justify-between border-b-[1px] border-b-[#ababab] px-[30px] py-[10px] dark:border-[#505050] dark:text-[#e0e0e0]">
         <div className="flex items-center justify-center">
           <UserAvatar size={150} imageUrl={imgUrl} />
           <div className="ml-8 flex flex-col gap-1 self-end">
@@ -58,28 +66,44 @@ export default function User({
             <p className="pt-1 text-[16px]">{introduction}</p>
             <div className="flex items-center justify-start gap-3">
               <span className="flex justify-center gap-1 leading-5 tracking-wide text-[#767676]">
-                <img src="/src/assets/images/mailStroke.svg" alt="메일" />
+                <img
+                  src="/src/assets/images/mailStroke.svg"
+                  className="dark:contrast-50 dark:invert"
+                  alt="메일"
+                />
                 {email}
               </span>
               {/* github, velog 주소값 여부에 따라 아이콘 렌더링 */}
               {github !== '' && (
                 <span>
                   <a href={github} target="_blank">
-                    <Icon name="githubIcon" size={18} />
+                    <Icon
+                      name="githubIcon"
+                      size={18}
+                      color={isDarkMode ? 'white' : 'black'}
+                    />
                   </a>
                 </span>
               )}
               {velog !== '' && (
                 <span>
                   <a href={velog} target="_blank">
-                    <Icon name="velogIcon" size={18} />
+                    <Icon
+                      name="velogIcon"
+                      size={18}
+                      color={isDarkMode ? 'white' : 'black'}
+                    />
                   </a>
                 </span>
               )}
               {homepage !== '' && (
                 <span>
                   <a href={homepage} target="_blank">
-                    <Icon name="homepageIcon" size={18} />
+                    <Icon
+                      name="homepageIcon"
+                      size={18}
+                      color={isDarkMode ? 'white' : 'black'}
+                    />
                   </a>
                 </span>
               )}

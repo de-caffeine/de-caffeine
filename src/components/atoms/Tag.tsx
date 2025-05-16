@@ -7,7 +7,7 @@ interface TagProps {
 export default function Tag({ children }: TagProps) {
   return (
     <>
-      <span className="nanum-gothic-regular inline-flex items-center rounded-[2px] bg-[#D7CAB9] px-[9px] py-[5px] text-[12px]">
+      <span className="nanum-gothic-regular inline-flex items-center rounded-[2px] bg-[#D7CAB9] px-[9px] py-[5px] text-[12px] text-[#000]">
         {children}
       </span>
     </>

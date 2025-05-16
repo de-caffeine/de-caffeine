@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
-import TimeAgo from "../atoms/TimeAgo";
-import UserAvatar from "../atoms/UserAvatar";
+import { Link } from 'react-router-dom';
+import TimeAgo from '../atoms/TimeAgo';
+import UserAvatar from '../atoms/UserAvatar';
 
 interface InfoProps {
   imageUrl?: string;
@@ -9,15 +9,20 @@ interface InfoProps {
   userName: string;
 }
 
-export default function Info({ imageUrl, size = 24, timestamp, userName }: InfoProps) {
+export default function Info({
+  imageUrl,
+  size = 24,
+  timestamp,
+  userName,
+}: InfoProps) {
   return (
     <>
       <Link to="/user">
-        <div className="inline-flex items-center space-x-2 flex-shrink-0">
+        <div className="inline-flex flex-shrink-0 items-center space-x-2">
           <UserAvatar imageUrl={imageUrl} size={size} />
           <div className="flex flex-col">
             {/* 이름max-w-[12ch] 넘어가면 뒤에... 표시 */}
-            <span className="text-sm nanum-gothic-bold inline-block max-w-[12ch] truncate">
+            <span className="nanum-gothic-bold inline-block max-w-[12ch] truncate text-sm dark:text-[#e0e0e0]">
               {userName}
             </span>
             <TimeAgo timestamp={timestamp} />

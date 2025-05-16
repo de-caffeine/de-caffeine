@@ -13,8 +13,8 @@ export default function TimeAgo({
   const time = new Date(timestamp);
   const diffInSeconds = Math.floor((now.getTime() - time.getTime()) / 1000);
 
-  const style = { fontSize, color: '#00000080' };
-  const className = 'nanum-gothic-regular'; // 기본 폰트 클래스
+  const style = { fontSize };
+  const className = 'nanum-gothic-regular dark:text-[#e0e0e0]'; // 기본 폰트 클래스
 
   if (diffInSeconds < 60) {
     return <span style={style}>{`${diffInSeconds}초 전`}</span>;

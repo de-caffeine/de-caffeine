@@ -82,7 +82,7 @@ export default function CommentBox({
   };
 
   return (
-    <div className="h-auto w-[979px] rounded-[5px] border border-[#ABABAB] bg-white px-25 py-8">
+    <div className="h-auto w-[979px] rounded-[5px] border border-[#ABABAB] bg-white px-25 py-8 dark:border-[#505050] dark:bg-[#1e1e1e] dark:text-[#e0e0e0]">
       {/* 댓글 개수 */}
       <p className="nanum-gothic-regular mb-4 text-sm">
         댓글 {comments.length}개

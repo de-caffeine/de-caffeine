@@ -43,12 +43,12 @@ export default function SearchBar() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="relative max-w-[350px] border-b border-[#ababab]"
+      className="relative max-w-[350px] border-b border-[#ababab] dark:border-[#505050]"
     >
       <input
         type="text"
         placeholder={placeholder}
-        className="w-full py-2 pl-2 text-[12px] placeholder-[#ababab] focus:outline-none"
+        className="w-full py-2 pl-2 text-[12px] placeholder-[#ababab] focus:outline-none dark:text-[#e0e0e0] dark:placeholder-[#505050]"
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />

@@ -23,7 +23,7 @@ export default function CommunityCard({ post }: { post: Post }) {
   asdf();
 
   return (
-    <div className="rounded-top-[6px] h-[340px] w-[270px] rounded-[6px] border border-[#d9d9d9]">
+    <div className="rounded-top-[6px] h-[340px] w-[270px] rounded-[6px] border border-[#d9d9d9] dark:border-[#505050] dark:bg-[#1e1e1e]">
       <Link to={`/post/${post._id}`}>
         <div className="m-between relative h-[55%]">
           {post.image ? (
@@ -53,15 +53,15 @@ export default function CommunityCard({ post }: { post: Post }) {
       <div className="flex h-[45%] flex-col justify-between">
         <Link to={`/post/${post._id}`}>
           <div className="h-[90px] p-[15px]">
-            <h3 className="nanum-gothic-bold line-clamp-1 pr-[30px] text-base">
+            <h3 className="nanum-gothic-bold line-clamp-1 pr-[30px] text-base dark:text-[#e0e0e0]">
               {JSON.parse(post.title).title}
             </h3>
-            <p className="nanum-gothic-regular line-clamp-2 text-sm">
+            <p className="nanum-gothic-regular line-clamp-2 text-sm dark:text-[#e0e0e0]">
               {JSON.parse(post.title).body.replace(/<[^>]*>?/g, '')}
             </p>
           </div>
         </Link>
-        <div className="mx-[10px] flex flex-row items-center justify-between border-t border-[#d9d9d9] px-[5px] py-[10px]">
+        <div className="mx-[10px] flex flex-row items-center justify-between border-t border-[#d9d9d9] px-[5px] py-[10px] dark:border-[#505050]">
           <Info
             size={30}
             userName={userName || '탈퇴한 사용자'}

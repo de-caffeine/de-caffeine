@@ -55,10 +55,10 @@ export default function Main() {
   }, []);
   return (
     <>
-      <div className="w-[270px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px]">
+      <div className="w-[270px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px] dark:bg-[#121212]">
         <div className="flex flex-col">
           <div className="nanum-gothic-regular flex justify-between py-[5px]">
-            <h2>커뮤니티 인기글 🔥</h2>
+            <h2 className="dark:text-[#e0e0e0]">커뮤니티 인기글 🔥</h2>
             <Link to="/community">
               <Icon name="rightIcon"></Icon>
             </Link>
@@ -69,7 +69,7 @@ export default function Main() {
                 <CommunityCard key={post._id} post={post} />
               ))
             ) : (
-              <p className="nanum-gothic-regular text-base text-[#ababab]">
+              <p className="nanum-gothic-regular text-base text-[#ababab] dark:text-[#e0e0e0]">
                 앗! 아직 작성된 게시물이 없어요!
               </p>
             )}
@@ -78,7 +78,7 @@ export default function Main() {
 
         <div className="my-[20px] flex flex-col">
           <div className="nanum-gothic-regular flex justify-between py-[5px]">
-            <h2>코드질문 최신글 💦</h2>
+            <h2 className="dark:text-[#e0e0e0]">코드질문 최신글 💦</h2>
             <Link to="/question">
               <Icon name="rightIcon"></Icon>
             </Link>
