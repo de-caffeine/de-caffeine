@@ -14,8 +14,8 @@ export default function Info({
   imageUrl = undefined,
   size = 24,
   timestamp,
-  userName = '탈퇴한 사용자',
-  userId = 'user',
+  userName,
+  userId,
 }: InfoProps) {
   return (
     <>
