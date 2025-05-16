@@ -1,6 +1,10 @@
 // src/components/organisms/ChatList.tsx
 import React, { useEffect, useState } from 'react';
-import { getConversations, markMessagesSeen } from '../../api/messages';
+import {
+  getConversations,
+  markMessagesSeen,
+  getMessages,
+} from '../../api/messages'; // getMessages 추가
 import ChattingListItem from '../atoms/ChattingListItem';
 
 export interface Conversation {
@@ -34,6 +38,15 @@ interface RawConversation {
   };
 }
 
+interface Message {
+  _id: string;
+  message: string;
+  seen: boolean;
+  sender: { _id: string };
+  receiver: { _id: string };
+  createdAt: string;
+}
+
 interface ChatListProps {
   onSelect: (conv: Conversation) => void;
   initialConversation?: Conversation;
@@ -49,10 +62,12 @@ export default function ChatList({
   useEffect(() => {
     async function fetchConvs() {
       try {
+        // 1) 원본 대화 목록 조회
         const raw: RawConversation[] = await getConversations();
         const meId = localStorage.getItem('myId');
 
-        const mapped: Conversation[] = raw.map((r: RawConversation) => {
+        // 2) raw → 기본 Conversation[] 매핑 (unreadCount는 placeholder)
+        const base: Conversation[] = raw.map((r) => {
           const isSender = r.sender._id === meId;
           const partnerUser = isSender ? r.receiver : r.sender;
           return {
@@ -64,19 +79,33 @@ export default function ChatList({
               status: partnerUser.isOnline ? 'online' : 'offline',
             },
             lastMessage: { timestamp: r.createdAt },
-            unreadCount: r.seen ? 0 : 1,
+            unreadCount: 0, // 나중에 계산
           };
         });
 
-        let merged = mapped;
-        if (
-          initialConversation &&
-          !mapped.some((c) => c.chatRoomId === initialConversation.chatRoomId)
-        ) {
-          merged = [initialConversation, ...mapped];
-        }
+        // 3) initialConversation 머지
+        let merged = initialConversation
+          ? [initialConversation, ...base]
+          : base;
+        // 4) 중복 제거
+        merged = Array.from(
+          new Map(merged.map((c) => [c.chatRoomId, c])).values(),
+        );
 
-        setConversations(merged);
+        // 5) 각 대화에 대해 getMessages 호출하여 실제 unreadCount 계산
+        const detailed = await Promise.all(
+          merged.map(async (conv) => {
+            // 모든 메시지를 조회
+            const msgs: Message[] = await getMessages(conv.partner._id);
+            // 파트너가 보낸, 아직 읽지 않은 메시지 수
+            const unread = msgs.filter(
+              (m) => m.sender._id === conv.partner._id && !m.seen,
+            ).length;
+            return { ...conv, unreadCount: unread };
+          }),
+        );
+
+        setConversations(detailed);
       } catch (e) {
         console.error('대화 목록 불러오기 실패', e);
       } finally {
@@ -90,6 +119,12 @@ export default function ChatList({
     if (conv.unreadCount > 0) {
       try {
         await markMessagesSeen(conv.chatRoomId);
+        // 로컬에서도 업데이트
+        setConversations((prev) =>
+          prev.map((c) =>
+            c.chatRoomId === conv.chatRoomId ? { ...c, unreadCount: 0 } : c,
+          ),
+        );
       } catch (e) {
         console.error('메시지 읽음 처리 실패', e);
       }

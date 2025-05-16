@@ -22,9 +22,23 @@ export default function ChatRoom({ chatId, reloadTrigger = 0 }: ChatRoomProps) {
   const myId = localStorage.getItem('myId');
 
   useEffect(() => {
-    getMessages(chatId).then((data: Message[]) => {
-      setMessages(data);
-    });
+    let isMounted = true;
+
+    const fetch = async () => {
+      const data = await getMessages(chatId);
+      if (isMounted) setMessages(data);
+    };
+
+    // 1) 초기 로드
+    fetch();
+
+    // 2) 폴링: 3초마다 새로 불러오기
+    const interval = setInterval(fetch, 800);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, [chatId, reloadTrigger]);
 
   return (
@@ -35,10 +49,7 @@ export default function ChatRoom({ chatId, reloadTrigger = 0 }: ChatRoomProps) {
           // 내 메시지면 "me", 아니면 "user"
           sender={msg.sender._id === myId ? 'me' : 'user'}
           // 예: "오전 10:23" 형태로
-          date={new Date(msg.createdAt).toLocaleTimeString('ko-KR', {
-            hour: 'numeric',
-            minute: 'numeric',
-          })}
+          timestamp={msg.createdAt}
         >
           {msg.message}
         </ChattingBubble>

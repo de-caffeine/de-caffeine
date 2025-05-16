@@ -5,6 +5,8 @@ import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 // import { useAuth } from '../../contexts/AuthContext'; // 나중에 전역 로그인 관리용
 import { createPost, getPost, updatePost } from '../../api/posts';
+import '../../css/PostCard.css';
+import coverimage from '../../assets/images/coverimage.png';
 
 interface LocationState {
   title?: string;
@@ -28,7 +30,6 @@ export default function Writer2() {
     '코드질문',
   ] as const;
   type Category = (typeof categories)[number];
-
   const channelMap: Record<Category, string> = {
     일상공유: '681d9fee7ffa911fa118e4b5',
     개발일지: '681da0077ffa911fa118e4ba',
@@ -43,16 +44,33 @@ export default function Writer2() {
   // 입력 필드의 초기값
   const [title, setTitle] = useState(state?.title ?? '');
   const [editor, setEditor] = useState(state?.body ?? '');
-  const [tags, setTags] = useState(state?.tags?.join(',') ?? '');
+
+  // ▶ 추가: 태그 입력용 상태 (tagsArray: 현재 태그 목록, tagInput: 입력 중 텍스트)
+  const [tagsArray, setTagsArray] = useState<string[]>(state?.tags ?? []);
+  const [tagInput, setTagInput] = useState('');
+  const tagInputRef = useRef<HTMLInputElement>(null);
 
   // 커버용 상태 분리
   const [coverFile, setCoverFile] = useState<File>();
   const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | undefined>(
     state?.imageUrl,
   );
+  // ▶ 추가: 커버 파일명 상태
+  const [coverFileName, setCoverFileName] = useState<string>('');
 
   const [loading, setLoading] = useState(false);
   const quillRef = useRef<ReactQuill>(null);
+
+  // ▶ 추가: 커스텀 파일 선택 핸들러
+  const onCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setCoverFile(file);
+      setCoverFileName(file.name);
+      const url = URL.createObjectURL(file);
+      setCoverPreviewUrl(url);
+    }
+  };
 
   // state가 없고 postId만 있을 때 백엔드에서 불러오기
   useEffect(() => {
@@ -61,7 +79,7 @@ export default function Writer2() {
         .then((data) => {
           setTitle(data.title);
           setEditor(data.body);
-          setTags((data.tags ?? []).join(','));
+          setTagsArray(data.tags ?? []); // ▶ 수정: tagsArray로 세팅
           if (data.image) setCoverPreviewUrl(data.image);
         })
         .catch((err) => {
@@ -69,14 +87,6 @@ export default function Writer2() {
         });
     }
   }, [postId, state]);
-
-  // 커버 파일 선택 시 미리보기 URL 생성
-  useEffect(() => {
-    if (!coverFile) return;
-    const url = URL.createObjectURL(coverFile);
-    setCoverPreviewUrl(url);
-    return () => URL.revokeObjectURL(url);
-  }, [coverFile]);
 
   // Quill 커스텀 이미지 핸들러 (커버 상태 건드리지 않음)
   const imageHandler = useCallback(() => {
@@ -139,16 +149,12 @@ export default function Writer2() {
 
     setLoading(true);
     try {
-      const tagArray = tags
-        .split(',')
-        .map((t) => t.trim())
-        .filter(Boolean);
+      // ▶ 수정: tagsArray 사용
+      const tagArray = tagsArray.map((t) => t.trim()).filter(Boolean);
 
-      // ▶ 여기서 선택된 카테고리의 채널ID를 꺼냅니다
       const selectedChannelId = channelMap[category];
 
       if (postId) {
-        // 수정 모드
         await updatePost(
           postId,
           title,
@@ -160,15 +166,15 @@ export default function Writer2() {
         alert('포스트가 성공적으로 수정되었습니다!');
         navigate(`/post/${postId}`);
       } else {
-        // 새 글 작성 모드
         await createPost(title, editor, selectedChannelId, tagArray, coverFile);
         alert('포스트가 성공적으로 생성되었습니다!');
         // 입력값 초기화
         setTitle('');
         setEditor('');
-        setTags('');
+        setTagsArray([]); // ▶ 수정: tagsArray 초기화
         setCoverFile(undefined);
         setCoverPreviewUrl(undefined);
+        setCoverFileName(''); // ▶ 추가: 커버 파일명 초기화
       }
     } catch (err: any) {
       console.error(err);
@@ -176,7 +182,7 @@ export default function Writer2() {
     } finally {
       setLoading(false);
     }
-  }, [postId, title, editor, tags, coverFile, category, navigate]);
+  }, [postId, title, editor, tagsArray, coverFile, category, navigate]);
 
   return (
     <div>
@@ -187,7 +193,7 @@ export default function Writer2() {
             key={cat}
             type="button"
             onClick={() => setCategory(cat)}
-            className={`rounded px-4 py-2 ${
+            className={`cursor-pointer rounded px-4 py-2 ${
               category === cat ? 'text-black opacity-100' : 'opacity-50'
             }`}
           >
@@ -196,63 +202,97 @@ export default function Writer2() {
         ))}
       </div>
 
-      <div className="nanum-gothic-regular flex min-h-[700px] w-[1200px] gap-4 px-30 py-5">
-        <div className="flex flex-1 flex-col gap-4 rounded-[5px] border border-[#ABABAB] p-4">
-          <h2 className="mb-4 text-2xl">
-            {postId ? '게시글 수정' : '새 게시글 작성'}
-          </h2>
-
-          {/* 제목 입력 */}
-          <input
-            type="text"
-            placeholder="제목을 작성해주세요"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="h-18 w-full rounded px-2 py-1 text-[32px]"
-          />
-
-          {/* 태그 입력 */}
-          <input
-            type="text"
-            placeholder="태그를 입력해주세요 (콤마로 구분)"
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
-            className="w-full rounded px-2 py-1 text-[16px]"
-          />
-          <div className="flex flex-wrap gap-2">
-            {tags
-              .split(',')
-              .map((t) => t.trim())
-              .filter(Boolean)
-              .map((tag, idx) => (
-                <span
-                  key={idx}
-                  className="rounded-[2px] bg-[#D7CAB9] px-2 py-0.5 text-sm text-black"
-                >
-                  {tag}
-                </span>
-              ))}
-          </div>
-
-          <hr className="mb-4 border-t border-[#ABABAB]" />
-
-          {/* 커버 이미지 업로드 */}
-          <div>
-            <label className="mb-1 block text-sm">커버 이미지 업로드</label>
+      <div className="nanum-gothic-regular flex min-h-[700px] w-[1200px] gap-4 px-55 py-5">
+        <div className="flex flex-1 flex-col gap-4 rounded-[5px] border border-[#ABABAB] px-10 py-10">
+          <div className="flex items-center justify-between gap-4">
+            {/* 제목 입력 */}
             <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setCoverFile(e.target.files?.[0])}
-              className="cursor-pointer"
+              type="text"
+              placeholder="제목을 작성해주세요"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="h-18 w-full flex-1 rounded px-2 py-1 text-[32px] focus:outline-none"
             />
-            {coverPreviewUrl && (
+
+            {/* ▶ 커버 이미지 업로드 (커스텀) */}
+            <div className="flex">
+              {/* ▶ 숨긴 실제 input */}
+              <img src={coverimage} alt="" />
+              <input
+                id="cover-input"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={onCoverChange}
+              />
+              {/* ▶ 클릭하면 파일 선택창 띄우는 버튼 */}
+              <label
+                htmlFor="cover-input"
+                className="inline-block cursor-pointer rounded px-3 py-1 text-sm text-[#ABABAB]"
+              >
+                {coverFileName || '커버 이미지 업로드'}
+              </label>
+              {/* ▶ 선택된 이미지 미리보기 */}
+              {/* {coverPreviewUrl && (
               <img
                 src={coverPreviewUrl}
                 alt="커버 이미지 미리보기"
                 className="mt-2 max-h-[200px] max-w-[200px] rounded-[5px] object-cover"
               />
-            )}
+            )} */}
+            </div>
           </div>
+
+          {/* ▶ 수정: 태그 입력/삭제 및 백스페이스 삭제 지원 */}
+          <div
+            className="flex flex-wrap items-center gap-1 rounded px-2 py-1"
+            onClick={() => tagInputRef.current?.focus()}
+          >
+            {tagsArray.map((tag, idx) => (
+              <span
+                key={idx}
+                className="flex items-center gap-1 rounded bg-[#D7CAB9] px-2 py-0.5 text-sm"
+              >
+                {tag}
+                <button
+                  type="button"
+                  onClick={() =>
+                    setTagsArray((prev) => prev.filter((_, i) => i !== idx))
+                  }
+                  className="text-xs font-bold"
+                ></button>
+              </span>
+            ))}
+            <input
+              ref={tagInputRef}
+              className="min-w-[100px] flex-1 focus:outline-none"
+              value={tagInput}
+              placeholder="태그를 입력해주세요"
+              onChange={(e) => setTagInput(e.target.value)}
+              onKeyDown={(e) => {
+                // 백스페이스/Del 누르고 입력값이 비어 있으면 마지막 태그 삭제
+                if (
+                  (e.key === 'Backspace' || e.key === 'Delete') &&
+                  tagInput === ''
+                ) {
+                  e.preventDefault();
+                  setTagsArray((prev) => prev.slice(0, -1));
+                  return;
+                }
+                // Enter 또는 쉼표로 태그 추가
+                if (e.key === 'Enter' || e.key === ',') {
+                  e.preventDefault();
+                  const val = tagInput.trim().replace(/,$/, '');
+                  if (val && !tagsArray.includes(val)) {
+                    setTagsArray((prev) => [...prev, val]);
+                  }
+                  setTagInput('');
+                }
+              }}
+            />
+          </div>
+
+          <hr className="mb-4 border-t border-[#ABABAB]" />
 
           {/* 본문 에디터 */}
           <ReactQuill
@@ -263,7 +303,7 @@ export default function Writer2() {
             formats={formats}
             theme="snow"
             placeholder="내용을 입력해주세요"
-            className="flex-1"
+            className="post-readonly-editor nanum-gothic-regular flex-1"
           />
 
           {/* 제출 버튼 */}
