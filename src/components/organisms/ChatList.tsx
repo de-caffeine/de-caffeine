@@ -12,7 +12,7 @@ export interface Conversation {
   partner: {
     _id: string;
     fullName: string;
-    avatarUrl?: string;
+    image?: string;
     status?: 'online' | 'offline';
   };
   lastMessage: { timestamp: string | number | Date };
@@ -27,13 +27,13 @@ interface RawConversation {
   sender: {
     _id: string;
     fullName: string;
-    avatarUrl?: string;
+    image?: string;
     isOnline?: boolean;
   };
   receiver: {
     _id: string;
     fullName: string;
-    avatarUrl?: string;
+    image?: string;
     isOnline?: boolean;
   };
 }
@@ -75,7 +75,7 @@ export default function ChatList({
             partner: {
               _id: partnerUser._id,
               fullName: partnerUser.fullName,
-              avatarUrl: partnerUser.avatarUrl,
+              image: partnerUser.image,
               status: partnerUser.isOnline ? 'online' : 'offline',
             },
             lastMessage: { timestamp: r.createdAt },
@@ -143,7 +143,7 @@ export default function ChatList({
           key={conv.chatRoomId}
           onClick={() => handleClick(conv)}
           chatRoomId={conv.chatRoomId}
-          imageUrl={conv.partner.avatarUrl || ''}
+          imageUrl={conv.partner.image || ''}
           size={50}
           status={conv.partner.status}
           statusSize={12}
