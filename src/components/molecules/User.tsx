@@ -43,25 +43,41 @@ export default function User({
   return (
     <>
       <div className="flex min-h-[184px] w-[1128px] items-center justify-between border-b-[1px] border-b-[#ababab] px-[30px] py-[10px]">
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-between">
           <UserAvatar size={150} imageUrl={imgUrl} />
-          <div className="ml-8 flex flex-col gap-1 self-end">
-            <UserName name={name} className="nanum-gothic-bold text-[28px]" />
+          <div className="ml-8 flex flex-col gap-1">
+            <UserName
+              name={name}
+              className="nanum-gothic-bold pl-[1px] text-[28px]"
+            />
             {/* tags 배열로 정보 받아와서 맵핑 */}
-            <ul className="flex w-[580px] flex-wrap gap-1 leading-none">
-              {techStack.map(
-                (t) =>
-                  // Tag value 값이 없을 경우 렌더링 하지 않음
-                  t.trim() !== '' && (
-                    <li key={t.trim().toUpperCase()}>
-                      <Tag>{t.trim().toUpperCase()}</Tag>
-                    </li>
-                  ),
+            {techStack.length === 0 ? (
+              <span className="pl-[1px] text-[#d9d9d9]">
+                기술 스택을 입력하지 않았습니다.
+              </span>
+            ) : (
+              <ul className="flex w-[580px] flex-wrap gap-1 leading-none">
+                {techStack.map(
+                  (t) =>
+                    // Tag value 값이 없을 경우 렌더링 하지 않음
+                    t.trim() !== '' && (
+                      <li key={t.trim().toUpperCase()}>
+                        <Tag>{t.trim().toUpperCase()}</Tag>
+                      </li>
+                    ),
+                )}
+              </ul>
+            )}
+
+            <p className="min-h-[24px] pl-[1px] text-[16px]">
+              {introduction !== '' ? (
+                introduction
+              ) : (
+                <span className="text-[#d9d9d9]">자기소개가 없습니다.</span>
               )}
-            </ul>
-            <p className="pt-1 text-[16px]">{introduction}</p>
+            </p>
             <div className="flex items-center justify-start gap-3">
-              <span className="flex justify-center gap-1 leading-5 tracking-wide text-[#767676]">
+              <span className="flex justify-start gap-1 leading-5 tracking-wide text-[#767676]">
                 <img src="/src/assets/images/mailStroke.svg" alt="메일" />
                 {email}
               </span>
