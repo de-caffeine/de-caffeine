@@ -17,13 +17,12 @@ export default function Header() {
   const [showSignup, setShowSignup] = useState(false);
   const isLoggedIn = !!localStorage.getItem('accessToken');
   const [showDropdown, setShowDropdown] = useState(false);
-
+  const [showChatWindow, setShowChatWindow] = useState(false); // 변경: 채팅창 토글 상태 추가
   const avatarRef = useRef(null);
   const dropdownRef = useRef(null);
   const storedImage = localStorage.getItem('myImage');
   const validImageUrl =
     storedImage && storedImage !== 'undefined' ? storedImage : undefined;
-
 
   const openLogin = () => {
     setShowSignup(false);
@@ -41,8 +40,8 @@ export default function Header() {
       if (
         dropdownRef.current &&
         avatarRef.current &&
-        !dropdownRef.current.contains(event.target as Node) &&
-        !avatarRef.current.contains(event.target as Node)
+        !(dropdownRef.current as HTMLElement).contains(event.target as Node) &&
+        !(avatarRef.current as HTMLElement).contains(event.target as Node)
       ) {
         setShowDropdown(false);
       }
