@@ -64,7 +64,7 @@ export default function Users() {
   }, [sortedUsers, location.pathname]);
 
   if (loading) {
-    return <p className="py-8 text-center">로딩 중...</p>;
+    return <p className="dark:text-dark-text py-8 text-center">로딩 중...</p>;
   }
   if (error) {
     return <p className="py-8 text-center text-red-500">{error}</p>;

@@ -72,7 +72,9 @@ export default function Main() {
           <div className="dark:text-dark-text nanum-gothic-regular flex justify-between py-[5px]">
             <h2>커뮤니티 인기글 🔥</h2>
             <Link to="/community">
-              <Icon name="rightIcon"></Icon>
+              <div className="dark:contrast-75 dark:invert">
+                <Icon name="rightIcon"></Icon>
+              </div>
             </Link>
           </div>
           <div className="flex flex-wrap justify-center gap-[15px]">
@@ -99,7 +101,9 @@ export default function Main() {
           <div className="nanum-gothic-regular flex justify-between py-[5px]">
             <h2 className="dark:text-[#e0e0e0]">코드질문 최신글 💦</h2>
             <Link to="/question">
-              <Icon name="rightIcon"></Icon>
+              <div className="dark:contrast-75 dark:invert">
+                <Icon name="rightIcon"></Icon>
+              </div>
             </Link>
           </div>
           <div className="flex flex-wrap justify-center gap-[15px]">
