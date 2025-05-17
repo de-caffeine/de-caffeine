@@ -18,3 +18,7 @@
 .post-readonly-editor .ql-editor {
   font-style: normal !important;
 }
+
+.ql-editor:focus.ql-blank::before {
+  content: '' !important;
+}
