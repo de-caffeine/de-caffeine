@@ -96,7 +96,7 @@ export default function UserPage() {
         partner: {
           _id: userData!._id, // UserPage의 userData 에 이미 로드된 대상 유저 정보
           fullName: userData!.fullName,
-          avatarUrl: userData!.image,
+          image: userData!.image,
           status: 'offline', // 원한다면 실제 상태로 교체
         },
         lastMessage: { timestamp: Date.now() },

@@ -53,9 +53,9 @@ export default function Writer2() {
 
   // 커버용 상태 분리
   const [coverFile, setCoverFile] = useState<File>();
-  const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | undefined>(
-    state?.imageUrl,
-  );
+  // const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | undefined>(
+  //   state?.imageUrl,
+  // );
   // ▶ 추가: 커버 파일명 상태
   const [coverFileName, setCoverFileName] = useState<string>('');
 
@@ -68,8 +68,8 @@ export default function Writer2() {
     if (file) {
       setCoverFile(file);
       setCoverFileName(file.name);
-      const url = URL.createObjectURL(file);
-      setCoverPreviewUrl(url);
+      // const url = URL.createObjectURL(file);
+      // setCoverPreviewUrl(url);
     }
   };
 
@@ -81,7 +81,7 @@ export default function Writer2() {
           setTitle(data.title);
           setEditor(data.body);
           setTagsArray(data.tags ?? []); // ▶ 수정: tagsArray로 세팅
-          if (data.image) setCoverPreviewUrl(data.image);
+          // if (data.image) setCoverPreviewUrl(data.image);
         })
         .catch((err) => {
           console.error('포스트 불러오기 실패', err);
