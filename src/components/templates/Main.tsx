@@ -7,12 +7,15 @@ import FloatingButton from '../atoms/FloatingButton';
 import Icon from '../atoms/Icon';
 import { getAuthUser } from '../../api/auth';
 import { useLoginStore } from '../../loginStore';
+import CommunityCardSkeleton from '../molecules/CommunityCardSkeleton';
+import QuestionCardSkeleton from '../molecules/QuestionCardSkeleton';
 
 export default function Main() {
   const [communityPosts, setCommunityPosts] = useState<Post[]>([]); // 출력할 커뮤니티 posts
   const [questionPosts, setQuestionPosts] = useState<Post[]>([]); // 출력할 코드질문 posts
   const [myInfo, setMyInfo] = useState<User | null>(); // 사용자 정보
   const [width, setWidth] = useState(window.innerWidth); // 반응형 width
+  const [isLoading, setIsLoading] = useState(true);
   const isLoggedIn = useLoginStore((state) => state.isLoggedIn);
   const refetch = useLoginStore((state) => state.refetch);
 
@@ -36,6 +39,7 @@ export default function Main() {
           )
           .sort((a, b) => b.likes.length - a.likes.length),
       );
+      setIsLoading(false);
     };
     const fetchQuestionPosts = async () => {
       const solved = await getPostsByChannel('681da03c7ffa911fa118e4c6');
@@ -79,21 +83,33 @@ export default function Main() {
             </Link>
           </div>
           <div className="flex flex-wrap justify-center gap-[15px]">
-            {printCommunityPosts.length !== 0 ? (
-              printCommunityPosts.map((post) => {
-                const like = myInfo?.likes?.find(
-                  (like) => like.post === post._id,
-                );
-                const likeId = like ? like._id : null;
-
-                return (
-                  <CommunityCard key={post._id} post={post} likeId={likeId} />
-                );
-              })
+            {isLoading ? (
+              [...Array(getVisibleCardCount)].map((_, index) => (
+                <CommunityCardSkeleton key={index} />
+              ))
             ) : (
-              <p className="nanum-gothic-regular text-base text-[#ababab]">
-                앗! 아직 작성된 게시물이 없어요!
-              </p>
+              <>
+                {printCommunityPosts.length !== 0 ? (
+                  printCommunityPosts.map((post) => {
+                    const like = myInfo?.likes?.find(
+                      (like) => like.post === post._id,
+                    );
+                    const likeId = like ? like._id : null;
+
+                    return (
+                      <CommunityCard
+                        key={post._id}
+                        post={post}
+                        likeId={likeId}
+                      />
+                    );
+                  })
+                ) : (
+                  <p className="nanum-gothic-regular text-base text-[#ababab]">
+                    앗! 아직 작성된 게시물이 없어요!
+                  </p>
+                )}
+              </>
             )}
           </div>
         </div>
@@ -108,7 +124,9 @@ export default function Main() {
             </Link>
           </div>
           <div className="flex flex-wrap justify-center gap-[15px]">
-            {questionPosts.length !== 0 ? (
+            {isLoading ? (
+              [...Array(4)].map((_, i) => <QuestionCardSkeleton key={i} />)
+            ) : questionPosts.length !== 0 ? (
               questionPosts.map((post) => {
                 const like = myInfo?.likes?.find(
                   (like) => like.post === post._id,
