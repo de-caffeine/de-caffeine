@@ -6,8 +6,6 @@ import Icon from '../atoms/Icon';
 import UserAvatar from '../atoms/UserAvatar';
 import { updateUser, uploadPhoto } from '../../api/users';
 import { getAuthUser } from '../../api/auth';
-import * as React from 'react';
-import Switch from '@mui/material/Switch';
 
 export default function Setting() {
   const [user, setUser] = useState<User | null>(null); // 사용자 데이터
@@ -27,8 +25,6 @@ export default function Setting() {
     }
     return false;
   });
-
-  const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -56,16 +52,6 @@ export default function Setting() {
 
     fetchCurrentUser();
   }, []);
-
-  useEffect(() => {
-    if (darkModeToggle) {
-      document.documentElement.classList.add('dark');
-      console.log('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      console.log('light');
-    }
-  }, [darkModeToggle]);
 
   useEffect(() => {
     localStorage.setItem('darkMode', String(darkModeToggle));
@@ -209,14 +195,18 @@ export default function Setting() {
             이미지 삭제
           </button>
 
-          <div className="ml-[100px] flex items-center text-[13px]">
-            <Switch
-              {...label}
+          <label className="ml-[100px] inline-flex cursor-pointer items-center">
+            <input
+              type="checkbox"
+              className="peer sr-only"
               checked={darkModeToggle}
-              onChange={(e) => setDarkModeToggle(e.target.checked)}
+              onChange={() => setDarkModeToggle((prev) => !prev)} // ✅ 상태 토글
             />
-            다크모드
-          </div>
+            <div className="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-blue-600 peer-focus:ring-4 peer-focus:ring-blue-300 peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full dark:border-gray-600 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800"></div>
+            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+              다크모드
+            </span>
+          </label>
         </div>
 
         <hr className="dark:border-dark-border my-5 border-t border-[#ababab]" />
