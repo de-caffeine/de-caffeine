@@ -96,7 +96,7 @@ export default function UserPage() {
         partner: {
           _id: userData!._id, // UserPage의 userData 에 이미 로드된 대상 유저 정보
           fullName: userData!.fullName,
-          avatarUrl: userData!.image,
+          image: userData!.image,
           status: 'offline', // 원한다면 실제 상태로 교체
         },
         lastMessage: { timestamp: Date.now() },
@@ -207,11 +207,18 @@ export default function UserPage() {
   }, [userData?.comments, channelPosts, questionPosts]);
 
   //[Follow]userData가 로드될 때 존재하는 팔로우 관계 찾아서 relationId 세팅
+  // loginUserId : 로그인한 유저 id
+  // userData: path id 값에서 가져온 useData
+
   useEffect(() => {
-    if (!userData || !id) return;
-    const checkRel = userData.following.find((rel) => rel.user === id);
-    setRelationId(checkRel?._id ?? null);
-  }, [userData, id]);
+    if (!userData || !loginUserId) return;
+    const followRel = userData.followers.find(
+      (rel) => rel.follower === loginUserId,
+    );
+    setRelationId(followRel?._id ?? null);
+    setIsFollowing(!!followRel);
+  }, [userData, loginUserId]);
+
   //[Follow]relationId 가 바뀔 때마다 isFollowing 갱신
   useEffect(() => {
     setIsFollowing(relationId !== null);
@@ -239,7 +246,6 @@ export default function UserPage() {
   const fileteredQuestionComments = commentData.filter((data) =>
     questionPosts.some((p) => p._id === data.postId),
   );
-
   //follow 핸들
   const handleFollow = async () => {
     try {
@@ -263,12 +269,13 @@ export default function UserPage() {
     }
   };
 
-  if (userInvalid) return <Navigate to="/*" />;
+  if (userInvalid) return <Navigate to="*" replace />;
   if (userDataLoading) return <div>로딩중 ... </div>;
-  if (error) return <div>에러 : {error}</div>;
+  if (error) return <Navigate to="*" replace />;
   if (userData === null) return <div>정보가 없습니다.</div>;
   // if (id === 'user') return <div>탈퇴한 회원입니다.</div>;
   if (channelError) return <div>{channelError}</div>;
+  // if (myInfo?._id === '') return <Navigate to="*" />;
   return (
     <>
       {!parts[2] && (
