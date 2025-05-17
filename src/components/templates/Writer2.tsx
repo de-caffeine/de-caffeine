@@ -143,6 +143,17 @@ export default function Writer2() {
 
   // 3) 제출 핸들러: channelMap[category] 사용
   const handleSubmit = useCallback(async () => {
+    // 1) 순수 텍스트 추출
+    const editorText =
+      quillRef.current
+        ?.getEditor()
+        .getText() // "\n" 만 남아 있는 경우도 있으니
+        .trim() || '';
+
+    if (!title.trim() || !editorText) {
+      toast.error('제목과 내용을 모두 입력해주세요.');
+      return;
+    }
     if (!title.trim() || !editor.trim()) {
       toast.error('제목과 내용을 모두 입력해주세요.');
       return;
