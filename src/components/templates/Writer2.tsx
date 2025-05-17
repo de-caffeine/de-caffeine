@@ -151,7 +151,6 @@ export default function Writer2() {
     try {
       // ▶ 수정: tagsArray 사용
       const tagArray = tagsArray.map((t) => t.trim()).filter(Boolean);
-
       const selectedChannelId = channelMap[category];
 
       if (postId) {
@@ -166,15 +165,16 @@ export default function Writer2() {
         alert('포스트가 성공적으로 수정되었습니다!');
         navigate(`/post/${postId}`);
       } else {
-        await createPost(title, editor, selectedChannelId, tagArray, coverFile);
+        // 새 포스트 생성 후 반환된 ID로 해당 게시글 페이지로 이동
+        const created = await createPost(
+          title,
+          editor,
+          selectedChannelId,
+          tagArray,
+          coverFile,
+        );
         alert('포스트가 성공적으로 생성되었습니다!');
-        // 입력값 초기화
-        setTitle('');
-        setEditor('');
-        setTagsArray([]); // ▶ 수정: tagsArray 초기화
-        setCoverFile(undefined);
-        setCoverPreviewUrl(undefined);
-        setCoverFileName(''); // ▶ 추가: 커버 파일명 초기화
+        navigate(`/post/${created._id}`);
       }
     } catch (err: any) {
       console.error(err);
@@ -232,18 +232,18 @@ export default function Writer2() {
               >
                 {coverFileName || '커버 이미지 업로드'}
               </label>
-              {/* ▶ 선택된 이미지 미리보기 */}
+              {/* ▶ 선택된 이미지 미리보기 (필요 시 주석 해제) */}
               {/* {coverPreviewUrl && (
-              <img
-                src={coverPreviewUrl}
-                alt="커버 이미지 미리보기"
-                className="mt-2 max-h-[200px] max-w-[200px] rounded-[5px] object-cover"
-              />
-            )} */}
+                <img
+                  src={coverPreviewUrl}
+                  alt="커버 이미지 미리보기"
+                  className="mt-2 max-h-[200px] max-w-[200px] rounded-[5px] object-cover"
+                />
+              )} */}
             </div>
           </div>
 
-          {/* ▶ 수정: 태그 입력/삭제 및 백스페이스 삭제 지원 */}
+          {/* ▶ 태그 입력/삭제 및 백스페이스 삭제 지원 */}
           <div
             className="flex flex-wrap items-center gap-1 rounded px-2 py-1"
             onClick={() => tagInputRef.current?.focus()}
