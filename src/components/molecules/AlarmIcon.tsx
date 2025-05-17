@@ -18,6 +18,7 @@ export default function AlarmIcon() {
         ? res.filter(
             (alarm) =>
               !alarm.seen &&
+              alarm.author !== null &&
               alarm.follow !== null &&
               !alarm.message &&
               alarm.author._id !== localStorage.getItem('myId'),
