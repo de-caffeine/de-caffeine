@@ -64,8 +64,6 @@ export default function App() {
             <Route path="/setting" element={<Setting />} />
           </Route>
 
-          {/* 탈퇴한 사용자, 404 페이지 경로 지정 */}
-          <Route path="/404" element={<NotFound />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
