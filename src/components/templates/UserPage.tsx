@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { getUserById } from '../../api/users';
 import CommunityCard from '../molecules/CommunityCard';
 import { getPostsByAuthor, getPostsByChannel } from '../../api/posts';
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import QuestionCard from '../molecules/QuestionCard';
 import { followUser, unfollowUser } from '../../api/follow';
 import FloatingButton from '../atoms/FloatingButton';
@@ -17,7 +17,6 @@ import ChatWindow from '../organisms/ChatWindow'; // 변경: 채팅창 컴포넌
 import type { Conversation } from '../organisms/ChatList'; // 변경: 대화 타입
 import { getAuthUser } from '../../api/auth';
 import { useLoginStore } from '../../loginStore';
-import NotFound from './NotFound';
 
 // import PostCard from '../molecules/PostCard';
 // import CommentCard from '../molecules/CommentCard';
@@ -264,11 +263,11 @@ export default function UserPage() {
     }
   };
 
-  if (userInvalid) return <NotFound />;
+  if (userInvalid) return <Navigate to="404" replace />;
   if (userDataLoading) return <div>로딩중 ... </div>;
-  if (error) return <NotFound />;
+  if (error) return <Navigate to="404" replace />;
   if (userData === null) return <div>정보가 없습니다.</div>;
-  if (id === 'user') return <div>탈퇴한 회원입니다.</div>;
+  // if (id === 'user') return <div>탈퇴한 회원입니다.</div>;
   if (channelError) return <div>{channelError}</div>;
   // if (myInfo?._id === '') return <Navigate to="*" />;
   return (
