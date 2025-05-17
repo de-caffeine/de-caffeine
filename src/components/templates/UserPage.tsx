@@ -207,11 +207,18 @@ export default function UserPage() {
   }, [userData?.comments, channelPosts, questionPosts]);
 
   //[Follow]userData가 로드될 때 존재하는 팔로우 관계 찾아서 relationId 세팅
+  // loginUserId : 로그인한 유저 id
+  // userData: path id 값에서 가져온 useData
+
   useEffect(() => {
-    if (!userData || !id) return;
-    const checkRel = userData.following.find((rel) => rel.user === id);
-    setRelationId(checkRel?._id ?? null);
-  }, [userData, id]);
+    if (!userData || !loginUserId) return;
+    const followRel = userData.followers.find(
+      (rel) => rel.follower === loginUserId,
+    );
+    setRelationId(followRel?._id ?? null);
+    setIsFollowing(!!followRel);
+  }, [userData, loginUserId]);
+
   //[Follow]relationId 가 바뀔 때마다 isFollowing 갱신
   useEffect(() => {
     setIsFollowing(relationId !== null);
@@ -239,7 +246,6 @@ export default function UserPage() {
   const fileteredQuestionComments = commentData.filter((data) =>
     questionPosts.some((p) => p._id === data.postId),
   );
-
   //follow 핸들
   const handleFollow = async () => {
     try {
