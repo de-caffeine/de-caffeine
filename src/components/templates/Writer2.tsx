@@ -252,7 +252,7 @@ export default function Writer2() {
             {tagsArray.map((tag, idx) => (
               <span
                 key={idx}
-                className="flex items-center gap-1 rounded bg-[#D7CAB9] px-2 py-0.5 text-sm text-black"
+                className="flex items-center rounded bg-[#D7CAB9] px-2 py-0.5 text-sm text-black"
               >
                 {tag}
                 <button
@@ -281,7 +281,7 @@ export default function Writer2() {
                   return;
                 }
                 // Enter 또는 쉼표로 태그 추가
-                if (e.key === 'Enter' || e.key === ',') {
+                if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
                   const val = tagInput.trim().replace(/,$/, '');
                   if (val && !tagsArray.includes(val)) {
