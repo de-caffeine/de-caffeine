@@ -8,6 +8,10 @@
   --color-dark-button: #3a3a3a;
   --color-dark-accent: #a9907e;
 }
+/* 예: global.css */
+.dark .ql-editor.ql-blank::before {
+  color: #e0e0e0; /* Tailwind의 text-gray-400 */
+}
 
 .wrapper {
   @apply w-[270px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px];
