@@ -53,9 +53,9 @@ export default function Writer2() {
 
   // 커버용 상태 분리
   const [coverFile, setCoverFile] = useState<File>();
-  const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | undefined>(
-    state?.imageUrl,
-  );
+  // const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | undefined>(
+  //   state?.imageUrl,
+  // );
   // ▶ 추가: 커버 파일명 상태
   const [coverFileName, setCoverFileName] = useState<string>('');
 
@@ -68,8 +68,8 @@ export default function Writer2() {
     if (file) {
       setCoverFile(file);
       setCoverFileName(file.name);
-      const url = URL.createObjectURL(file);
-      setCoverPreviewUrl(url);
+      // const url = URL.createObjectURL(file);
+      // setCoverPreviewUrl(url);
     }
   };
 
@@ -81,7 +81,7 @@ export default function Writer2() {
           setTitle(data.title);
           setEditor(data.body);
           setTagsArray(data.tags ?? []); // ▶ 수정: tagsArray로 세팅
-          if (data.image) setCoverPreviewUrl(data.image);
+          // if (data.image) setCoverPreviewUrl(data.image);
         })
         .catch((err) => {
           console.error('포스트 불러오기 실패', err);
@@ -143,6 +143,17 @@ export default function Writer2() {
 
   // 3) 제출 핸들러: channelMap[category] 사용
   const handleSubmit = useCallback(async () => {
+    // 1) 순수 텍스트 추출
+    const editorText =
+      quillRef.current
+        ?.getEditor()
+        .getText() // "\n" 만 남아 있는 경우도 있으니
+        .trim() || '';
+
+    if (!title.trim() || !editorText) {
+      toast.error('제목과 내용을 모두 입력해주세요.');
+      return;
+    }
     if (!title.trim() || !editor.trim()) {
       toast.error('제목과 내용을 모두 입력해주세요.');
       return;
@@ -252,7 +263,7 @@ export default function Writer2() {
             {tagsArray.map((tag, idx) => (
               <span
                 key={idx}
-                className="flex items-center gap-1 rounded bg-[#D7CAB9] px-2 py-0.5 text-sm text-black"
+                className="flex items-center rounded bg-[#D7CAB9] px-2 py-0.5 text-sm text-black"
               >
                 {tag}
                 <button
@@ -281,7 +292,7 @@ export default function Writer2() {
                   return;
                 }
                 // Enter 또는 쉼표로 태그 추가
-                if (e.key === 'Enter' || e.key === ',') {
+                if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
                   const val = tagInput.trim().replace(/,$/, '');
                   if (val && !tagsArray.includes(val)) {
