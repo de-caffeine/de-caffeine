@@ -16,7 +16,12 @@ export default function AlarmIcon() {
     setAlarms(
       res
         ? res.filter(
-            (alarm) => !alarm.seen && alarm.follow !== null && !alarm.message,
+            (alarm) =>
+              !alarm.seen &&
+              alarm.author !== null &&
+              alarm.follow !== null &&
+              !alarm.message &&
+              alarm.author._id !== localStorage.getItem('myId'),
           )
         : [],
     );
@@ -30,7 +35,7 @@ export default function AlarmIcon() {
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [alarms]);
+  }, []);
 
   const deleteAlarms = async () => {
     await markNotificationsSeen();

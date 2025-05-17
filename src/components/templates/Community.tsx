@@ -4,11 +4,13 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import FloatingButton from '../atoms/FloatingButton';
 import { getAuthUser } from '../../api/auth';
+import { useLoginStore } from '../../loginStore';
 
 export default function Community() {
   const location = useLocation(); // subChannel
   const [posts, setPosts] = useState<Post[]>([]); // 출력할 posts
   const [myInfo, setMyInfo] = useState<User | null>(); // 사용자 정보
+  const isLoggedIn = useLoginStore((state) => state.isLoggedIn);
 
   /* 최초 실행때 myInfo 저장 */
   useEffect(() => {
@@ -80,9 +82,25 @@ export default function Community() {
           </p>
         )}
       </div>
-      <Link to="/writer" className="fixed right-[10%] bottom-[5%]">
-        <FloatingButton buttonType="write" />
-      </Link>
+
+      {isLoggedIn ? (
+        <>
+          <Link to="/writer" className="fixed right-[10%] bottom-[5%]">
+            <FloatingButton buttonType="write" />
+          </Link>
+        </>
+      ) : (
+        <>
+          <div
+            className="fixed right-[10%] bottom-[5%]"
+            onClick={() => {
+              alert('로그인 후에 이용 가능합니다.');
+            }}
+          >
+            <FloatingButton buttonType="write" />
+          </div>
+        </>
+      )}
     </>
   );
 }

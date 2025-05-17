@@ -9,6 +9,7 @@ import QuestionCard from '../molecules/QuestionCard';
 import UserCard from '../molecules/UserCard';
 import { getUsers } from '../../api/users';
 import { getAuthUser } from '../../api/auth';
+import { useLoginStore } from '../../loginStore';
 
 export default function Search() {
   const location = useLocation();
@@ -18,6 +19,7 @@ export default function Search() {
   const [users, setUsers] = useState<User[]>([]);
   const [width, setWidth] = useState(window.innerWidth);
   const [myInfo, setMyInfo] = useState<User | null>(); // 사용자 정보
+  const isLoggedIn = useLoginStore((state) => state.isLoggedIn);
 
   /* 최초 실행때 myInfo 저장 */
   useEffect(() => {
@@ -206,9 +208,24 @@ export default function Search() {
             </div>
           </div>
 
-          <Link to="/writer" className="fixed right-[10%] bottom-[5%]">
-            <FloatingButton buttonType="write" />
-          </Link>
+          {isLoggedIn ? (
+            <>
+              <Link to="/writer" className="fixed right-[10%] bottom-[5%]">
+                <FloatingButton buttonType="write" />
+              </Link>
+            </>
+          ) : (
+            <>
+              <div
+                className="fixed right-[10%] bottom-[5%]"
+                onClick={() => {
+                  alert('로그인 후에 이용 가능합니다.');
+                }}
+              >
+                <FloatingButton buttonType="write" />
+              </div>
+            </>
+          )}
         </>
       );
     }
@@ -249,9 +266,24 @@ export default function Search() {
               </div>
             </div>
           </div>
-          <Link to="/writer" className="fixed right-[10%] bottom-[5%]">
-            <FloatingButton buttonType="write" />
-          </Link>
+          {isLoggedIn ? (
+            <>
+              <Link to="/writer" className="fixed right-[10%] bottom-[5%]">
+                <FloatingButton buttonType="write" />
+              </Link>
+            </>
+          ) : (
+            <>
+              <div
+                className="fixed right-[10%] bottom-[5%]"
+                onClick={() => {
+                  alert('로그인 후에 이용 가능합니다.');
+                }}
+              >
+                <FloatingButton buttonType="write" />
+              </div>
+            </>
+          )}
         </>
       );
     }
@@ -287,9 +319,24 @@ export default function Search() {
               </div>
             </div>
           </div>
-          <Link to="/writer" className="fixed right-[10%] bottom-[5%]">
-            <FloatingButton buttonType="write" />
-          </Link>
+          {isLoggedIn ? (
+            <>
+              <Link to="/writer" className="fixed right-[10%] bottom-[5%]">
+                <FloatingButton buttonType="write" />
+              </Link>
+            </>
+          ) : (
+            <>
+              <div
+                className="fixed right-[10%] bottom-[5%]"
+                onClick={() => {
+                  alert('로그인 후에 이용 가능합니다.');
+                }}
+              >
+                <FloatingButton buttonType="write" />
+              </div>
+            </>
+          )}
         </>
       );
     }
