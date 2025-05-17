@@ -14,6 +14,7 @@ export default function Main() {
   const [myInfo, setMyInfo] = useState<User | null>(); // 사용자 정보
   const [width, setWidth] = useState(window.innerWidth); // 반응형 width
   const isLoggedIn = useLoginStore((state) => state.isLoggedIn);
+  const refetch = useLoginStore((state) => state.refetch);
 
   /* 최초 실행때 myInfo 저장, posts fetch */
   useEffect(() => {
@@ -50,7 +51,7 @@ export default function Main() {
     fetchCommunityPosts();
     fetchQuestionPosts();
     console.log(isLoggedIn);
-  }, [isLoggedIn]);
+  }, [isLoggedIn, refetch]);
 
   /* 반응형 출력 */
   useEffect(() => {

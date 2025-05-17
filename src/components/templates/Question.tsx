@@ -11,6 +11,7 @@ export default function Question() {
   const [posts, setPosts] = useState<Post[]>([]); // 출력할 posts
   const [myInfo, setMyInfo] = useState<User | null>(); // 사용자 정보
   const isLoggedIn = useLoginStore((state) => state.isLoggedIn);
+  const refetch = useLoginStore((state) => state.refetch);
 
   /* 최초 실행때 myInfo 저장 */
   useEffect(() => {
@@ -18,7 +19,7 @@ export default function Question() {
       setMyInfo(await getAuthUser());
     };
     getMyInfo();
-  }, []);
+  }, [isLoggedIn, refetch]);
 
   /* subChannel에 따라 fetch */
   useEffect(() => {
