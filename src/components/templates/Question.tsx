@@ -55,7 +55,7 @@ export default function Question() {
         break;
       }
     }
-  }, [location.pathname]);
+  }, [location.pathname, refetch]);
 
   return (
     <>

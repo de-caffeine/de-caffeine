@@ -144,7 +144,7 @@ export default function UserPage() {
       }
     }
     loadUserData();
-  }, [id]);
+  }, [id, refetch]);
 
   useEffect(() => {
     async function postsOfEachChannel() {
