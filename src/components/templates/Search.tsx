@@ -95,7 +95,7 @@ export default function Search() {
     case undefined: {
       return (
         <>
-          <div className="w-[270px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px]">
+          <div className="dark:text-dark-text w-[270px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px]">
             <div className="flex flex-col">
               <div className="nanum-gothic-regular flex justify-between py-[5px]">
                 <h2>

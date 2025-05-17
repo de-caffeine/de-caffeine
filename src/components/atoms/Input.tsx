@@ -1,30 +1,26 @@
-import React from "react";
+import React from 'react';
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   icon?: React.ReactNode;
 };
 
 export default function Input({
-  type = "text",
+  type = 'text',
   icon,
-  className = "",
+  className = '',
   ...props
 }: InputProps) {
   return (
     <div className="relative flex items-center">
       {/* 아이콘  */}
       {icon && (
-        <span className="absolute left-[10px] pointer-events-none flex items-center">
+        <span className="pointer-events-none absolute left-[10px] flex items-center">
           {icon}
         </span>
       )}
       <input
         type={type}
-        className={`
-          ${icon ? "pl-10" : ""}
-          rounded-[5px] border px-[20px] placeholder-[#ababab] nanum-gothic-regular text-[16px]
-          ${className}
-        `}
+        className={` ${icon ? 'pl-10' : ''} dark:placeholder-dark-border nanum-gothic-regular rounded-[5px] border px-[20px] text-[16px] placeholder-[#ababab] ${className} `}
         {...props}
       />
     </div>

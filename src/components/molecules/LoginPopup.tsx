@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { login } from '../../api/auth'; // 로그인 API
 import { AxiosError } from 'axios';
-import coffeeBean from '../../assets/images/CoffeeBean.svg';
+
+import coffeeBean from '../../assets/images/CoffeeBean.png';
 import { useLoginStore } from '../../loginStore';
 
 export default function LoginPopup({
@@ -58,7 +59,7 @@ export default function LoginPopup({
 
   return (
     <div className="fixed inset-0 z-10 flex items-center justify-center bg-black/50">
-      <div className="nanum-gothic-regular relative rounded-[15px] bg-white p-7 shadow-inner">
+      <div className="nanum-gothic-regular dark:bg-dark-card dark:text-dark-text dark:placeholder-dark-text relative rounded-[15px] bg-white p-7 shadow-inner">
         <button
           onClick={onClose}
           className="absolute top-2 right-2 h-5 w-5 cursor-pointer"
@@ -101,7 +102,7 @@ export default function LoginPopup({
           </button>
           <button
             onClick={onSwitchToSignup}
-            className="h-[50px] w-full cursor-pointer rounded-[5px] border text-[20px]"
+            className="dark:border-dark-border dark:bg-dark-border h-[50px] w-full cursor-pointer rounded-[5px] border text-[20px] dark:text-[#000]"
           >
             회원가입
           </button>

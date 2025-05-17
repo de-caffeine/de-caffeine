@@ -308,7 +308,7 @@ export default function UserPage() {
 
       {/* 내가 쓴 글 */}
       {!parts[2] && (
-        <div className="mx-auto flex w-[1128px] flex-wrap justify-start gap-4 pt-[17px]">
+        <div className="dark:text-dark-text mx-auto flex w-[1128px] flex-wrap justify-start gap-4 pt-[17px]">
           {posts.length === 0 ? (
             <div>아직 작성된 게시글이 없습니다.</div>
           ) : (
@@ -336,7 +336,7 @@ export default function UserPage() {
 
       {/* 내가 한 질문 */}
       {parts[2] === 'question' && (
-        <div className="flex w-[1128px] flex-col gap-4 pt-[22px]">
+        <div className="dark:text-dark-text flex w-[1128px] flex-col gap-4 pt-[22px]">
           {questionPosts.length === 0 ? (
             <div>아직 작성된 질문이 없습니다.</div>
           ) : (
@@ -356,7 +356,7 @@ export default function UserPage() {
 
       {/* 내가 쓴 댓글  */}
       {parts[2] === 'comments' && (
-        <div className="mx-auto w-[1128px] pt-4 text-left">
+        <div className="dark:text-dark-text mx-auto w-[1128px] pt-4 text-left">
           <p>
             커뮤니티
             <span className="text-[#3bb900]"> {communityComments.length}</span>
@@ -364,14 +364,14 @@ export default function UserPage() {
         </div>
       )}
       {parts[2] === 'comments' && (
-        <div className="nanum-gothic-regular mx-auto flex w-[1128px] flex-wrap gap-4 pt-4">
+        <div className="nanum-gothic-regular dark:text-dark-text mx-auto flex w-[1128px] flex-wrap gap-4 pt-4">
           {communityComments.length === 0 ? (
             <div>아직 댓글이 없습니다.</div>
           ) : (
             communityComments.map(({ postId, postTitle, comment }) => (
               <div
                 key={postId}
-                className="w-[100%] gap-2 rounded border border-[#d9d9d9] p-4"
+                className="dark:border-dark-border w-[100%] gap-2 rounded border border-[#d9d9d9] p-4"
               >
                 <h3 className="mb-1 font-semibold">“{postTitle}” 글의 댓글</h3>
                 <p>{comment}</p>
@@ -381,7 +381,7 @@ export default function UserPage() {
         </div>
       )}
       {parts[2] === 'comments' && (
-        <div className="mx-auto w-[1128px] pt-8 text-left">
+        <div className="dark:text-dark-text mx-auto w-[1128px] pt-8 text-left">
           <p>
             질문{' '}
             <span className="text-[#3bb900]">
@@ -391,14 +391,14 @@ export default function UserPage() {
         </div>
       )}
       {parts[2] === 'comments' && (
-        <div className="nanum-gothic-regular mx-auto flex w-[1128px] flex-wrap gap-2 pt-4">
+        <div className="nanum-gothic-regular dark:text-dark-text mx-auto flex w-[1128px] flex-wrap gap-2 pt-4">
           {fileteredQuestionComments.length === 0 ? (
             <div>아직 댓글이 없습니다.</div>
           ) : (
             fileteredQuestionComments.map(({ postId, postTitle, comment }) => (
               <div
                 key={postId}
-                className="w-[100%] gap-2 rounded border border-[#d9d9d9] p-4 pt-4"
+                className="dark:border-dark-border w-[100%] gap-2 rounded border border-[#d9d9d9] p-4 pt-4"
               >
                 <h3 className="mb-1 font-semibold">“{postTitle}” 글의 댓글</h3>
                 <p>{comment}</p>
@@ -410,7 +410,7 @@ export default function UserPage() {
 
       {/*  좋아요 누른 글 */}
       {parts[2] === 'liked' && (
-        <div className="mx-auto w-[1128px] pt-4 text-left">
+        <div className="dark:text-dark-text mx-auto w-[1128px] pt-4 text-left">
           <p>
             커뮤니티{' '}
             <span className="text-[#3bb900]">{communityLiked.length}</span>
@@ -418,7 +418,7 @@ export default function UserPage() {
         </div>
       )}
       {parts[2] === 'liked' && (
-        <div className="mx-auto flex w-[1128px] flex-wrap justify-start gap-4 pt-[17px]">
+        <div className="dark:text-dark-text mx-auto flex w-[1128px] flex-wrap justify-start gap-4 pt-[17px]">
           {communityLiked.length === 0 ? (
             <div>아직 좋아요를 누른 글이 없습니다.</div>
           ) : (
@@ -436,14 +436,14 @@ export default function UserPage() {
         </div>
       )}
       {parts[2] === 'liked' && (
-        <div className="mx-auto w-[1128px] pt-4 text-left">
+        <div className="dark:text-dark-text mx-auto w-[1128px] pt-4 text-left">
           <p className="justify-start pt-4">
             질문 <span className="text-[#3bb900]">{questionLiked.length}</span>
           </p>
         </div>
       )}
       {parts[2] === 'liked' && (
-        <div className="mx-auto flex w-[1128px] flex-wrap justify-start gap-4 pt-[17px]">
+        <div className="dark:text-dark-text mx-auto flex w-[1128px] flex-wrap justify-start gap-4 pt-[17px]">
           {questionLiked.length === 0 ? (
             <div>아직 좋아요를 누른 글이 없습니다.</div>
           ) : (

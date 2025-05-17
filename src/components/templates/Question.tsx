@@ -58,7 +58,7 @@ export default function Question() {
 
   return (
     <>
-      <div className="wrapper card-list">
+      <div className="wrapper card-list dark:text-dark-text">
         {posts.length !== 0 ? (
           posts.map((post) => {
             const like = myInfo?.likes?.find((like) => like.post === post._id);

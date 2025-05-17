@@ -44,7 +44,7 @@ export default function AlarmIcon() {
 
   return (
     <div className="relative inline-block" ref={modalRef}>
-      <div className="relative mt-[5px]">
+      <div className="relative mt-[5px] dark:contrast-75 dark:invert">
         <Icon
           size={40}
           name="alarmIcon"
@@ -56,7 +56,7 @@ export default function AlarmIcon() {
       </div>
 
       {ismodalOpen && (
-        <div className="absolute top-full right-0 z-50 mt-2 max-h-[400px] w-[300px] cursor-default rounded-md border border-[#d9d9d9] bg-white shadow-md">
+        <div className="dark:bg-dark-card dark:border-dark-border dark:text-dark-text absolute top-full right-0 z-50 mt-2 max-h-[400px] w-[300px] cursor-default rounded-md border border-[#d9d9d9] bg-white shadow-md">
           <div className="mx-[15px] my-[5px] flex h-[50px] items-center justify-between border-b border-[#d9d9d9] px-[5px]">
             <span className="nanum-gothic-bold">알림</span>
             <button className="cursor-pointer text-sm" onClick={deleteAlarms}>

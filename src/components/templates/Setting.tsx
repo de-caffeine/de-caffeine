@@ -10,7 +10,6 @@ import { getAuthUser } from '../../api/auth';
 export default function Setting() {
   const [user, setUser] = useState<User | null>(null); // 사용자 데이터
   const [file, setFile] = useState<File | null>(null); // 프로필 이미지 파일
-
   const [form, setForm] = useState({
     fullName: '',
     introduction: '',
@@ -20,22 +19,44 @@ export default function Setting() {
     velog: '',
     homepage: '',
   });
-  const [darkModeToggle, setDarkModeToggle] = useState(false);
+  const [darkModeToggle, setDarkModeToggle] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('darkMode') === 'true';
+    }
+    return false;
+  });
 
   useEffect(() => {
-    // 서버에서 로그인된 사용자 정보 불러오기
     const fetchCurrentUser = async () => {
       try {
-        const currentUser = await getAuthUser(); // 인증된 사용자 정보 가져오기
-        setUser(currentUser); // 상태에 저장
+        const currentUser = await getAuthUser();
+        setUser(currentUser);
+
+        const userMeta = currentUser.username
+          ? JSON.parse(currentUser.username)
+          : {};
+
+        setForm({
+          fullName: currentUser.fullName ?? '',
+          introduction: userMeta.introduction ?? '',
+          tags: (userMeta.tags || []).join(', '),
+          email: userMeta.email ?? '',
+          github: userMeta.github ?? '',
+          velog: userMeta.velog ?? '',
+          homepage: userMeta.homepage ?? '',
+        });
       } catch (error) {
         console.error('사용자 정보를 불러오는 중 오류 발생:', error);
-        // 필요시 사용자에게 오류 메시지 표시
       }
     };
 
     fetchCurrentUser();
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', String(darkModeToggle));
+    document.documentElement.classList.toggle('dark', darkModeToggle);
+  }, [darkModeToggle]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -144,25 +165,22 @@ export default function Setting() {
   };
 
   return (
-    <div className="nanum-gothic-regular ml-[42px] w-[950px]">
+    <div className="nanum-gothic-regular dark:text-dark-text dark:border-dark-border ml-[42px] w-[950px] transition-colors duration-300 ease-in-out">
       <div className="mb-[10px] flex">
         <Icon name="leftIcon" />
         <div className="ml-[20px]">설정</div>
       </div>
 
-      <div className="rounded-[5px] border border-[#ababab] p-6">
+      <div className="dark:bg-dark-card dark:border-dark-border rounded-[5px] border border-[#ababab] p-6 transition-colors duration-300">
         <div className="ml-[28px] flex items-end gap-5">
           <UserAvatar size={120} imageUrl={user?.image} />
 
-          <div>
-            {/* 파일 선택 input */}
-            <input
-              type="file"
-              accept="image/*" // 이미지 파일만 선택 가능하도록 설정
-              onChange={handleFileChange}
-              className="cursor-pointer rounded-[5px] border text-[12px]"
-            />
-          </div>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="dark:border-dark-border dark:bg-dark-card cursor-pointer rounded-[5px] border text-[12px] transition-colors"
+          />
 
           <button
             className="h-[28px] w-[94px] cursor-pointer rounded-[5px] bg-[#A9907E] text-[13px] text-white"
@@ -172,25 +190,26 @@ export default function Setting() {
           </button>
           <button
             onClick={handleDeleteImage}
-            className="h-[28px] w-[94px] cursor-pointer rounded-[5px] border text-[13px]"
+            className="dark:border-dark-border dark:bg-dark-button h-[28px] w-[94px] cursor-pointer rounded-[5px] border text-[13px] transition-colors dark:text-white"
           >
             이미지 삭제
           </button>
-          <div className="ml-[130px] h-[30px] w-[59px] rounded-4xl border bg-white">
-            <button
-              className={`h-[28px] w-[28px] transform rounded-2xl bg-[#A9907E] transition-transform duration-300 ease-in-out ${
-                darkModeToggle ? 'translate-x-[29px]' : 'translate-x-0'
-              }`}
-              onClick={() => setDarkModeToggle((prev) => !prev)}
-            >
-              <div className="ml-[3px]">
-                <Icon name="darkModeIcon" size={20} />
-              </div>
-            </button>
-          </div>
+
+          <label className="ml-[100px] inline-flex cursor-pointer items-center">
+            <input
+              type="checkbox"
+              className="peer sr-only"
+              checked={darkModeToggle}
+              onChange={() => setDarkModeToggle((prev) => !prev)} // ✅ 상태 토글
+            />
+            <div className="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-blue-600 peer-focus:ring-4 peer-focus:ring-blue-300 peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full dark:border-gray-600 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800"></div>
+            <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+              다크모드
+            </span>
+          </label>
         </div>
 
-        <hr className="my-5 border-t border-[#ababab]" />
+        <hr className="dark:border-dark-border my-5 border-t border-[#ababab]" />
 
         <div className="ml-[28px] space-y-6">
           <div>
@@ -200,7 +219,7 @@ export default function Setting() {
               value={form.fullName}
               onChange={(e) => handleInputChange(e, 'fullName')}
               placeholder="설정할 닉네임을 입력해주세요."
-              className="h-[38px] w-[255px] rounded-[5px] border p-3 text-[12px]"
+              className="dark:text-dark-text dark:border-dark-border dark:bg-dark-card h-[38px] w-[255px] rounded-[5px] border p-3 text-[12px] transition-colors"
             />
           </div>
 
@@ -211,7 +230,7 @@ export default function Setting() {
               value={form.introduction}
               onChange={(e) => handleInputChange(e, 'introduction')}
               placeholder="한 줄로 나를 소개해 보세요!"
-              className="h-[38px] w-[520px] rounded-[5px] border p-3 text-[12px]"
+              className="dark:text-dark-text dark:border-dark-border dark:bg-dark-card h-[38px] w-[520px] rounded-[5px] border p-3 text-[12px] transition-colors"
             />
           </div>
 
@@ -222,7 +241,7 @@ export default function Setting() {
               value={form.tags}
               onChange={(e) => handleInputChange(e, 'tags')}
               placeholder="예: React, TypeScript, Node.js"
-              className="h-[38px] w-[520px] rounded-[5px] border p-3 text-[12px]"
+              className="dark:text-dark-text dark:border-dark-border dark:bg-dark-card h-[38px] w-[520px] rounded-[5px] border p-3 text-[12px] transition-colors"
             />
           </div>
 
@@ -244,7 +263,7 @@ export default function Setting() {
                 },
               ].map(({ icon, key, placeholder }, i) => (
                 <div key={i} className="relative">
-                  <div className="absolute top-1/2 left-3 -translate-y-1/2">
+                  <div className="absolute top-1/2 left-2 -translate-y-1/2 dark:contrast-75 dark:invert">
                     <Icon name={icon} />
                   </div>
                   <input
@@ -254,7 +273,7 @@ export default function Setting() {
                       handleInputChange(e, key as keyof typeof form)
                     }
                     placeholder={`${placeholder}를 입력해주세요`}
-                    className="h-[38px] w-[200px] rounded-[5px] border pr-3 pl-[36px] text-[12px]"
+                    className="dark:text-dark-text dark:border-dark-border dark:bg-dark-card h-[38px] w-[200px] rounded-[5px] border pr-3 pl-[36px] text-[12px] transition-colors"
                   />
                 </div>
               ))}

@@ -65,7 +65,7 @@ export default function SubNavigation({ channel }: { channel: string }) {
             {tabs.map(({ name, path }) => (
               <li
                 key={path}
-                className="nanum-gothic-regular mx-2 my-[30px] cursor-pointer"
+                className="nanum-gothic-regular dark:text-dark-text mx-2 my-[30px] cursor-pointer"
               >
                 <NavLink
                   to={path}

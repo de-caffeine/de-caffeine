@@ -15,7 +15,7 @@ import UserPage from './components/templates/UserPage';
 export default function App() {
   return (
     <>
-      <div className="m-auto flex flex-col items-center">
+      <div className="dark:bg-dark-bg inset-0 m-auto flex min-h-screen flex-col items-center transition-colors duration-300 ease-in-out">
         <Routes>
           <Route path="/" element={<Header />}>
             <Route index element={<Main />} />

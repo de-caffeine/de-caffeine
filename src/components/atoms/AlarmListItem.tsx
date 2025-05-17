@@ -4,8 +4,8 @@ import TimeAgo from './TimeAgo';
 export default function AlarmListItem({ alarm }: { alarm: Notification }) {
   return (
     <>
-      <div className="py-[10px]">
-        <p className="nanum-gothic-regular line-clamp-2 w-[100%] text-sm">
+      <div className="dark:bg-dark-bg dark:text-dark-text py-[10px]">
+        <p className="nanum-gothic-regular dark:bg-dark-bg line-clamp-2 w-[100%] text-sm">
           <Link to={`/${alarm.author._id}`}>
             <span className="nanum-gothic-bold">{alarm.author.fullName}</span>님
           </Link>
@@ -25,7 +25,7 @@ export default function AlarmListItem({ alarm }: { alarm: Notification }) {
             <Link to={`/${alarm.author._id}`}>이 나를 팔로우합니다.</Link>
           )}
         </p>
-        <p className="nanum-gothic-regular mt-[5px] cursor-default text-[12px] text-[#ababab]">
+        <p className="nanum-gothic-regular dark:text-dark-text mt-[5px] cursor-default text-[12px] text-[#ababab]">
           <TimeAgo timestamp={alarm.createdAt} />
         </p>
       </div>

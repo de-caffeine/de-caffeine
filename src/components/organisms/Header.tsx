@@ -82,14 +82,14 @@ export default function Header() {
             <SearchBar />
           </div>
 
-          <div className="flex flex-shrink-0 items-center space-x-6">
+          <div className="flex flex-shrink-0 items-center space-x-4">
             {isLoggedIn ? (
               <>
-                <div className="mt-[5px] ml-3 cursor-pointer">
+                <div className="z-10 mt-[5px] ml-3 cursor-pointer">
                   <AlarmIcon />
                 </div>
                 <div
-                  className="ml-3 cursor-pointer"
+                  className="ml-3 cursor-pointer dark:contrast-70 dark:invert"
                   onClick={() => setShowChatWindow(true)} // 변경: 채팅 아이콘 클릭 시 채팅창 열기
                 >
                   <Icon name="chatIcon" size={26} />
@@ -100,13 +100,13 @@ export default function Header() {
                     onClick={() => setShowDropdown(!showDropdown)}
                     className="flex cursor-pointer"
                   >
-                    <UserAvatar imageUrl={validImageUrl} size={30} />
+                    <UserAvatar imageUrl={validImageUrl} size={40} />
                   </div>
 
                   {showDropdown && (
                     <div
                       ref={dropdownRef}
-                      className="absolute right-0 z-50 mt-2 w-25 rounded-[5px] bg-white text-[14px] shadow drop-shadow-sm"
+                      className="dark:bg-dark-card dark:text-dark-text absolute right-0 z-50 mt-2 w-25 rounded-[5px] bg-white text-[14px] shadow drop-shadow-sm"
                     >
                       <Link
                         to={`/${localStorage.getItem('myId')}`}

@@ -21,8 +21,8 @@ export default function UserCard({
   loginStatus,
 }: UserCardProps) {
   return (
-    <div className="flex h-[140px] w-[310px] gap-4 rounded-[5px] border border-[#d9d9d9] p-5">
-      <div className="">
+    <div className="dark:border-dark-border dark:bg-dark-card dark:text-dark-text flex h-[140px] w-[310px] gap-4 rounded-[5px] border border-[#d9d9d9] p-5">
+      <div className="flex-shrink-0">
         <UserAvatar
           size={100}
           statusSize={20}

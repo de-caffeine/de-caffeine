@@ -40,10 +40,11 @@ export default function User({
 }: UserProps) {
   const ensureProtocol = (url: string) =>
     url.match(/^https?:\/\//i) ? url : `https://${url}`;
+
   return (
     <>
-      <div className="flex min-h-[184px] w-[1128px] items-center justify-between border-b-[1px] border-b-[#ababab] px-[30px] py-[10px]">
-        <div className="flex items-center justify-between">
+      <div className="dark:border-dark-border dark:text-dark-text flex min-h-[184px] w-[1128px] items-center justify-between border-b-[1px] border-b-[#ababab] px-[30px] py-[10px]">
+        <div className="flex items-center justify-center">
           <UserAvatar size={150} imageUrl={imgUrl} />
           <div className="ml-8 flex flex-col gap-1">
             <UserName
@@ -77,13 +78,17 @@ export default function User({
               )}
             </p>
             <div className="flex items-center justify-start gap-3">
-              <span className="flex justify-start gap-1 leading-5 tracking-wide text-[#767676]">
-                <img src="/src/assets/images/mailStroke.svg" alt="메일" />
+              <span className="flex justify-center gap-1 leading-5 tracking-wide text-[#767676]">
+                <img
+                  src="/src/assets/images/mailStroke.svg"
+                  className="dark:contrast-50 dark:invert"
+                  alt="메일"
+                />
                 {email}
               </span>
               {/* github, velog 주소값 여부에 따라 아이콘 렌더링 */}
               {github !== '' && (
-                <span>
+                <span className="dark:contrast-50 dark:invert">
                   <a
                     href={ensureProtocol(github)}
                     target="_blank"
@@ -94,7 +99,7 @@ export default function User({
                 </span>
               )}
               {velog !== '' && (
-                <span>
+                <span className="dark:contrast-50 dark:invert">
                   <a
                     href={ensureProtocol(velog)}
                     target="_blank"
@@ -105,7 +110,7 @@ export default function User({
                 </span>
               )}
               {homepage !== '' && (
-                <span>
+                <span className="dark:contrast-50 dark:invert">
                   <a
                     href={ensureProtocol(homepage)}
                     target="_blank"

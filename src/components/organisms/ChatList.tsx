@@ -1,5 +1,5 @@
 // src/components/organisms/ChatList.tsx
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   getConversations,
   markMessagesSeen,
