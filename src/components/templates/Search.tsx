@@ -90,7 +90,7 @@ export default function Search() {
     fetchCommunityPosts();
     fetchQuestionPosts();
     fetchUsers();
-  }, [keyword]);
+  }, [keyword, refetch]);
 
   switch (location.pathname.split('/')[3]) {
     case undefined: {

@@ -65,7 +65,7 @@ export default function Community() {
         break;
       }
     }
-  }, [location.pathname]);
+  }, [location.pathname, refetch]);
 
   return (
     <>
