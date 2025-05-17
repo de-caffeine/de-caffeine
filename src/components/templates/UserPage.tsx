@@ -263,9 +263,9 @@ export default function UserPage() {
     }
   };
 
-  if (userInvalid) return <Navigate to="404" replace />;
+  if (userInvalid) return <Navigate to="*" replace />;
   if (userDataLoading) return <div>로딩중 ... </div>;
-  if (error) return <Navigate to="404" replace />;
+  if (error) return <Navigate to="*" replace />;
   if (userData === null) return <div>정보가 없습니다.</div>;
   // if (id === 'user') return <div>탈퇴한 회원입니다.</div>;
   if (channelError) return <div>{channelError}</div>;
