@@ -20,6 +20,7 @@ export default function Search() {
   const [width, setWidth] = useState(window.innerWidth);
   const [myInfo, setMyInfo] = useState<User | null>(); // 사용자 정보
   const isLoggedIn = useLoginStore((state) => state.isLoggedIn);
+  const refetch = useLoginStore((state) => state.refetch);
 
   /* 최초 실행때 myInfo 저장 */
   useEffect(() => {
@@ -27,7 +28,7 @@ export default function Search() {
       setMyInfo(await getAuthUser());
     };
     getMyInfo();
-  }, []);
+  }, [isLoggedIn, refetch]);
 
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
