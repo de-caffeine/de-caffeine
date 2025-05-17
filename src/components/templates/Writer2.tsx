@@ -7,6 +7,7 @@ import 'react-quill-new/dist/quill.snow.css';
 import { createPost, getPost, updatePost } from '../../api/posts';
 import '../../css/PostCard.css';
 import coverimage from '../../assets/images/coverimage.png';
+import { toast } from 'react-toastify';
 
 interface LocationState {
   title?: string;
@@ -143,7 +144,7 @@ export default function Writer2() {
   // 3) 제출 핸들러: channelMap[category] 사용
   const handleSubmit = useCallback(async () => {
     if (!title.trim() || !editor.trim()) {
-      alert('제목과 내용을 모두 입력해주세요.');
+      toast.error('제목과 내용을 모두 입력해주세요.');
       return;
     }
 
@@ -162,7 +163,7 @@ export default function Writer2() {
           tagArray,
           coverFile,
         );
-        alert('포스트가 성공적으로 수정되었습니다!');
+        toast.success('포스트가 성공적으로 수정되었습니다!');
         navigate(`/post/${postId}`);
       } else {
         // 새 포스트 생성 후 반환된 ID로 해당 게시글 페이지로 이동
@@ -173,12 +174,12 @@ export default function Writer2() {
           tagArray,
           coverFile,
         );
-        alert('포스트가 성공적으로 생성되었습니다!');
+        toast.success('포스트가 성공적으로 생성되었습니다!');
         navigate(`/post/${created._id}`);
       }
     } catch (err: any) {
       console.error(err);
-      alert('오류 발생: ' + err.message);
+      toast.error('오류 발생: ' + err.message);
     } finally {
       setLoading(false);
     }

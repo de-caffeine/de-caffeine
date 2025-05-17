@@ -11,6 +11,8 @@ import Setting from './components/templates/Setting';
 import Post from './components/templates/Post';
 import Writer from './components/templates/Writer2';
 import UserPage from './components/templates/UserPage';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function App() {
   return (
@@ -66,6 +68,15 @@ export default function App() {
 
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          pauseOnHover
+          draggable
+        />
       </div>
     </>
   );
