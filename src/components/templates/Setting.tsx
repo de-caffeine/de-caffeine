@@ -7,6 +7,7 @@ import UserAvatar from '../atoms/UserAvatar';
 import { updateUser, uploadPhoto } from '../../api/users';
 import { getAuthUser } from '../../api/auth';
 import { toast } from 'react-toastify';
+import Button from '../atoms/Button';
 
 export default function Setting() {
   const [user, setUser] = useState<User | null>(null); // 사용자 데이터
@@ -284,12 +285,12 @@ export default function Setting() {
         >
           회원탈퇴
         </button>
-        <button
-          onClick={handleApply}
-          className="absolute right-0 h-[40px] w-[100px] cursor-pointer rounded-[5px] bg-[#A9907E] text-white"
-        >
-          적용
-        </button>
+
+        <div className="absolute right-0">
+          <Button size="m" full onClick={handleApply}>
+            적용
+          </Button>
+        </div>
       </div>
     </div>
   );
