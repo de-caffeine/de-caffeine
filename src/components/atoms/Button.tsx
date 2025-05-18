@@ -16,7 +16,7 @@ export default function Button({
       className={`nanum-gothic-regular cursor-pointer rounded-[5px] border ${
         full
           ? 'border-[#6B4C36] bg-[#6B4C36] text-white'
-          : 'dark:border-dark-border dark:bg-dark-button'
+          : 'dark:border-dark-border dark:bg-dark-button dark:text-dark-text'
       } ${
         size === 's' &&
         `h-[30px] w-[70px] text-[10px] ${full ? 'border-[#A9907E] bg-[#A9907E]' : ''}`
