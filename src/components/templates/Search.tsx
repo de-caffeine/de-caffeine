@@ -10,16 +10,19 @@ import UserCard from '../molecules/UserCard';
 import { getUsers } from '../../api/users';
 import { getAuthUser } from '../../api/auth';
 import { useLoginStore } from '../../loginStore';
-import { toast } from 'react-toastify';
+import CommunityCardSkeleton from '../molecules/CommunityCardSkeleton';
+import QuestionCardSkeleton from '../molecules/QuestionCardSkeleton';
+import UserCardSkeleton from '../molecules/UserCardSkeleton';
 
 export default function Search() {
-  const location = useLocation();
+  const location = useLocation().pathname.split('/')[3];
   const { keyword } = useParams();
   const [communityPosts, setCommunityPosts] = useState<Post[]>([]);
   const [questionPosts, setQuestionPosts] = useState<Post[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [width, setWidth] = useState(window.innerWidth);
   const [myInfo, setMyInfo] = useState<User | null>(); // 사용자 정보
+  const [isLoading, setIsLoading] = useState(true);
   const isLoggedIn = useLoginStore((state) => state.isLoggedIn);
   const refetch = useLoginStore((state) => state.refetch);
 
@@ -64,6 +67,7 @@ export default function Search() {
               new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
           ),
       );
+      setIsLoading(false);
     };
     const fetchQuestionPosts = async () => {
       const solved = await getPostsByChannel('681da03c7ffa911fa118e4c6');
@@ -93,7 +97,7 @@ export default function Search() {
     fetchUsers();
   }, [keyword, refetch]);
 
-  switch (location.pathname.split('/')[3]) {
+  switch (location) {
     case undefined: {
       return (
         <>
@@ -102,35 +106,45 @@ export default function Search() {
               <div className="nanum-gothic-regular flex justify-between py-[5px]">
                 <h2>
                   "{keyword}" 커뮤니티 검색 결과
-                  <span className="text-[#3bb900]">
-                    &nbsp;
-                    {communityPosts.length}
-                  </span>
+                  {!isLoading && (
+                    <span className="text-[#3bb900]">
+                      &nbsp;
+                      {communityPosts.length}
+                    </span>
+                  )}
                 </h2>
                 <Link to={`/search/${keyword}/community`}>
-                  <Icon name="rightIcon"></Icon>
+                  <Icon name="rightIcon" />
                 </Link>
               </div>
               <div className="flex flex-wrap justify-center gap-[15px]">
-                {communityPosts.length !== 0 ? (
-                  printCommunityPosts.map((post) => {
-                    const like = myInfo?.likes?.find(
-                      (like) => like.post === post._id,
-                    );
-                    const likeId = like ? like._id : null;
-
-                    return (
-                      <CommunityCard
-                        key={post._id}
-                        post={post}
-                        likeId={likeId}
-                      />
-                    );
-                  })
+                {isLoading ? (
+                  [...Array(getVisibleCardCount)].map((_, index) => (
+                    <CommunityCardSkeleton key={index} />
+                  ))
                 ) : (
-                  <p className="nanum-gothic-regular text-base text-[#ababab]">
-                    앗! "{keyword}"을 포함한 게시물이 없어요!
-                  </p>
+                  <>
+                    {communityPosts.length !== 0 ? (
+                      printCommunityPosts.map((post) => {
+                        const like = myInfo?.likes?.find(
+                          (like) => like.post === post._id,
+                        );
+                        const likeId = like ? like._id : null;
+
+                        return (
+                          <CommunityCard
+                            key={post._id}
+                            post={post}
+                            likeId={likeId}
+                          />
+                        );
+                      })
+                    ) : (
+                      <p className="nanum-gothic-regular text-base text-[#ababab]">
+                        앗! "{keyword}"을 포함한 게시물이 없어요!
+                      </p>
+                    )}
+                  </>
                 )}
               </div>
             </div>
@@ -139,35 +153,45 @@ export default function Search() {
               <div className="nanum-gothic-regular flex justify-between py-[5px]">
                 <h2>
                   "{keyword}" 코드질문 검색 결과
-                  <span className="text-[#3bb900]">
-                    &nbsp;
-                    {questionPosts.length}
-                  </span>
+                  {!isLoading && (
+                    <span className="text-[#3bb900]">
+                      &nbsp;
+                      {questionPosts.length}
+                    </span>
+                  )}
                 </h2>
                 <Link to={`/search/${keyword}/question`}>
-                  <Icon name="rightIcon"></Icon>
+                  <Icon name="rightIcon" />
                 </Link>
               </div>
               <div className="flex flex-wrap justify-center gap-[15px]">
-                {questionPosts.length !== 0 ? (
-                  questionPosts.map((post) => {
-                    const like = myInfo?.likes?.find(
-                      (like) => like.post === post._id,
-                    );
-                    const likeId = like ? like._id : null;
-
-                    return (
-                      <QuestionCard
-                        key={post._id}
-                        post={post}
-                        likeId={likeId}
-                      />
-                    );
-                  })
+                {isLoading ? (
+                  [...Array(2)].map((_, index) => (
+                    <QuestionCardSkeleton key={index} />
+                  ))
                 ) : (
-                  <p className="nanum-gothic-regular text-base text-[#ababab]">
-                    앗! "{keyword}"을 포함한 게시물이 없어요!
-                  </p>
+                  <>
+                    {questionPosts.length !== 0 ? (
+                      questionPosts.slice(0, 2).map((post) => {
+                        const like = myInfo?.likes?.find(
+                          (like) => like.post === post._id,
+                        );
+                        const likeId = like ? like._id : null;
+
+                        return (
+                          <QuestionCard
+                            key={post._id}
+                            post={post}
+                            likeId={likeId}
+                          />
+                        );
+                      })
+                    ) : (
+                      <p className="nanum-gothic-regular text-base text-[#ababab]">
+                        앗! "{keyword}"을 포함한 게시물이 없어요!
+                      </p>
+                    )}
+                  </>
                 )}
               </div>
             </div>
@@ -176,35 +200,50 @@ export default function Search() {
               <div className="nanum-gothic-regular flex justify-between py-[5px]">
                 <h2>
                   "{keyword}" 유저 검색 결과
-                  <span className="text-[#3bb900]">&nbsp;{users.length}</span>
+                  {!isLoading && (
+                    <span className="text-[#3bb900]">
+                      &nbsp;
+                      {users.length}
+                    </span>
+                  )}
                 </h2>
                 <Link to={`/search/${keyword}/user`}>
-                  <Icon name="rightIcon"></Icon>
+                  <Icon name="rightIcon" />
                 </Link>
               </div>
               <div className="flex flex-wrap justify-center gap-[15px]">
-                {users.length !== 0 ? (
-                  users.map((user) => (
-                    <UserCard
-                      key={user._id}
-                      UName={user.fullName}
-                      followCount={user.following.length}
-                      followerCount={user.followers.length}
-                      tags={
-                        user.username
-                          ? JSON.parse(user.username).tags
-                            ? JSON.parse(user.username).tags
-                            : []
-                          : []
-                      }
-                      imgUrl={user.image}
-                      loginStatus={user.isOnline ? 'online' : 'offline'}
-                    ></UserCard>
+                {isLoading ? (
+                  [...Array(3)].map((_, index) => (
+                    <UserCardSkeleton key={index} />
                   ))
                 ) : (
-                  <p className="nanum-gothic-regular text-base text-[#ababab]">
-                    앗! "{keyword}"을 포함한 사용자가 없어요!
-                  </p>
+                  <>
+                    {users.length !== 0 ? (
+                      users.map((user) => (
+                        <Link to={`/${user._id}`}>
+                          <UserCard
+                            key={user._id}
+                            UName={user.fullName}
+                            followCount={user.following.length}
+                            followerCount={user.followers.length}
+                            tags={
+                              user.username
+                                ? JSON.parse(user.username).tags
+                                  ? JSON.parse(user.username).tags
+                                  : []
+                                : []
+                            }
+                            imgUrl={user.image}
+                            loginStatus={user.isOnline ? 'online' : 'offline'}
+                          ></UserCard>
+                        </Link>
+                      ))
+                    ) : (
+                      <p className="nanum-gothic-regular text-base text-[#ababab]">
+                        앗! "{keyword}"을 포함한 사용자가 없어요!
+                      </p>
+                    )}
+                  </>
                 )}
               </div>
             </div>
@@ -221,7 +260,7 @@ export default function Search() {
               <div
                 className="fixed right-[10%] bottom-[5%]"
                 onClick={() => {
-                  toast.info('로그인 후에 이용해주세요.');
+                  alert('로그인 후에 이용 가능합니다.');
                 }}
               >
                 <FloatingButton buttonType="write" />
@@ -234,36 +273,53 @@ export default function Search() {
     case 'community': {
       return (
         <>
-          <div className="w-[270px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px]">
+          <div className="mb-[20px] w-[270px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px]">
             <div className="flex flex-col">
-              <div className="nanum-gothic-regular flex justify-between py-[5px]">
+              <div className="nanum-gothic-regular relative flex py-[5px]">
                 <h2>
                   "{keyword}" 커뮤니티 검색 결과
-                  <span className="text-[#3bb900]">
-                    &nbsp;{communityPosts.length}
-                  </span>
+                  {!isLoading && (
+                    <span className="text-[#3bb900]">
+                      &nbsp;
+                      {communityPosts.length}
+                    </span>
+                  )}
                 </h2>
+                <Link
+                  to={`/search/${keyword}`}
+                  className="absolute left-[-30px]"
+                >
+                  <Icon name="leftIcon" />
+                </Link>
               </div>
               <div className="flex flex-wrap justify-center gap-[15px]">
-                {communityPosts.length !== 0 ? (
-                  communityPosts.map((post) => {
-                    const like = myInfo?.likes?.find(
-                      (like) => like.post === post._id,
-                    );
-                    const likeId = like ? like._id : null;
-
-                    return (
-                      <CommunityCard
-                        key={post._id}
-                        post={post}
-                        likeId={likeId}
-                      />
-                    );
-                  })
+                {isLoading ? (
+                  [...Array(16)].map((_, index) => (
+                    <CommunityCardSkeleton key={index} />
+                  ))
                 ) : (
-                  <p className="nanum-gothic-regular text-base text-[#ababab]">
-                    앗! 아직 작성된 게시물이 없어요!
-                  </p>
+                  <>
+                    {communityPosts.length !== 0 ? (
+                      communityPosts.map((post) => {
+                        const like = myInfo?.likes?.find(
+                          (like) => like.post === post._id,
+                        );
+                        const likeId = like ? like._id : null;
+
+                        return (
+                          <CommunityCard
+                            key={post._id}
+                            post={post}
+                            likeId={likeId}
+                          />
+                        );
+                      })
+                    ) : (
+                      <p className="nanum-gothic-regular text-base text-[#ababab]">
+                        앗! 아직 작성된 게시물이 없어요!
+                      </p>
+                    )}
+                  </>
                 )}
               </div>
             </div>
@@ -279,7 +335,7 @@ export default function Search() {
               <div
                 className="fixed right-[10%] bottom-[5%]"
                 onClick={() => {
-                  toast.info('로그인 후에 이용해주세요.');
+                  alert('로그인 후에 이용 가능합니다.');
                 }}
               >
                 <FloatingButton buttonType="write" />
@@ -293,30 +349,52 @@ export default function Search() {
       return (
         <>
           <div className="w-[270px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px]">
-            <div className="my-[20px] flex flex-col">
-              <div className="nanum-gothic-regular flex justify-between py-[5px]">
-                <h2>"{keyword}" 코드질문 검색 결과</h2>
+            <div className="mb-[20px] flex flex-col">
+              <div className="nanum-gothic-regular relative flex py-[5px]">
+                <h2>
+                  "{keyword}" 코드질문 검색 결과
+                  {!isLoading && (
+                    <span className="text-[#3bb900]">
+                      &nbsp;
+                      {questionPosts.length}
+                    </span>
+                  )}
+                </h2>
+                <Link
+                  to={`/search/${keyword}`}
+                  className="absolute left-[-30px]"
+                >
+                  <Icon name="leftIcon" />
+                </Link>
               </div>
               <div className="flex flex-wrap justify-center gap-[15px]">
-                {questionPosts.length !== 0 ? (
-                  questionPosts.map((post) => {
-                    const like = myInfo?.likes?.find(
-                      (like) => like.post === post._id,
-                    );
-                    const likeId = like ? like._id : null;
-
-                    return (
-                      <QuestionCard
-                        key={post._id}
-                        post={post}
-                        likeId={likeId}
-                      />
-                    );
-                  })
+                {isLoading ? (
+                  [...Array(16)].map((_, index) => (
+                    <QuestionCardSkeleton key={index} />
+                  ))
                 ) : (
-                  <p className="nanum-gothic-regular text-base text-[#ababab]">
-                    앗! 아직 작성된 게시물이 없어요!
-                  </p>
+                  <>
+                    {questionPosts.length !== 0 ? (
+                      questionPosts.map((post) => {
+                        const like = myInfo?.likes?.find(
+                          (like) => like.post === post._id,
+                        );
+                        const likeId = like ? like._id : null;
+
+                        return (
+                          <QuestionCard
+                            key={post._id}
+                            post={post}
+                            likeId={likeId}
+                          />
+                        );
+                      })
+                    ) : (
+                      <p className="nanum-gothic-regular text-base text-[#ababab]">
+                        앗! 아직 작성된 게시물이 없어요!
+                      </p>
+                    )}
+                  </>
                 )}
               </div>
             </div>
@@ -332,7 +410,7 @@ export default function Search() {
               <div
                 className="fixed right-[10%] bottom-[5%]"
                 onClick={() => {
-                  toast.info('로그인 후에 이용해주세요.');
+                  alert('로그인 후에 이용 가능합니다.');
                 }}
               >
                 <FloatingButton buttonType="write" />
@@ -346,33 +424,55 @@ export default function Search() {
       return (
         <>
           <div className="w-[270px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px]">
-            <div className="my-[20px] flex flex-col">
-              <div className="nanum-gothic-regular flex justify-between py-[5px]">
-                <h2>"{keyword}" 유저 검색 결과</h2>
+            <div className="mb-[20px] flex flex-col">
+              <div className="nanum-gothic-regular relative flex py-[5px]">
+                <h2>
+                  "{keyword}" 유저 검색 결과
+                  {!isLoading && (
+                    <span className="text-[#3bb900]">
+                      &nbsp;
+                      {users.length}
+                    </span>
+                  )}
+                </h2>
+                <Link
+                  to={`/search/${keyword}`}
+                  className="absolute left-[-30px]"
+                >
+                  <Icon name="leftIcon" />
+                </Link>
               </div>
               <div className="flex flex-wrap justify-center gap-[15px]">
-                {users.length !== 0 ? (
-                  users.map((user) => (
-                    <UserCard
-                      key={user._id}
-                      UName={user.fullName}
-                      followCount={user.following.length}
-                      followerCount={user.followers.length}
-                      tags={
-                        user.username
-                          ? JSON.parse(user.username).tags
-                            ? JSON.parse(user.username).tags
-                            : []
-                          : []
-                      }
-                      imgUrl={user.image}
-                      loginStatus={user.isOnline ? 'online' : 'offline'}
-                    ></UserCard>
+                {isLoading ? (
+                  [...Array(18)].map((_, index) => (
+                    <UserCardSkeleton key={index} />
                   ))
                 ) : (
-                  <p className="nanum-gothic-regular text-base text-[#ababab]">
-                    앗! "{keyword}"을 포함한 사용자가 없어요!
-                  </p>
+                  <>
+                    {users.length !== 0 ? (
+                      users.map((user) => (
+                        <UserCard
+                          key={user._id}
+                          UName={user.fullName}
+                          followCount={user.following.length}
+                          followerCount={user.followers.length}
+                          tags={
+                            user.username
+                              ? JSON.parse(user.username).tags
+                                ? JSON.parse(user.username).tags
+                                : []
+                              : []
+                          }
+                          imgUrl={user.image}
+                          loginStatus={user.isOnline ? 'online' : 'offline'}
+                        ></UserCard>
+                      ))
+                    ) : (
+                      <p className="nanum-gothic-regular text-base text-[#ababab]">
+                        앗! "{keyword}"을 포함한 사용자가 없어요!
+                      </p>
+                    )}
+                  </>
                 )}
               </div>
             </div>
