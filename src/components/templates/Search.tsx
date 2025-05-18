@@ -10,6 +10,7 @@ import UserCard from '../molecules/UserCard';
 import { getUsers } from '../../api/users';
 import { getAuthUser } from '../../api/auth';
 import { useLoginStore } from '../../loginStore';
+import { toast } from 'react-toastify';
 
 export default function Search() {
   const location = useLocation();
@@ -220,7 +221,7 @@ export default function Search() {
               <div
                 className="fixed right-[10%] bottom-[5%]"
                 onClick={() => {
-                  alert('로그인 후에 이용 가능합니다.');
+                  toast.info('로그인 후에 이용해주세요.');
                 }}
               >
                 <FloatingButton buttonType="write" />
@@ -278,7 +279,7 @@ export default function Search() {
               <div
                 className="fixed right-[10%] bottom-[5%]"
                 onClick={() => {
-                  alert('로그인 후에 이용 가능합니다.');
+                  toast.info('로그인 후에 이용해주세요.');
                 }}
               >
                 <FloatingButton buttonType="write" />
@@ -331,7 +332,7 @@ export default function Search() {
               <div
                 className="fixed right-[10%] bottom-[5%]"
                 onClick={() => {
-                  alert('로그인 후에 이용 가능합니다.');
+                  toast.info('로그인 후에 이용해주세요.');
                 }}
               >
                 <FloatingButton buttonType="write" />

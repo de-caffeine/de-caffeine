@@ -5,6 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import FloatingButton from '../atoms/FloatingButton';
 import { getAuthUser } from '../../api/auth';
 import { useLoginStore } from '../../loginStore';
+import { toast } from 'react-toastify';
 
 export default function Question() {
   const location = useLocation(); // subChannel
@@ -84,7 +85,7 @@ export default function Question() {
           <div
             className="fixed right-[10%] bottom-[5%]"
             onClick={() => {
-              alert('로그인 후에 이용 가능합니다.');
+              toast.info('로그인 후에 이용해주세요.');
             }}
           >
             <FloatingButton buttonType="write" />

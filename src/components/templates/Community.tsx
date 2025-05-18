@@ -6,6 +6,7 @@ import FloatingButton from '../atoms/FloatingButton';
 import { getAuthUser } from '../../api/auth';
 import { useLoginStore } from '../../loginStore';
 import CommunityCardSkeleton from '../molecules/CommunityCardSkeleton';
+import { toast } from 'react-toastify';
 
 export default function Community() {
   const location = useLocation(); // subChannel
@@ -36,7 +37,6 @@ export default function Community() {
     };
     fetchPosts();
   }, [isLoggedIn, refetch]);
-
   /* subChannel에 따라 fetch */
   useEffect(() => {
     switch (location.pathname) {
@@ -108,7 +108,7 @@ export default function Community() {
           <div
             className="fixed right-[10%] bottom-[5%]"
             onClick={() => {
-              alert('로그인 후에 이용 가능합니다.');
+              toast.info('로그인 후에 이용해주세요.');
             }}
           >
             <FloatingButton buttonType="write" />

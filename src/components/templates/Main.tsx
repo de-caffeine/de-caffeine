@@ -9,6 +9,7 @@ import { getAuthUser } from '../../api/auth';
 import { useLoginStore } from '../../loginStore';
 import CommunityCardSkeleton from '../molecules/CommunityCardSkeleton';
 import QuestionCardSkeleton from '../molecules/QuestionCardSkeleton';
+import { toast } from 'react-toastify';
 
 export default function Main() {
   const [communityPosts, setCommunityPosts] = useState<Post[]>([]); // 출력할 커뮤니티 posts
@@ -157,7 +158,7 @@ export default function Main() {
           <div
             className="fixed right-[10%] bottom-[5%]"
             onClick={() => {
-              alert('로그인 후에 이용 가능합니다.');
+              toast.info('로그인 후에 이용해주세요.');
             }}
           >
             <FloatingButton buttonType="write" />
