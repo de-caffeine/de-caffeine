@@ -443,7 +443,7 @@ export default function UserPage() {
           )}
         </div>
       )}
-      {!isMe && (
+      {!isMe && isLoggedIn && (
         <div
           className="fixed right-[10%] bottom-[5%] cursor-pointer"
           onClick={handleStartChat}
