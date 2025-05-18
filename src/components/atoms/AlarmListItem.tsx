@@ -5,7 +5,7 @@ export default function AlarmListItem({ alarm }: { alarm: Notification }) {
   return (
     <>
       <div className="dark:bg-dark-bg dark:text-dark-text py-[10px]">
-        <p className="nanum-gothic-regular dark:bg-dark-bg line-clamp-2 w-[100%] text-sm">
+        <p className="nanum-gothic-regular dark:bg-dark-bg line-clamp-2 w-[100%] text-sm hover:underline">
           <Link to={`/${alarm.author._id}`}>
             <span className="nanum-gothic-bold">{alarm.author.fullName}</span>님
           </Link>
