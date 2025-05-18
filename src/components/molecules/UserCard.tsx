@@ -21,7 +21,7 @@ export default function UserCard({
   loginStatus,
 }: UserCardProps) {
   return (
-    <div className="dark:border-dark-border dark:bg-dark-card dark:text-dark-text flex h-[140px] w-[310px] gap-4 rounded-[5px] border border-[#d9d9d9] p-5">
+    <div className="dark:border-dark-border dark:bg-dark-card dark:text-dark-text flex h-[140px] w-[310px] gap-4 rounded-[5px] border border-[#d9d9d9] p-5 duration-300 hover:shadow-md dark:shadow-black">
       <div className="flex-shrink-0">
         <UserAvatar
           size={100}
@@ -33,7 +33,7 @@ export default function UserCard({
       <div className="flex flex-1 flex-col justify-evenly">
         <div>
           <UserName name={UName} className="nanum-gothic-bold text-[16px]" />
-          <div className="fmin-h-[24px] flex items-center">
+          <div className="flex min-h-[24px] items-center">
             {tags.length > 0 ? (
               <ul className="flex flex-wrap gap-1 leading-none">
                 {tags.slice(0, 2).map((t) =>
@@ -45,7 +45,7 @@ export default function UserCard({
                 )}
               </ul>
             ) : (
-              <span className="h-[22px] text-[12px] text-[#ABABAB]">
+              <span className="nanum-gothic-regular h-[22px] pt-[3px] text-[12px] text-[#ABABAB]">
                 설정한 기술 스택이 없습니다.
               </span>
             )}
