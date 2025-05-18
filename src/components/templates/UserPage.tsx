@@ -4,23 +4,23 @@ import { useEffect, useState } from 'react';
 import { getUserById } from '../../api/users';
 import CommunityCard from '../molecules/CommunityCard';
 import { getPostsByAuthor, getPostsByChannel } from '../../api/posts';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import QuestionCard from '../molecules/QuestionCard';
 import { followUser, unfollowUser } from '../../api/follow';
 import FloatingButton from '../atoms/FloatingButton';
 import { createNotification } from '../../api/notifications';
-// 변경: 메시지 API import 추가
-import { createMessage } from '../../api/messages'; // 변경: 메시지 전송 및 목록 조회
+
 // 변경: ChatWindow import 추가
 import ChatWindow from '../organisms/ChatWindow'; // 변경: 채팅창 컴포넌트
 // 변경: Conversation 타입 import 추가
 import type { Conversation } from '../organisms/ChatList'; // 변경: 대화 타입
 import { getAuthUser } from '../../api/auth';
-import { useLoginStore } from '../../loginStore';
+import { useLoginStore } from '../../stores/loginStore';
 
 // import PostCard from '../molecules/PostCard';
-// import CommentCard from '../molecules/CommentCard';
 import { useMemo } from 'react';
+import CommentCard from '../molecules/CommentCard';
+import { AnimatePresence } from 'framer-motion';
 
 interface CommentItem {
   post: string;
@@ -32,6 +32,7 @@ export default function UserPage() {
   const [userInvalid, setUserInvalid] = useState(false);
   const [myInfo, setMyInfo] = useState<User | null>(); // 사용자 정보
   const isLoggedIn = useLoginStore((state) => state.isLoggedIn);
+  const refetch = useLoginStore((state) => state.refetch);
 
   const [userDataLoading, setUserDataLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -59,7 +60,6 @@ export default function UserPage() {
   const loginUserId = localStorage.getItem('myId');
   // 로그인 유저와 path id 값 비교
   const isMe = loginUserId === id;
-  const isLogin = Boolean(loginUserId);
 
   //질문게시글 필터링
   const questionPosts = useMemo(
@@ -76,39 +76,23 @@ export default function UserPage() {
   const [initialConv, setInitialConv] = useState<Conversation | null>(null); // 변경: 초기 대화 저장 상태
 
   // 변경: "채팅 보내기" 버튼 클릭 시 호출할 핸들러 추가
-  const handleStartChat = async () => {
-    try {
-      // 1) 메시지 전송 및 받아온 데이터 확인
-      const newMsg = await createMessage('안녕하세요!', id);
-      console.log('createMessage response', newMsg);
-      // Assume newMsg = { _id: '...', message: '안녕하세요!', chatRoomId: '68229f0e04101073e04876ca', ... }
-
-      // 2) chatRoomId 만 뽑아서
-      const chatRoomId = newMsg._id;
-      if (!chatRoomId) {
-        console.error('chatRoomId가 응답에 없습니다.');
-        return;
-      }
-
-      // 3) Conversation 객체를 직접 생성
-      const conv: Conversation = {
-        chatRoomId,
-        partner: {
-          _id: userData!._id, // UserPage의 userData 에 이미 로드된 대상 유저 정보
-          fullName: userData!.fullName,
-          image: userData!.image,
-          status: 'offline', // 원한다면 실제 상태로 교체
-        },
-        lastMessage: { timestamp: Date.now() },
-        unreadCount: 0,
-      };
-
-      // 4) 강제로 초기 대화 세팅 & 창 열기
-      setInitialConv(conv);
-      setChatOpen(true);
-    } catch (e) {
-      console.error('채팅방 생성 또는 열기 실패', e);
-    }
+  const handleStartChat = () => {
+    if (!userData) return;
+    // 1) Conversation 객체: chatRoomId를 곧바로 상대방 ID로 사용
+    const conv: Conversation = {
+      chatRoomId: id, // userId를 chatId로
+      partner: {
+        _id: userData._id,
+        fullName: userData.fullName,
+        image: userData.image, // 프로필 이미지
+        status: userData.isOnline ? 'online' : 'offline',
+      },
+      lastMessage: { timestamp: Date.now() },
+      unreadCount: 0,
+    };
+    // 2) 초기 대화 세팅 & ChatWindow 열기
+    setInitialConv(conv);
+    setChatOpen(true);
   };
 
   useEffect(() => {
@@ -116,7 +100,7 @@ export default function UserPage() {
       setMyInfo(await getAuthUser());
     };
     getMyInfo();
-  }, [isLoggedIn]);
+  }, [isLoggedIn, refetch]);
 
   useEffect(() => {
     async function loadUserData() {
@@ -143,7 +127,7 @@ export default function UserPage() {
       }
     }
     loadUserData();
-  }, [id]);
+  }, [id, refetch]);
 
   useEffect(() => {
     async function postsOfEachChannel() {
@@ -307,7 +291,7 @@ export default function UserPage() {
               : ''
           }
           isMe={isMe}
-          isLogin={isLogin}
+          isLogin={isLoggedIn}
           isFollowing={isFollowing}
           followHandler={handleFollow}
         />
@@ -328,7 +312,7 @@ export default function UserPage() {
                   p.channel._id === '681da0247ffa911fa118e4be',
               )
               .map((post) => {
-                const like = userData?.likes?.find(
+                const like = myInfo?.likes?.find(
                   (like) => like.post === post._id,
                 );
                 const likeId = like ? like._id : null;
@@ -371,18 +355,14 @@ export default function UserPage() {
         </div>
       )}
       {parts[2] === 'comments' && (
-        <div className="nanum-gothic-regular dark:text-dark-text mx-auto flex w-[1128px] flex-wrap gap-4 pt-4">
+        <div className="nanum-gothic-regular dark:text-dark-text mx-auto flex w-[1128px] flex-wrap gap-[15px] pt-[5px]">
           {communityComments.length === 0 ? (
             <div>아직 댓글이 없습니다.</div>
           ) : (
             communityComments.map(({ postId, postTitle, comment }) => (
-              <div
-                key={postId}
-                className="dark:border-dark-border w-[100%] gap-2 rounded border border-[#d9d9d9] p-4"
-              >
-                <h3 className="mb-1 font-semibold">“{postTitle}” 글의 댓글</h3>
-                <p>{comment}</p>
-              </div>
+              <Link to={`/post/${postId}`} className="w-[100%]">
+                <CommentCard title={postTitle} comment={comment}></CommentCard>
+              </Link>
             ))
           )}
         </div>
@@ -398,18 +378,14 @@ export default function UserPage() {
         </div>
       )}
       {parts[2] === 'comments' && (
-        <div className="nanum-gothic-regular dark:text-dark-text mx-auto flex w-[1128px] flex-wrap gap-2 pt-4">
+        <div className="nanum-gothic-regular dark:text-dark-text mx-auto flex w-[1128px] flex-wrap gap-[15px] pt-[5px]">
           {fileteredQuestionComments.length === 0 ? (
             <div>아직 댓글이 없습니다.</div>
           ) : (
             fileteredQuestionComments.map(({ postId, postTitle, comment }) => (
-              <div
-                key={postId}
-                className="dark:border-dark-border w-[100%] gap-2 rounded border border-[#d9d9d9] p-4 pt-4"
-              >
-                <h3 className="mb-1 font-semibold">“{postTitle}” 글의 댓글</h3>
-                <p>{comment}</p>
-              </div>
+              <Link to={`/post/${postId}`} className="w-[100%]">
+                <CommentCard title={postTitle} comment={comment}></CommentCard>
+              </Link>
             ))
           )}
         </div>
@@ -425,7 +401,7 @@ export default function UserPage() {
         </div>
       )}
       {parts[2] === 'liked' && (
-        <div className="dark:text-dark-text mx-auto flex w-[1128px] flex-wrap justify-start gap-4 pt-[17px]">
+        <div className="nanum-gothic-regular dark:text-dark-text mx-auto flex w-[1128px] flex-wrap gap-[15px] pt-[5px]">
           {communityLiked.length === 0 ? (
             <div>아직 좋아요를 누른 글이 없습니다.</div>
           ) : (
@@ -450,7 +426,7 @@ export default function UserPage() {
         </div>
       )}
       {parts[2] === 'liked' && (
-        <div className="dark:text-dark-text mx-auto flex w-[1128px] flex-wrap justify-start gap-4 pt-[17px]">
+        <div className="nanum-gothic-regular dark:text-dark-text mx-auto flex w-[1128px] flex-wrap gap-[15px] pt-[5px]">
           {questionLiked.length === 0 ? (
             <div>아직 좋아요를 누른 글이 없습니다.</div>
           ) : (
@@ -467,7 +443,7 @@ export default function UserPage() {
           )}
         </div>
       )}
-      {!isMe && (
+      {!isMe && isLoggedIn && (
         <div
           className="fixed right-[10%] bottom-[5%] cursor-pointer"
           onClick={handleStartChat}
@@ -475,13 +451,15 @@ export default function UserPage() {
           <FloatingButton buttonType="chat" />
         </div>
       )}
-
-      {/* 변경: 채팅창 모달 */}
-      {chatOpen && initialConv && (
-        <ChatWindow
-          onClose={() => setChatOpen(false)} // 변경: 채팅창 닫기 핸들러
-        />
-      )}
+      <AnimatePresence>
+        {/* 변경: 채팅창 모달 */}
+        {chatOpen && initialConv && (
+          <ChatWindow
+            onClose={() => setChatOpen(false)} // 변경: 채팅창 닫기 핸들러
+            initialConversation={initialConv} //바로 채팅창 보이게
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }

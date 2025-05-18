@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { login } from '../../api/auth'; // 로그인 API
 import { AxiosError } from 'axios';
-
 import coffeeBean from '../../assets/images/CoffeeBean.png';
-import { useLoginStore } from '../../loginStore';
+import { useLoginStore } from '../../stores/loginStore';
+import Button from '../atoms/Button'; // 버튼 컴포넌트 경로
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginPopup({
   onClose,
@@ -15,8 +16,9 @@ export default function LoginPopup({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleLogin = useCallback(async () => {
     setError('');
 
     if (!email || !password) {
@@ -26,11 +28,12 @@ export default function LoginPopup({
 
     try {
       const res = await login(email, password);
-      localStorage.setItem('accessToken', res.token); // 로그인 성공 시 토큰 저장
+      localStorage.setItem('accessToken', res.token);
       localStorage.setItem('myId', res.user._id);
       localStorage.setItem('myImage', res.user.image);
       useLoginStore.getState().login();
-      onClose(); // 팝업 닫기
+      navigate('/');
+      onClose();
     } catch (err) {
       let msg = '알 수 없는 오류가 발생했습니다.';
       const axiosError = err as AxiosError<{ message?: string }>;
@@ -41,7 +44,6 @@ export default function LoginPopup({
         axiosError.message ||
         msg;
 
-      // 이메일 중복 오류 처리
       if (
         axiosError.response?.status === 400 &&
         msg.includes(
@@ -49,23 +51,36 @@ export default function LoginPopup({
         )
       ) {
         setError('이메일 또는 패스워드가 일치하지 않습니다.');
-        console.log(msg);
         return;
       }
 
       setError(msg);
     }
-  };
+  }, [email, password, navigate, onClose]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+      if (e.key === 'Enter') {
+        handleLogin();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose, handleLogin]);
 
   return (
-    <div className="fixed inset-0 z-10 flex items-center justify-center bg-black/50">
-      <div className="nanum-gothic-regular dark:bg-dark-card dark:text-dark-text dark:placeholder-dark-text relative rounded-[15px] bg-white p-7 shadow-inner">
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 h-5 w-5 cursor-pointer"
-        >
-          ✕
-        </button>
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-10 flex items-center justify-center bg-black/50"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="nanum-gothic-regular dark:bg-dark-card dark:text-dark-text dark:placeholder-dark-text relative rounded-[15px] bg-white p-7 shadow-inner"
+      >
         <div className="flex items-center pt-1 pb-3">
           <div className="text-[32px]">Log In</div>
           <img
@@ -94,18 +109,12 @@ export default function LoginPopup({
 
           {error && <div className="text-sm text-red-500">{error}</div>}
 
-          <button
-            onClick={handleLogin}
-            className="mt-2 h-[50px] w-full cursor-pointer rounded-[5px] bg-[#6b4c36] text-[20px] text-white"
-          >
+          <Button onClick={handleLogin} size="l" full>
             로그인
-          </button>
-          <button
-            onClick={onSwitchToSignup}
-            className="dark:border-dark-border dark:bg-dark-border h-[50px] w-full cursor-pointer rounded-[5px] border text-[20px] dark:text-[#000]"
-          >
+          </Button>
+          <Button onClick={onSwitchToSignup} size="l">
             회원가입
-          </button>
+          </Button>
         </div>
       </div>
     </div>

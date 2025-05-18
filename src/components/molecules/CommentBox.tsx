@@ -4,6 +4,7 @@ import Info from '../atoms/Info';
 import { getAuthUser } from '../../api/auth';
 import { createComment, deleteComment } from '../../api/comments';
 import { createNotification } from '../../api/notifications';
+import { toast } from 'react-toastify';
 
 interface CommentBoxProps {
   postId: string;
@@ -73,7 +74,7 @@ export default function CommentBox({
         postId: postId, // 댓글이 달린 포스트 ID
       });
     } catch {
-      alert('댓글 작성에 실패했습니다.');
+      toast.error('댓글 작성에 실패했습니다.');
     }
   };
 
@@ -84,7 +85,7 @@ export default function CommentBox({
       await deleteComment(id);
       setComments((prev) => prev.filter((c) => c._id !== id));
     } catch {
-      alert('댓글 삭제에 실패했습니다.');
+      toast.error('댓글 삭제에 실패했습니다.');
     }
   };
 
