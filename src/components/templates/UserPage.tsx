@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { getUserById } from '../../api/users';
 import CommunityCard from '../molecules/CommunityCard';
 import { getPostsByAuthor, getPostsByChannel } from '../../api/posts';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import QuestionCard from '../molecules/QuestionCard';
 import { followUser, unfollowUser } from '../../api/follow';
 import FloatingButton from '../atoms/FloatingButton';
@@ -19,8 +19,8 @@ import { getAuthUser } from '../../api/auth';
 import { useLoginStore } from '../../loginStore';
 
 // import PostCard from '../molecules/PostCard';
-// import CommentCard from '../molecules/CommentCard';
 import { useMemo } from 'react';
+import CommentCard from '../molecules/CommentCard';
 
 interface CommentItem {
   post: string;
@@ -372,18 +372,14 @@ export default function UserPage() {
         </div>
       )}
       {parts[2] === 'comments' && (
-        <div className="nanum-gothic-regular dark:text-dark-text mx-auto flex w-[1128px] flex-wrap gap-4 pt-4">
+        <div className="nanum-gothic-regular dark:text-dark-text mx-auto flex w-[1128px] flex-wrap gap-[15px] pt-[5px]">
           {communityComments.length === 0 ? (
             <div>아직 댓글이 없습니다.</div>
           ) : (
             communityComments.map(({ postId, postTitle, comment }) => (
-              <div
-                key={postId}
-                className="dark:border-dark-border w-[100%] gap-2 rounded border border-[#d9d9d9] p-4"
-              >
-                <h3 className="mb-1 font-semibold">“{postTitle}” 글의 댓글</h3>
-                <p>{comment}</p>
-              </div>
+              <Link to={`/post/${postId}`} className="w-[100%]">
+                <CommentCard title={postTitle} comment={comment}></CommentCard>
+              </Link>
             ))
           )}
         </div>
@@ -399,18 +395,14 @@ export default function UserPage() {
         </div>
       )}
       {parts[2] === 'comments' && (
-        <div className="nanum-gothic-regular dark:text-dark-text mx-auto flex w-[1128px] flex-wrap gap-2 pt-4">
+        <div className="nanum-gothic-regular dark:text-dark-text mx-auto flex w-[1128px] flex-wrap gap-[15px] pt-[5px]">
           {fileteredQuestionComments.length === 0 ? (
             <div>아직 댓글이 없습니다.</div>
           ) : (
             fileteredQuestionComments.map(({ postId, postTitle, comment }) => (
-              <div
-                key={postId}
-                className="dark:border-dark-border w-[100%] gap-2 rounded border border-[#d9d9d9] p-4 pt-4"
-              >
-                <h3 className="mb-1 font-semibold">“{postTitle}” 글의 댓글</h3>
-                <p>{comment}</p>
-              </div>
+              <Link to={`/post/${postId}`} className="w-[100%]">
+                <CommentCard title={postTitle} comment={comment}></CommentCard>
+              </Link>
             ))
           )}
         </div>

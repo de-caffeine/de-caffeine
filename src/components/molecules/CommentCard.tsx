@@ -7,13 +7,11 @@ export default function CommentCard({
 }) {
   return (
     <>
-      <div className="dark:border-dark-border dark:text-dark-text w-[100%] rounded-[5px] border border-[#ababab] px-[25px] py-[15px]">
-        <p className="nanum-gothic-bold mb-[5px] line-clamp-1 text-[18px]">
+      <div className="dark:border-dark-border dark:text-dark-text w-[100%] rounded-[5px] border border-[#d9d9d9] p-[15px] duration-400 ease-in-out hover:shadow-md dark:shadow-black">
+        <p className="nanum-gothic-bold text-basic mb-[5px] line-clamp-1">
           "{title}" 글의 댓글
         </p>
-        <p className="nanum-gothic-regular line-clamp-2 text-[16px]">
-          {comment}
-        </p>
+        <p className="nanum-gothic-regular line-clamp-2 text-sm">{comment}</p>
       </div>
     </>
   );
