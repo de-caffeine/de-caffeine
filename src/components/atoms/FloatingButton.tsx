@@ -11,6 +11,12 @@ const baseStyles = `
   shadow-[0_4px_4px_rgba(0,0,0,0.25)]
   cursor-pointer
   flex items-center justify-center
+  dark:shadow-[0_4px_4px_rgba(0,0,0,1)]
+  hover:bg-[#9E7A60]
+  dark:bg-[#9E7A60]
+  dark:hover:bg-[#825D42]
+  duration-300
+  ease-in-out
 `;
 
 type ButtonType = 'write' | 'chat' | 'like';
