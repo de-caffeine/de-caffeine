@@ -9,6 +9,7 @@ import { getAuthUser } from '../../api/auth';
 import { toast } from 'react-toastify';
 import Button from '../atoms/Button';
 import { useNavigate } from 'react-router-dom';
+import { useDarkModeStore } from '../../stores/darkModeStore';
 
 export default function Setting() {
   const [user, setUser] = useState<User | null>(null); // 사용자 데이터
@@ -22,12 +23,7 @@ export default function Setting() {
     velog: '',
     homepage: '',
   });
-  const [darkModeToggle, setDarkModeToggle] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('darkMode') === 'true';
-    }
-    return false;
-  });
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -57,6 +53,10 @@ export default function Setting() {
     fetchCurrentUser();
   }, []);
 
+  // 다크모드 전역상태로 관리
+  const darkModeToggle = useDarkModeStore((state) => state.isDarkMode);
+  const toggleDarkMode = useDarkModeStore((state) => state.toggleDarkMode);
+
   // esc 누르면 메인으로 이동하는 훅
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -70,11 +70,6 @@ export default function Setting() {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [navigate]);
-
-  useEffect(() => {
-    localStorage.setItem('darkMode', String(darkModeToggle));
-    document.documentElement.classList.toggle('dark', darkModeToggle);
-  }, [darkModeToggle]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -217,8 +212,9 @@ export default function Setting() {
               type="checkbox"
               className="peer sr-only"
               checked={darkModeToggle}
-              onChange={() => setDarkModeToggle((prev) => !prev)} // ✅ 상태 토글
+              onChange={toggleDarkMode}
             />
+
             <div className="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-blue-600 peer-focus:ring-4 peer-focus:ring-blue-300 peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full dark:border-gray-600 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800"></div>
             <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
               다크모드

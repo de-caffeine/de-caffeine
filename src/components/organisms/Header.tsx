@@ -10,7 +10,7 @@ import Icon from '../atoms/Icon';
 import UserAvatar from '../atoms/UserAvatar';
 import { logout } from '../../api/auth';
 import AlarmIcon from '../molecules/AlarmIcon';
-import { useLoginStore } from '../../loginStore';
+import { useLoginStore } from '../../stores/loginStore';
 import ChatWindow from './ChatWindow'; // 변경: ChatWindow import 추가
 import Button from '../atoms/Button';
 

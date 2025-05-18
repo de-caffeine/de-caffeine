@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { login } from '../../api/auth'; // 로그인 API
 import { AxiosError } from 'axios';
 import coffeeBean from '../../assets/images/CoffeeBean.png';
-import { useLoginStore } from '../../loginStore';
+import { useLoginStore } from '../../stores/loginStore';
 import Button from '../atoms/Button'; // 버튼 컴포넌트 경로
 import { useNavigate } from 'react-router-dom';
 

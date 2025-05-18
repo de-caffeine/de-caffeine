@@ -13,8 +13,16 @@ import Writer from './components/templates/Writer2';
 import UserPage from './components/templates/UserPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDarkModeStore } from './stores/darkModeStore';
+import { useEffect } from 'react';
 
 export default function App() {
+  const setDarkMode = useDarkModeStore((state) => state.setDarkMode);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('darkMode') === 'true';
+    setDarkMode(stored);
+  }, [setDarkMode]);
   return (
     <>
       <div className="dark:bg-dark-bg inset-0 m-auto flex min-h-screen flex-col items-center transition-colors duration-300 ease-in-out">

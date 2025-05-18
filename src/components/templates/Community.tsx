@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import FloatingButton from '../atoms/FloatingButton';
 import { getAuthUser } from '../../api/auth';
-import { useLoginStore } from '../../loginStore';
+import { useLoginStore } from '../../stores/loginStore';
 import CommunityCardSkeleton from '../molecules/CommunityCardSkeleton';
 import { toast } from 'react-toastify';
 
