@@ -44,12 +44,14 @@ export default function AlarmIcon() {
 
   return (
     <div className="relative inline-block" ref={modalRef}>
-      <div className="relative mt-[5px] dark:contrast-75 dark:invert">
-        <Icon
-          size={40}
-          name="alarmIcon"
-          onClick={() => setIsmodalOpen(!ismodalOpen)}
-        />
+      <div className="relative mt-[5px]">
+        <div className="dark:contrast-75 dark:invert">
+          <Icon
+            size={40}
+            name="alarmIcon"
+            onClick={() => setIsmodalOpen(!ismodalOpen)}
+          />
+        </div>
         {alarms.length > 0 && (
           <div className="absolute top-0 right-0 h-[10px] w-[10px] rounded-full bg-red-600" />
         )}
