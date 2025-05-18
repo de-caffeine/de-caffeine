@@ -102,10 +102,10 @@ export default function Header() {
                 <div className="relative ml-3 inline-block">
                   <div
                     ref={avatarRef}
-                    onClick={() => setShowDropdown((prev) => !prev)}
-                    className="flex cursor-pointer duration-200 hover:scale-110"
+                    onClick={() => setShowDropdown(!showDropdown)}
+                    className="ml-2 flex cursor-pointer duration-200 hover:scale-110"
                   >
-                    <UserAvatar imageUrl={validImageUrl} size={40} />
+                    <UserAvatar imageUrl={validImageUrl} size={30} />
                   </div>
 
                   <AnimatePresence>
