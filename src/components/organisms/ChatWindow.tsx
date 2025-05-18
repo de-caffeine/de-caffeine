@@ -82,7 +82,10 @@ export default function ChatWindow({
         ) : (
           <>
             <h4 className="text-lg font-bold">채팅 목록</h4>
-            <button onClick={onClose} className="dark:contrast-70 dark:invert">
+            <button
+              onClick={onClose}
+              className="cursor-pointer dark:contrast-70 dark:invert"
+            >
               <img src={XIcon} alt="닫기" />
             </button>
           </>
