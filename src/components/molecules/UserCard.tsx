@@ -21,7 +21,7 @@ export default function UserCard({
   loginStatus,
 }: UserCardProps) {
   return (
-    <div className="dark:border-dark-border dark:bg-dark-card dark:text-dark-text flex h-[140px] w-[310px] gap-4 rounded-[5px] border border-[#d9d9d9] p-5 duration-300 hover:shadow-md dark:shadow-black">
+    <div className="dark:border-dark-border dark:bg-dark-card dark:text-dark-text flex h-[140px] w-[310px] gap-4 rounded-[5px] border border-[#d9d9d9] p-5">
       <div className="flex-shrink-0">
         <UserAvatar
           size={100}
@@ -30,19 +30,25 @@ export default function UserCard({
           status={loginStatus}
         />
       </div>
-      <div className="flex flex-col justify-evenly gap-3">
-        <div className="flex flex-col">
+      <div className="flex flex-1 flex-col justify-evenly">
+        <div>
           <UserName name={UName} className="nanum-gothic-bold text-[16px]" />
-          <div className="flex flex-col gap-0.5">
-            <ul className="flex flex-wrap gap-1 leading-none">
-              {tags.slice(0, 2).map((t) =>
-                t.trim() !== '' ? (
-                  <li key={t.trim().toUpperCase()}>
-                    <Tag>{t.trim().toUpperCase()}</Tag>
-                  </li>
-                ) : null,
-              )}
-            </ul>
+          <div className="fmin-h-[24px] flex items-center">
+            {tags.length > 0 ? (
+              <ul className="flex flex-wrap gap-1 leading-none">
+                {tags.slice(0, 2).map((t) =>
+                  t.trim() !== '' ? (
+                    <li key={t.trim().toUpperCase()}>
+                      <Tag>{t.trim().toUpperCase()}</Tag>
+                    </li>
+                  ) : null,
+                )}
+              </ul>
+            ) : (
+              <span className="h-[22px] text-[12px] text-[#ABABAB]">
+                설정한 기술 스택이 없습니다.
+              </span>
+            )}
           </div>
         </div>
         <div className="nanum-gothic-regular flex items-baseline gap-4 text-[12px]">
