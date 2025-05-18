@@ -21,7 +21,7 @@ export default function UserCard({
   loginStatus,
 }: UserCardProps) {
   return (
-    <div className="dark:border-dark-border dark:bg-dark-card dark:text-dark-text flex h-[140px] w-[310px] gap-4 rounded-[5px] border border-[#d9d9d9] p-5 duration-300 ease-in-out hover:shadow-md dark:shadow-black">
+    <div className="dark:border-dark-border dark:bg-dark-card dark:text-dark-text flex h-[140px] w-[310px] gap-4 rounded-[5px] border border-[#d9d9d9] p-5 duration-300 hover:shadow-md dark:shadow-black">
       <div className="flex-shrink-0">
         <UserAvatar
           size={100}
