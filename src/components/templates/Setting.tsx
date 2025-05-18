@@ -8,6 +8,7 @@ import { updateUser, uploadPhoto } from '../../api/users';
 import { getAuthUser } from '../../api/auth';
 import { toast } from 'react-toastify';
 import Button from '../atoms/Button';
+import { useNavigate } from 'react-router-dom';
 
 export default function Setting() {
   const [user, setUser] = useState<User | null>(null); // 사용자 데이터
@@ -27,6 +28,7 @@ export default function Setting() {
     }
     return false;
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -54,6 +56,20 @@ export default function Setting() {
 
     fetchCurrentUser();
   }, []);
+
+  // esc 누르면 메인으로 이동하는 훅
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        navigate('/');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [navigate]);
 
   useEffect(() => {
     localStorage.setItem('darkMode', String(darkModeToggle));
@@ -169,7 +185,12 @@ export default function Setting() {
   return (
     <div className="nanum-gothic-regular dark:text-dark-text dark:border-dark-border ml-[42px] w-[950px] transition-colors duration-300 ease-in-out">
       <div className="mb-[10px] flex">
-        <Icon name="leftIcon" />
+        <div
+          onClick={() => navigate('/')}
+          className="cursor-pointer dark:contrast-75 dark:invert"
+        >
+          <Icon name="leftIcon" />
+        </div>
         <div className="ml-[20px]">설정</div>
       </div>
 

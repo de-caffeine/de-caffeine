@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { login, signup } from '../../api/auth';
+import { useState, useCallback, useEffect } from 'react';
+import { signup } from '../../api/auth';
 import { AxiosError } from 'axios';
 import coffeeBean from '../../assets/images/CoffeeBean.png';
-import Button from '../atoms/Button'; // 버튼 컴포넌트 import
+import Button from '../atoms/Button';
+import { toast } from 'react-toastify';
 
 export default function SignupPopup({
   onClose,
@@ -30,7 +31,7 @@ export default function SignupPopup({
     setIsEmailValid(validateEmail(emailValue));
   };
 
-  const handleSignup = async () => {
+  const handleSignup = useCallback(async () => {
     setError('');
 
     if (!fullName || !email || !password || !passwordConfirm) {
@@ -51,9 +52,9 @@ export default function SignupPopup({
     }
 
     try {
-      await signup(email, fullName, password);
-      const loginResponse = await login(email, password);
-      localStorage.setItem('accessToken', loginResponse.token);
+      const signupResponse = await signup(email, fullName, password);
+      localStorage.setItem('accessToken', signupResponse.token);
+      toast.success('회원가입에 성공하였습니다.');
       onClose();
     } catch (err) {
       let msg = '알 수 없는 오류가 발생했습니다.';
@@ -75,17 +76,38 @@ export default function SignupPopup({
 
       setError(msg);
     }
-  };
+  }, [
+    email,
+    fullName,
+    password,
+    passwordConfirm,
+    agree,
+    isEmailValid,
+    onClose,
+  ]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        handleSignup();
+      }
+      if (e.key === 'Escape') {
+        onClose(); // ✅ ESC 키로 모달 닫기
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleSignup, onClose]);
 
   return (
-    <div className="nanum-gothic-regular fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="dark:bg-dark-card dark:text-dark-text relative rounded-[15px] bg-white p-7 shadow-inner">
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 h-5 w-5 cursor-pointer"
-        >
-          ✕
-        </button>
+    <div
+      onClick={onClose}
+      className="nanum-gothic-regular fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()} // ✅ 모달 내부 클릭은 닫힘 방지
+        className="dark:bg-dark-card dark:text-dark-text relative rounded-[15px] bg-white p-7 shadow-inner"
+      >
         <div className="flex items-center pt-1 pb-3">
           <div className="text-[32px]">Sign Up</div>
           <img

@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { login } from '../../api/auth'; // 로그인 API
 import { AxiosError } from 'axios';
 import coffeeBean from '../../assets/images/CoffeeBean.png';
 import { useLoginStore } from '../../loginStore';
 import Button from '../atoms/Button'; // 버튼 컴포넌트 경로
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginPopup({
   onClose,
@@ -15,6 +16,7 @@ export default function LoginPopup({
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     setError('');
@@ -30,6 +32,7 @@ export default function LoginPopup({
       localStorage.setItem('myId', res.user._id);
       localStorage.setItem('myImage', res.user.image);
       useLoginStore.getState().login();
+      navigate('/');
       onClose();
     } catch (err) {
       let msg = '알 수 없는 오류가 발생했습니다.';
@@ -55,15 +58,25 @@ export default function LoginPopup({
     }
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 z-10 flex items-center justify-center bg-black/50">
-      <div className="nanum-gothic-regular dark:bg-dark-card dark:text-dark-text dark:placeholder-dark-text relative rounded-[15px] bg-white p-7 shadow-inner">
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 h-5 w-5 cursor-pointer"
-        >
-          ✕
-        </button>
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-10 flex items-center justify-center bg-black/50"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="nanum-gothic-regular dark:bg-dark-card dark:text-dark-text dark:placeholder-dark-text relative rounded-[15px] bg-white p-7 shadow-inner"
+      >
         <div className="flex items-center pt-1 pb-3">
           <div className="text-[32px]">Log In</div>
           <img
