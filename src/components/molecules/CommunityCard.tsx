@@ -13,7 +13,7 @@ export default function CommunityCard({
 }) {
   console.log('CommunityCard render:', post.title);
   return (
-    <div className="rounded-top-[6px] dark:border-dark-border dark:bg-dark-card h-[340px] w-[270px] rounded-[6px] border border-[#d9d9d9] duration-400 ease-in-out hover:shadow-md dark:shadow-black">
+    <div className="rounded-top-[6px] dark:border-dark-border dark:bg-dark-card h-[340px] w-[270px] rounded-[6px] border border-[#d9d9d9] duration-300 hover:shadow-md dark:shadow-black">
       <Link to={`/post/${post._id}`}>
         <div className="m-between relative h-[55%]">
           {post.image ? (
