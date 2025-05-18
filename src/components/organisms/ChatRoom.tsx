@@ -1,7 +1,6 @@
 // src/components/organisms/ChatRoom.tsx
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { getMessages } from '../../api/messages';
-// 변경: ChattingBubble import
 import ChattingBubble from '../atoms/ChattingBubble';
 
 interface Message {
@@ -18,21 +17,17 @@ interface ChatRoomProps {
 
 export default function ChatRoom({ chatId, reloadTrigger = 0 }: ChatRoomProps) {
   const [messages, setMessages] = useState<Message[]>([]);
-  // 내 ID
   const myId = localStorage.getItem('myId');
+  const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let isMounted = true;
-
     const fetch = async () => {
       const data = await getMessages(chatId);
       if (isMounted) setMessages(data);
     };
 
-    // 1) 초기 로드
     fetch();
-
-    // 2) 폴링: 3초마다 새로 불러오기
     const interval = setInterval(fetch, 800);
 
     return () => {
@@ -41,19 +36,23 @@ export default function ChatRoom({ chatId, reloadTrigger = 0 }: ChatRoomProps) {
     };
   }, [chatId, reloadTrigger]);
 
+  // 메시지가 바뀔 때마다 스크롤을 가장 아래로 이동
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
   return (
     <div className="space-y-2">
       {messages.map((msg) => (
         <ChattingBubble
           key={msg._id}
-          // 내 메시지면 "me", 아니면 "user"
           sender={msg.sender._id === myId ? 'me' : 'user'}
-          // 예: "오전 10:23" 형태로
           timestamp={msg.createdAt}
         >
           {msg.message}
         </ChattingBubble>
       ))}
+      <div ref={endRef} />
     </div>
   );
 }

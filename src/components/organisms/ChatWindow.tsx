@@ -96,10 +96,7 @@ export default function ChatWindow({
             reloadTrigger={reloadTrigger}
           />
         ) : (
-          <ChatList
-            onSelect={handleSelectChat}
-            initialConversation={initialConversation}
-          />
+          <ChatList onSelect={handleSelectChat} />
         )}
       </div>
 
