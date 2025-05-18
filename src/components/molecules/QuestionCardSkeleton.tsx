@@ -2,7 +2,7 @@ export default function QuestionCardSkeleton() {
   return (
     <div className="dark:border-dark-border dark:bg-dark-card flex h-[190px] w-[100%] animate-pulse flex-col justify-between rounded-[5px] border border-[#d9d9d9]">
       {/* 제목 & 본문 */}
-      <div className="flex flex-col p-[15px]">
+      <div className="flex flex-col p-[15px] pt-[16px]">
         <div className="mb-[8px] flex items-center gap-[5px]">
           <div className="dark:bg-dark-border h-[16px] w-[70%] rounded bg-gray-300" />
         </div>
@@ -15,7 +15,7 @@ export default function QuestionCardSkeleton() {
         {[...Array(3)].map((_, i) => (
           <div
             key={i}
-            className="dark:bg-dark-border h-[22px] w-[50px] rounded-[2px] bg-gray-300"
+            className="dark:bg-dark-border h-[24px] w-[50px] rounded-[2px] bg-gray-300 px-[9px] py-[5px]"
           />
         ))}
         <div className="dark:to-dark-card absolute right-[15px] h-[30px] w-[15px] bg-gradient-to-r from-transparent to-white" />
