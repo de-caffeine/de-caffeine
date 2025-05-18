@@ -20,6 +20,8 @@ export default function AlarmIcon() {
               !alarm.seen &&
               alarm.author !== null &&
               alarm.follow !== null &&
+              alarm.like !== null &&
+              alarm.comment !== null &&
               !alarm.message &&
               alarm.author._id !== localStorage.getItem('myId'),
           )
