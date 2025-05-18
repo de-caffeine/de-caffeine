@@ -12,8 +12,10 @@ import { logout } from '../../api/auth';
 import AlarmIcon from '../molecules/AlarmIcon';
 import { useLoginStore } from '../../loginStore';
 import ChatWindow from './ChatWindow'; // 변경: ChatWindow import 추가
+import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
+  const navigate = useNavigate();
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const isLoggedIn = useLoginStore((state) => state.isLoggedIn);
@@ -63,6 +65,7 @@ export default function Header() {
     useLoginStore.getState().logout();
 
     setShowDropdown(false);
+    navigate('/');
   };
 
   return (
