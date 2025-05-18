@@ -32,6 +32,7 @@ export default function UserPage() {
   const [userInvalid, setUserInvalid] = useState(false);
   const [myInfo, setMyInfo] = useState<User | null>(); // 사용자 정보
   const isLoggedIn = useLoginStore((state) => state.isLoggedIn);
+  const refetch = useLoginStore((state) => state.refetch);
 
   const [userDataLoading, setUserDataLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -116,7 +117,7 @@ export default function UserPage() {
       setMyInfo(await getAuthUser());
     };
     getMyInfo();
-  }, [isLoggedIn]);
+  }, [isLoggedIn, refetch]);
 
   useEffect(() => {
     async function loadUserData() {
@@ -143,7 +144,7 @@ export default function UserPage() {
       }
     }
     loadUserData();
-  }, [id]);
+  }, [id, refetch]);
 
   useEffect(() => {
     async function postsOfEachChannel() {
