@@ -1,7 +1,10 @@
-import { useState } from 'react';
-import { login, signup } from '../../api/auth';
+import { useState, useCallback, useEffect } from 'react';
+import { signup } from '../../api/auth';
 import { AxiosError } from 'axios';
 import coffeeBean from '../../assets/images/CoffeeBean.png';
+import Button from '../atoms/Button';
+import { toast } from 'react-toastify';
+import Checkbox from '../atoms/Checkbox';
 
 export default function SignupPopup({
   onClose,
@@ -16,7 +19,7 @@ export default function SignupPopup({
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [agree, setAgree] = useState(false);
   const [error, setError] = useState('');
-  const [isEmailValid, setIsEmailValid] = useState(true); // 이메일 유효성 검사 상태
+  const [isEmailValid, setIsEmailValid] = useState(true);
 
   const validateEmail = (email: string) => {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -26,15 +29,10 @@ export default function SignupPopup({
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const emailValue = e.target.value;
     setEmail(emailValue);
-
-    if (!validateEmail(emailValue)) {
-      setIsEmailValid(false);
-    } else {
-      setIsEmailValid(true);
-    }
+    setIsEmailValid(validateEmail(emailValue));
   };
 
-  const handleSignup = async () => {
+  const handleSignup = useCallback(async () => {
     setError('');
 
     if (!fullName || !email || !password || !passwordConfirm) {
@@ -55,14 +53,14 @@ export default function SignupPopup({
     }
 
     try {
-      await signup(email, fullName, password);
-
-      // 회원가입 성공 → 로그인 처리
-      const loginResponse = await login(email, password);
-
-      // 로그인 성공 → accessToken 저장
-      localStorage.setItem('accessToken', loginResponse.token);
-      // 모달 닫기
+      const signupResponse = await signup(email, fullName, password);
+      localStorage.setItem('accessToken', signupResponse.token);
+      toast.success(
+        <>
+          회원가입에 성공하였습니다. <br />
+          이제 로그인 해주세요!
+        </>,
+      );
       onClose();
     } catch (err) {
       let msg = '알 수 없는 오류가 발생했습니다.';
@@ -74,29 +72,48 @@ export default function SignupPopup({
         axiosError.message ||
         msg;
 
-      // 이메일 중복 오류 처리
       if (
         axiosError.response?.status === 400 &&
         msg.includes('The email address is already being used.')
       ) {
         setError('이미 존재하는 이메일입니다.');
-        console.log(msg);
         return;
       }
 
       setError(msg);
     }
-  };
+  }, [
+    email,
+    fullName,
+    password,
+    passwordConfirm,
+    agree,
+    isEmailValid,
+    onClose,
+  ]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        handleSignup();
+      }
+      if (e.key === 'Escape') {
+        onClose(); // ✅ ESC 키로 모달 닫기
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleSignup, onClose]);
 
   return (
-    <div className="nanum-gothic-regular fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="dark:bg-dark-card dark:text-dark-text relative rounded-[15px] bg-white p-7 shadow-inner">
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 h-5 w-5 cursor-pointer"
-        >
-          ✕
-        </button>
+    <div
+      onClick={onClose}
+      className="nanum-gothic-regular fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()} // ✅ 모달 내부 클릭은 닫힘 방지
+        className="dark:bg-dark-card dark:text-dark-text relative rounded-[15px] bg-white p-7 shadow-inner"
+      >
         <div className="flex items-center pt-1 pb-3">
           <div className="text-[32px]">Sign Up</div>
           <img
@@ -124,7 +141,7 @@ export default function SignupPopup({
               className={`h-[50px] w-[350px] rounded-[5px] border p-3 ${!isEmailValid ? 'border-red-500' : ''}`}
             />
             {!isEmailValid && (
-              <div className="absolute bottom-[-15px] left-3 text-sm text-[12px] text-red-500">
+              <div className="absolute bottom-[-15px] left-2 text-[10px] text-red-500">
                 이메일 형식이 잘못되었습니다.
               </div>
             )}
@@ -144,32 +161,24 @@ export default function SignupPopup({
             className="h-[50px] w-[350px] rounded-[5px] border p-3"
           />
 
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              checked={agree}
-              onChange={(e) => setAgree(e.target.checked)}
-              className="cursor-pointer accent-[#6b4c36]"
-            />
-            <div className="ml-3 text-[12px]">
+          <div
+            onChange={(e) => setAgree((e.target as HTMLInputElement).checked)}
+            className="flex items-center"
+          >
+            <Checkbox id="agree" />
+            <label htmlFor="agree" className="ml-3 text-[12px]">
               이용약관 및 개인정보 수집/이용에 동의합니다
-            </div>
+            </label>
           </div>
 
           {error && <div className="text-sm text-red-500">{error}</div>}
 
-          <button
-            onClick={handleSignup}
-            className="mt-2 h-[50px] w-full cursor-pointer rounded-[5px] bg-[#6b4c36] text-[20px] text-white"
-          >
+          <Button onClick={handleSignup} size="l" full>
             회원가입
-          </button>
-          <button
-            onClick={onSwitchToLogin}
-            className="dark:bg-dark-border dark:text-dark-bg h-[50px] w-full cursor-pointer rounded-[5px] border text-[20px]"
-          >
+          </Button>
+          <Button onClick={onSwitchToLogin} size="l">
             로그인
-          </button>
+          </Button>
         </div>
       </div>
     </div>

@@ -27,9 +27,12 @@ api.interceptors.response.use(
     const status = err.response?.status;
     const msg = err.response?.data || err.message;
 
-    if (status === 401) {
-      console.log('인증이 필요합니다. 로그인 해주세요.');
-      toast.info('로그인 후에 이용해주세요.');
+    // 회원탈퇴 요청은 401 토스트 띄우지 않음
+    if (
+      err.response?.status === 401 &&
+      err.config?.url !== '/users/delete-user'
+    ) {
+      toast.error('로그인 후 이용해주세요');
     } else if (status >= 500) {
       console.log('서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
     } else if (status === 400) {

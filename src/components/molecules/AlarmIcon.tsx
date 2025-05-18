@@ -54,7 +54,6 @@ export default function AlarmIcon() {
             onClick={() => setIsmodalOpen(!ismodalOpen)}
           />
         </div>
-
         {alarms.length > 0 && (
           <>
             <div className="absolute top-0 right-0 h-[10px] w-[10px] animate-ping rounded-full bg-red-500" />

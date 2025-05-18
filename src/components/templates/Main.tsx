@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import FloatingButton from '../atoms/FloatingButton';
 import Icon from '../atoms/Icon';
 import { getAuthUser } from '../../api/auth';
-import { useLoginStore } from '../../loginStore';
+import { useLoginStore } from '../../stores/loginStore';
 import CommunityCardSkeleton from '../molecules/CommunityCardSkeleton';
 import QuestionCardSkeleton from '../molecules/QuestionCardSkeleton';
 import { toast } from 'react-toastify';

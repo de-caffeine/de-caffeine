@@ -7,6 +7,10 @@ import UserAvatar from '../atoms/UserAvatar';
 import { updateUser, uploadPhoto } from '../../api/users';
 import { getAuthUser } from '../../api/auth';
 import { toast } from 'react-toastify';
+import Button from '../atoms/Button';
+import { useNavigate } from 'react-router-dom';
+import { useDarkModeStore } from '../../stores/darkModeStore';
+import { AxiosError } from 'axios';
 
 export default function Setting() {
   const [user, setUser] = useState<User | null>(null); // 사용자 데이터
@@ -20,12 +24,8 @@ export default function Setting() {
     velog: '',
     homepage: '',
   });
-  const [darkModeToggle, setDarkModeToggle] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('darkMode') === 'true';
-    }
-    return false;
-  });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -54,10 +54,23 @@ export default function Setting() {
     fetchCurrentUser();
   }, []);
 
+  // 다크모드 전역상태로 관리
+  const darkModeToggle = useDarkModeStore((state) => state.isDarkMode);
+  const toggleDarkMode = useDarkModeStore((state) => state.toggleDarkMode);
+
+  // esc 누르면 메인으로 이동하는 훅
   useEffect(() => {
-    localStorage.setItem('darkMode', String(darkModeToggle));
-    document.documentElement.classList.toggle('dark', darkModeToggle);
-  }, [darkModeToggle]);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        navigate('/');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [navigate]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -154,12 +167,36 @@ export default function Setting() {
 
     try {
       await deleteUser(user._id);
-      toast.success('회원 탈퇴가 완료되었습니다.');
-      localStorage.removeItem('accessToken'); // 로그인 성공 시 토큰 저장
+      localStorage.removeItem('accessToken');
       localStorage.removeItem('myId');
       localStorage.removeItem('myImage');
-      window.location.href = '/'; // 홈 또는 로그인 페이지로 이동
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 2000);
+      toast.success(
+        <>
+          회원 탈퇴가 완료되었습니다. <br />
+          잠시 후 메인화면으로 이동합니다.
+        </>,
+      );
     } catch (error) {
+      const err = error as AxiosError;
+      // 401 에러도 성공으로 간주
+      if (err?.response?.status === 401) {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('myId');
+        localStorage.removeItem('myImage');
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 2000);
+        toast.success(
+          <>
+            회원 탈퇴가 완료되었습니다. <br />
+            잠시 후 메인화면으로 이동합니다.
+          </>,
+        );
+        return;
+      }
       console.error('회원 탈퇴 실패:', error);
       toast.error('회원 탈퇴 중 오류가 발생했습니다.');
     }
@@ -168,7 +205,12 @@ export default function Setting() {
   return (
     <div className="nanum-gothic-regular dark:text-dark-text dark:border-dark-border ml-[42px] w-[950px] transition-colors duration-300 ease-in-out">
       <div className="mb-[10px] flex">
-        <Icon name="leftIcon" />
+        <div
+          onClick={() => navigate('/')}
+          className="cursor-pointer dark:contrast-75 dark:invert"
+        >
+          <Icon name="leftIcon" />
+        </div>
         <div className="ml-[20px]">설정</div>
       </div>
 
@@ -183,26 +225,21 @@ export default function Setting() {
             className="dark:border-dark-border dark:bg-dark-card cursor-pointer rounded-[5px] border text-[12px] transition-colors"
           />
 
-          <button
-            className="h-[28px] w-[94px] cursor-pointer rounded-[5px] bg-[#A9907E] text-[13px] text-white"
-            onClick={handleUpload}
-          >
+          <Button size="s" full onClick={handleUpload}>
             이미지 업로드
-          </button>
-          <button
-            onClick={handleDeleteImage}
-            className="dark:border-dark-border dark:bg-dark-button h-[28px] w-[94px] cursor-pointer rounded-[5px] border text-[13px] transition-colors dark:text-white"
-          >
+          </Button>
+          <Button size="s" onClick={handleDeleteImage}>
             이미지 삭제
-          </button>
+          </Button>
 
           <label className="ml-[100px] inline-flex cursor-pointer items-center">
             <input
               type="checkbox"
               className="peer sr-only"
               checked={darkModeToggle}
-              onChange={() => setDarkModeToggle((prev) => !prev)} // ✅ 상태 토글
+              onChange={toggleDarkMode}
             />
+
             <div className="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-blue-600 peer-focus:ring-4 peer-focus:ring-blue-300 peer-focus:outline-none after:absolute after:start-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full dark:border-gray-600 dark:bg-gray-700 dark:peer-checked:bg-blue-600 dark:peer-focus:ring-blue-800"></div>
             <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
               다크모드
@@ -290,12 +327,12 @@ export default function Setting() {
         >
           회원탈퇴
         </button>
-        <button
-          onClick={handleApply}
-          className="absolute right-0 h-[40px] w-[100px] cursor-pointer rounded-[5px] bg-[#A9907E] text-white"
-        >
-          적용
-        </button>
+
+        <div className="absolute right-0">
+          <Button size="m" full onClick={handleApply}>
+            적용
+          </Button>
+        </div>
       </div>
     </div>
   );

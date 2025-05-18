@@ -15,7 +15,7 @@ import ChatWindow from '../organisms/ChatWindow'; // 변경: 채팅창 컴포넌
 // 변경: Conversation 타입 import 추가
 import type { Conversation } from '../organisms/ChatList'; // 변경: 대화 타입
 import { getAuthUser } from '../../api/auth';
-import { useLoginStore } from '../../loginStore';
+import { useLoginStore } from '../../stores/loginStore';
 
 // import PostCard from '../molecules/PostCard';
 import { useMemo } from 'react';
