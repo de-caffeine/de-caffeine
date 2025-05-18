@@ -17,12 +17,11 @@ import { useDarkModeStore } from './stores/darkModeStore';
 import { useEffect } from 'react';
 
 export default function App() {
-  const setDarkMode = useDarkModeStore((state) => state.setDarkMode);
+  const isDarkMode = useDarkModeStore((state) => state.isDarkMode);
 
   useEffect(() => {
-    const stored = localStorage.getItem('darkMode') === 'true';
-    setDarkMode(stored);
-  }, [setDarkMode]);
+    document.documentElement.classList.toggle('dark', isDarkMode);
+  }, [isDarkMode]);
   return (
     <>
       <div className="dark:bg-dark-bg inset-0 m-auto flex min-h-screen flex-col items-center transition-colors duration-300 ease-in-out">
