@@ -98,9 +98,9 @@ export default function Header() {
                   <div
                     ref={avatarRef}
                     onClick={() => setShowDropdown(!showDropdown)}
-                    className="flex cursor-pointer duration-200 hover:scale-110"
+                    className="ml-2 flex cursor-pointer duration-200 hover:scale-110"
                   >
-                    <UserAvatar imageUrl={validImageUrl} size={40} />
+                    <UserAvatar imageUrl={validImageUrl} size={30} />
                   </div>
 
                   {showDropdown && (
