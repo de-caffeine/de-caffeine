@@ -10,7 +10,6 @@ import UserCard from '../molecules/UserCard';
 import { getUsers } from '../../api/users';
 import { getAuthUser } from '../../api/auth';
 import { useLoginStore } from '../../stores/loginStore';
-import { toast } from 'react-toastify';
 import CommunityCardSkeleton from '../molecules/CommunityCardSkeleton';
 import QuestionCardSkeleton from '../molecules/QuestionCardSkeleton';
 import UserCardSkeleton from '../molecules/UserCardSkeleton';
