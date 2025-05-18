@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import Button from '../atoms/Button';
 import { useNavigate } from 'react-router-dom';
 import { useDarkModeStore } from '../../stores/darkModeStore';
+import { AxiosError } from 'axios';
 
 export default function Setting() {
   const [user, setUser] = useState<User | null>(null); // 사용자 데이터
@@ -166,12 +167,36 @@ export default function Setting() {
 
     try {
       await deleteUser(user._id);
-      toast.success('회원 탈퇴가 완료되었습니다.');
-      localStorage.removeItem('accessToken'); // 로그인 성공 시 토큰 저장
+      localStorage.removeItem('accessToken');
       localStorage.removeItem('myId');
       localStorage.removeItem('myImage');
-      window.location.href = '/'; // 홈 또는 로그인 페이지로 이동
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 2000);
+      toast.success(
+        <>
+          회원 탈퇴가 완료되었습니다. <br />
+          잠시 후 메인화면으로 이동합니다.
+        </>,
+      );
     } catch (error) {
+      const err = error as AxiosError;
+      // 401 에러도 성공으로 간주
+      if (err?.response?.status === 401) {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('myId');
+        localStorage.removeItem('myImage');
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 2000);
+        toast.success(
+          <>
+            회원 탈퇴가 완료되었습니다. <br />
+            잠시 후 메인화면으로 이동합니다.
+          </>,
+        );
+        return;
+      }
       console.error('회원 탈퇴 실패:', error);
       toast.error('회원 탈퇴 중 오류가 발생했습니다.');
     }

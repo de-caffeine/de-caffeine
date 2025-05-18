@@ -55,7 +55,12 @@ export default function SignupPopup({
     try {
       const signupResponse = await signup(email, fullName, password);
       localStorage.setItem('accessToken', signupResponse.token);
-      toast.success('회원가입에 성공하였습니다.');
+      toast.success(
+        <>
+          회원가입에 성공하였습니다. <br />
+          이제 로그인 해주세요!
+        </>,
+      );
       onClose();
     } catch (err) {
       let msg = '알 수 없는 오류가 발생했습니다.';

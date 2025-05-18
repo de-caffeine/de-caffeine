@@ -81,7 +81,7 @@ export default function Users() {
     return <p className="py-8 text-center">등록된 유저가 없습니다.</p>;
   }
   return (
-    <div className="grid grid-cols-1 gap-6 p-6 lg:grid-cols-3">
+    <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-2 lg:grid-cols-3">
       {filteredUsers.map((user, idx) => (
         <div
           key={user._id ?? idx} // _id 없으면 인덱스를 키로

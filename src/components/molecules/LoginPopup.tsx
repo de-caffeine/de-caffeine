@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { login } from '../../api/auth'; // 로그인 API
 import { AxiosError } from 'axios';
 import coffeeBean from '../../assets/images/CoffeeBean.png';
@@ -18,7 +18,7 @@ export default function LoginPopup({
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleLogin = useCallback(async () => {
     setError('');
 
     if (!email || !password) {
@@ -56,17 +56,21 @@ export default function LoginPopup({
 
       setError(msg);
     }
-  };
+  }, [email, password, navigate, onClose]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
       }
+      if (e.key === 'Enter') {
+        handleLogin();
+      }
     };
+
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  }, [onClose, handleLogin]);
 
   return (
     <div
