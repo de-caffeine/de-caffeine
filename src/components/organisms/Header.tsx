@@ -14,7 +14,6 @@ import { useLoginStore } from '../../stores/loginStore';
 import ChatWindow from './ChatWindow'; // 변경: ChatWindow import 추가
 import Button from '../atoms/Button';
 import { useDarkModeStore } from '../../stores/darkModeStore';
-import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 
 export default function Header() {
@@ -29,7 +28,6 @@ export default function Header() {
   const storedImage = localStorage.getItem('myImage');
   const validImageUrl =
     storedImage && storedImage !== 'undefined' ? storedImage : undefined;
-  const navigate = useNavigate();
   const isDarkMode = useDarkModeStore((state) => state.isDarkMode);
   const toggleDarkMode = useDarkModeStore((state) => state.toggleDarkMode);
 
@@ -85,7 +83,7 @@ export default function Header() {
         </div>
 
         {/* Search & Icons */}
-        <div className="flex min-w-[150px] flex-grow items-center">
+        <div className="relative flex min-w-[150px] flex-grow items-center">
           <div className="mr-5 ml-auto max-w-[350px] min-w-[120px] flex-1">
             <SearchBar />
           </div>
@@ -97,7 +95,7 @@ export default function Header() {
                   <AlarmIcon />
                 </div>
                 <div
-                  className="ml-3 cursor-pointer duration-200 hover:scale-110"
+                  className="ml-3 cursor-pointer duration-200 hover:scale-110 dark:contrast-75 dark:invert"
                   onClick={() => setShowChatWindow(true)}
                 >
                   <Icon name="chatIcon" size={26} />
@@ -172,7 +170,7 @@ export default function Header() {
               onSwitchToLogin={openLogin}
             />
           )}
-          <div className="ml-3 flex flex-col justify-center">
+          <div className="absolute right-[-50px]">
             <input
               type="checkbox"
               id="light-switch"
