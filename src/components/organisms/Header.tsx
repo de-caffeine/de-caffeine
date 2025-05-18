@@ -1,6 +1,6 @@
 // src/components/organisms/Header.tsx
 import { useEffect, useRef, useState } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import Logo from '../atoms/Logo';
 import SignupPopup from '../molecules/SignupPopup';
 import LoginPopup from '../molecules/LoginPopup';
@@ -25,6 +25,7 @@ export default function Header() {
   const storedImage = localStorage.getItem('myImage');
   const validImageUrl =
     storedImage && storedImage !== 'undefined' ? storedImage : undefined;
+  const navigate = useNavigate();
 
   const openLogin = () => {
     setShowSignup(false);
@@ -64,6 +65,7 @@ export default function Header() {
     useLoginStore.getState().logout();
 
     setShowDropdown(false);
+    navigate('/'); // 로그아웃 시 메인화면으로 이동
   };
 
   return (
