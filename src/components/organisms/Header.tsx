@@ -92,7 +92,7 @@ export default function Header() {
                   <AlarmIcon />
                 </div>
                 <div
-                  className="ml-3 cursor-pointer dark:contrast-70 dark:invert"
+                  className="ml-3 cursor-pointer duration-200 hover:scale-110 dark:contrast-70 dark:invert"
                   onClick={() => setShowChatWindow(true)} // 변경: 채팅 아이콘 클릭 시 채팅창 열기
                 >
                   <Icon name="chatIcon" size={26} />
@@ -101,7 +101,7 @@ export default function Header() {
                   <div
                     ref={avatarRef}
                     onClick={() => setShowDropdown(!showDropdown)}
-                    className="flex cursor-pointer"
+                    className="flex cursor-pointer duration-200 hover:scale-110"
                   >
                     <UserAvatar imageUrl={validImageUrl} size={40} />
                   </div>
@@ -127,7 +127,7 @@ export default function Header() {
                       </Link>
                       <button
                         onClick={handleLogout}
-                        className="block w-full px-4 py-2 text-left text-red-600 hover:text-red-900"
+                        className="block w-full cursor-pointer px-4 py-2 text-left text-red-600 hover:text-red-800"
                       >
                         로그아웃
                       </button>
