@@ -59,7 +59,6 @@ export default function UserPage() {
   const loginUserId = localStorage.getItem('myId');
   // 로그인 유저와 path id 값 비교
   const isMe = loginUserId === id;
-  const isLogin = Boolean(loginUserId);
 
   //질문게시글 필터링
   const questionPosts = useMemo(
@@ -307,7 +306,7 @@ export default function UserPage() {
               : ''
           }
           isMe={isMe}
-          isLogin={isLogin}
+          isLogin={isLoggedIn}
           isFollowing={isFollowing}
           followHandler={handleFollow}
         />
@@ -328,7 +327,7 @@ export default function UserPage() {
                   p.channel._id === '681da0247ffa911fa118e4be',
               )
               .map((post) => {
-                const like = userData?.likes?.find(
+                const like = myInfo?.likes?.find(
                   (like) => like.post === post._id,
                 );
                 const likeId = like ? like._id : null;
