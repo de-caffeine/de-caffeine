@@ -6,6 +6,7 @@ import Icon from '../atoms/Icon';
 import UserAvatar from '../atoms/UserAvatar';
 import { updateUser, uploadPhoto } from '../../api/users';
 import { getAuthUser } from '../../api/auth';
+import Button from '../atoms/Button';
 
 export default function Setting() {
   const [user, setUser] = useState<User | null>(null); // 사용자 데이터
@@ -182,18 +183,12 @@ export default function Setting() {
             className="dark:border-dark-border dark:bg-dark-card cursor-pointer rounded-[5px] border text-[12px] transition-colors"
           />
 
-          <button
-            className="h-[28px] w-[94px] cursor-pointer rounded-[5px] bg-[#A9907E] text-[13px] text-white"
-            onClick={handleUpload}
-          >
+          <Button size="s" full onClick={handleUpload}>
             이미지 업로드
-          </button>
-          <button
-            onClick={handleDeleteImage}
-            className="dark:border-dark-border dark:bg-dark-button h-[28px] w-[94px] cursor-pointer rounded-[5px] border text-[13px] transition-colors dark:text-white"
-          >
+          </Button>
+          <Button size="s" onClick={handleDeleteImage}>
             이미지 삭제
-          </button>
+          </Button>
 
           <label className="ml-[100px] inline-flex cursor-pointer items-center">
             <input

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { login } from '../../api/auth'; // 로그인 API
 import { AxiosError } from 'axios';
-
 import coffeeBean from '../../assets/images/CoffeeBean.png';
 import { useLoginStore } from '../../loginStore';
+import Button from '../atoms/Button'; // 버튼 컴포넌트 경로
 
 export default function LoginPopup({
   onClose,
@@ -26,11 +26,11 @@ export default function LoginPopup({
 
     try {
       const res = await login(email, password);
-      localStorage.setItem('accessToken', res.token); // 로그인 성공 시 토큰 저장
+      localStorage.setItem('accessToken', res.token);
       localStorage.setItem('myId', res.user._id);
       localStorage.setItem('myImage', res.user.image);
       useLoginStore.getState().login();
-      onClose(); // 팝업 닫기
+      onClose();
     } catch (err) {
       let msg = '알 수 없는 오류가 발생했습니다.';
       const axiosError = err as AxiosError<{ message?: string }>;
@@ -41,7 +41,6 @@ export default function LoginPopup({
         axiosError.message ||
         msg;
 
-      // 이메일 중복 오류 처리
       if (
         axiosError.response?.status === 400 &&
         msg.includes(
@@ -49,7 +48,6 @@ export default function LoginPopup({
         )
       ) {
         setError('이메일 또는 패스워드가 일치하지 않습니다.');
-        console.log(msg);
         return;
       }
 
@@ -94,18 +92,12 @@ export default function LoginPopup({
 
           {error && <div className="text-sm text-red-500">{error}</div>}
 
-          <button
-            onClick={handleLogin}
-            className="mt-2 h-[50px] w-full cursor-pointer rounded-[5px] bg-[#6b4c36] text-[20px] text-white"
-          >
+          <Button onClick={handleLogin} size="l" full>
             로그인
-          </button>
-          <button
-            onClick={onSwitchToSignup}
-            className="dark:border-dark-border dark:bg-dark-border h-[50px] w-full cursor-pointer rounded-[5px] border text-[20px] dark:text-[#000]"
-          >
+          </Button>
+          <Button onClick={onSwitchToSignup} size="l">
             회원가입
-          </button>
+          </Button>
         </div>
       </div>
     </div>

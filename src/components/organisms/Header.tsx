@@ -12,6 +12,7 @@ import { logout } from '../../api/auth';
 import AlarmIcon from '../molecules/AlarmIcon';
 import { useLoginStore } from '../../loginStore';
 import ChatWindow from './ChatWindow'; // 변경: ChatWindow import 추가
+import Button from '../atoms/Button';
 
 export default function Header() {
   const [showLogin, setShowLogin] = useState(false);
@@ -134,18 +135,12 @@ export default function Header() {
               </>
             ) : (
               <>
-                <button
-                  className="h-[40px] w-[70px] cursor-pointer rounded-[5px] border text-[12px]"
-                  onClick={openLogin}
-                >
+                <Button onClick={openLogin} size="s">
                   Log In
-                </button>
-                <button
-                  className="h-[40px] w-[70px] cursor-pointer rounded-[5px] bg-[#6B4C36] text-[12px] text-white"
-                  onClick={openSignup}
-                >
+                </Button>
+                <Button onClick={openSignup} size="s" full>
                   Sign Up
-                </button>
+                </Button>
               </>
             )}
           </div>
