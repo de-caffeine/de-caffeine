@@ -1,5 +1,5 @@
 // src/components/organisms/ChatRoom.tsx
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { getMessages } from '../../api/messages';
 import ChattingBubble from '../atoms/ChattingBubble';
 
