@@ -9,8 +9,7 @@ import QuestionCard from '../molecules/QuestionCard';
 import { followUser, unfollowUser } from '../../api/follow';
 import FloatingButton from '../atoms/FloatingButton';
 import { createNotification } from '../../api/notifications';
-// 변경: 메시지 API import 추가
-import { createMessage } from '../../api/messages'; // 변경: 메시지 전송 및 목록 조회
+
 // 변경: ChatWindow import 추가
 import ChatWindow from '../organisms/ChatWindow'; // 변경: 채팅창 컴포넌트
 // 변경: Conversation 타입 import 추가
@@ -21,6 +20,7 @@ import { useLoginStore } from '../../loginStore';
 // import PostCard from '../molecules/PostCard';
 import { useMemo } from 'react';
 import CommentCard from '../molecules/CommentCard';
+import { AnimatePresence } from 'framer-motion';
 
 interface CommentItem {
   post: string;
@@ -76,39 +76,23 @@ export default function UserPage() {
   const [initialConv, setInitialConv] = useState<Conversation | null>(null); // 변경: 초기 대화 저장 상태
 
   // 변경: "채팅 보내기" 버튼 클릭 시 호출할 핸들러 추가
-  const handleStartChat = async () => {
-    try {
-      // 1) 메시지 전송 및 받아온 데이터 확인
-      const newMsg = await createMessage('안녕하세요!', id);
-      console.log('createMessage response', newMsg);
-      // Assume newMsg = { _id: '...', message: '안녕하세요!', chatRoomId: '68229f0e04101073e04876ca', ... }
-
-      // 2) chatRoomId 만 뽑아서
-      const chatRoomId = newMsg._id;
-      if (!chatRoomId) {
-        console.error('chatRoomId가 응답에 없습니다.');
-        return;
-      }
-
-      // 3) Conversation 객체를 직접 생성
-      const conv: Conversation = {
-        chatRoomId,
-        partner: {
-          _id: userData!._id, // UserPage의 userData 에 이미 로드된 대상 유저 정보
-          fullName: userData!.fullName,
-          image: userData!.image,
-          status: 'offline', // 원한다면 실제 상태로 교체
-        },
-        lastMessage: { timestamp: Date.now() },
-        unreadCount: 0,
-      };
-
-      // 4) 강제로 초기 대화 세팅 & 창 열기
-      setInitialConv(conv);
-      setChatOpen(true);
-    } catch (e) {
-      console.error('채팅방 생성 또는 열기 실패', e);
-    }
+  const handleStartChat = () => {
+    if (!userData) return;
+    // 1) Conversation 객체: chatRoomId를 곧바로 상대방 ID로 사용
+    const conv: Conversation = {
+      chatRoomId: id, // userId를 chatId로
+      partner: {
+        _id: userData._id,
+        fullName: userData.fullName,
+        image: userData.image, // 프로필 이미지
+        status: userData.isOnline ? 'online' : 'offline',
+      },
+      lastMessage: { timestamp: Date.now() },
+      unreadCount: 0,
+    };
+    // 2) 초기 대화 세팅 & ChatWindow 열기
+    setInitialConv(conv);
+    setChatOpen(true);
   };
 
   useEffect(() => {
@@ -467,13 +451,15 @@ export default function UserPage() {
           <FloatingButton buttonType="chat" />
         </div>
       )}
-
-      {/* 변경: 채팅창 모달 */}
-      {chatOpen && initialConv && (
-        <ChatWindow
-          onClose={() => setChatOpen(false)} // 변경: 채팅창 닫기 핸들러
-        />
-      )}
+      <AnimatePresence>
+        {/* 변경: 채팅창 모달 */}
+        {chatOpen && initialConv && (
+          <ChatWindow
+            onClose={() => setChatOpen(false)} // 변경: 채팅창 닫기 핸들러
+            initialConversation={initialConv} //바로 채팅창 보이게
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }
