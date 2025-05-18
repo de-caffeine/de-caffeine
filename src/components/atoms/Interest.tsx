@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Icon from './Icon';
 import { likePost, unlikePost } from '../../api/likes';
 import { useDarkModeStore } from '../../stores/darkModeStore';

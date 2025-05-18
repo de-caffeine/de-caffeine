@@ -4,6 +4,7 @@ import { AxiosError } from 'axios';
 import coffeeBean from '../../assets/images/CoffeeBean.png';
 import Button from '../atoms/Button';
 import { toast } from 'react-toastify';
+import Checkbox from '../atoms/Checkbox';
 
 export default function SignupPopup({
   onClose,
@@ -135,7 +136,7 @@ export default function SignupPopup({
               className={`h-[50px] w-[350px] rounded-[5px] border p-3 ${!isEmailValid ? 'border-red-500' : ''}`}
             />
             {!isEmailValid && (
-              <div className="absolute bottom-[-15px] left-3 text-[12px] text-red-500">
+              <div className="absolute bottom-[-15px] left-2 text-[10px] text-red-500">
                 이메일 형식이 잘못되었습니다.
               </div>
             )}
@@ -155,16 +156,14 @@ export default function SignupPopup({
             className="h-[50px] w-[350px] rounded-[5px] border p-3"
           />
 
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              checked={agree}
-              onChange={(e) => setAgree(e.target.checked)}
-              className="cursor-pointer accent-[#6b4c36]"
-            />
-            <div className="ml-3 text-[12px]">
+          <div
+            onChange={(e) => setAgree((e.target as HTMLInputElement).checked)}
+            className="flex items-center"
+          >
+            <Checkbox id="agree" />
+            <label htmlFor="agree" className="ml-3 text-[12px]">
               이용약관 및 개인정보 수집/이용에 동의합니다
-            </div>
+            </label>
           </div>
 
           {error && <div className="text-sm text-red-500">{error}</div>}
