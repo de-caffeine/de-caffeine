@@ -11,8 +11,9 @@ import UserAvatar from '../atoms/UserAvatar';
 import { logout } from '../../api/auth';
 import AlarmIcon from '../molecules/AlarmIcon';
 import { useLoginStore } from '../../loginStore';
-import ChatWindow from './ChatWindow'; // 변경: ChatWindow import 추가
+import ChatWindow from './ChatWindow';
 import { useNavigate } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -20,9 +21,9 @@ export default function Header() {
   const [showSignup, setShowSignup] = useState(false);
   const isLoggedIn = useLoginStore((state) => state.isLoggedIn);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [showChatWindow, setShowChatWindow] = useState(false); // 변경: 채팅창 토글 상태 추가
-  const avatarRef = useRef(null);
-  const dropdownRef = useRef(null);
+  const [showChatWindow, setShowChatWindow] = useState(false);
+  const avatarRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const storedImage = localStorage.getItem('myImage');
   const validImageUrl =
     storedImage && storedImage !== 'undefined' ? storedImage : undefined;
@@ -31,20 +32,18 @@ export default function Header() {
     setShowSignup(false);
     setShowLogin(true);
   };
-
   const openSignup = () => {
     setShowLogin(false);
     setShowSignup(true);
   };
 
-  // 바깥 클릭 시 드롭다운 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
         avatarRef.current &&
-        !(dropdownRef.current as HTMLElement).contains(event.target as Node) &&
-        !(avatarRef.current as HTMLElement).contains(event.target as Node)
+        !dropdownRef.current.contains(event.target as Node) &&
+        !avatarRef.current.contains(event.target as Node)
       ) {
         setShowDropdown(false);
       }
@@ -55,7 +54,7 @@ export default function Header() {
 
   const handleLogout = async () => {
     try {
-      await logout(); // 서버 세션 무효화
+      await logout();
     } catch (e) {
       console.error('Logout failed:', e);
     }
@@ -63,7 +62,6 @@ export default function Header() {
     localStorage.removeItem('myId');
     localStorage.removeItem('myImage');
     useLoginStore.getState().logout();
-
     setShowDropdown(false);
     navigate('/');
   };
@@ -71,6 +69,7 @@ export default function Header() {
   return (
     <>
       <div className="nanum-gothic-regular flex h-[80px] w-full max-w-[1300px] items-center px-7">
+        {/* Logo & Navigation */}
         <div className="flex flex-shrink-0 items-center space-x-7">
           <Link to="/">
             <Logo />
@@ -80,6 +79,7 @@ export default function Header() {
           </div>
         </div>
 
+        {/* Search & Icons */}
         <div className="flex min-w-[150px] flex-grow items-center">
           <div className="mr-5 ml-auto max-w-[350px] min-w-[120px] flex-1">
             <SearchBar />
@@ -92,47 +92,55 @@ export default function Header() {
                   <AlarmIcon />
                 </div>
                 <div
-                  className="ml-3 cursor-pointer duration-200 hover:scale-110 dark:contrast-70 dark:invert"
-                  onClick={() => setShowChatWindow(true)} // 변경: 채팅 아이콘 클릭 시 채팅창 열기
+                  className="ml-3 cursor-pointer duration-200 hover:scale-110"
+                  onClick={() => setShowChatWindow(true)}
                 >
                   <Icon name="chatIcon" size={26} />
                 </div>
+
+                {/* Avatar & Dropdown */}
                 <div className="relative ml-3 inline-block">
                   <div
                     ref={avatarRef}
-                    onClick={() => setShowDropdown(!showDropdown)}
+                    onClick={() => setShowDropdown((prev) => !prev)}
                     className="flex cursor-pointer duration-200 hover:scale-110"
                   >
                     <UserAvatar imageUrl={validImageUrl} size={40} />
                   </div>
 
-                  {showDropdown && (
-                    <div
-                      ref={dropdownRef}
-                      className="dark:bg-dark-card dark:text-dark-text absolute right-0 z-50 mt-2 w-25 rounded-[5px] bg-white text-[14px] shadow drop-shadow-sm"
-                    >
-                      <Link
-                        to={`/${localStorage.getItem('myId')}`}
-                        onClick={() => setShowDropdown(false)}
-                        className="block px-4 py-2 hover:text-[#4b4744]"
+                  <AnimatePresence>
+                    {showDropdown && (
+                      <motion.div
+                        ref={dropdownRef}
+                        className="dark:bg-dark-card dark:text-dark-text absolute right-0 z-50 mt-2 w-25 origin-top-right rounded-md border border-[#d9d9d9] bg-white text-[14px] shadow-md drop-shadow-sm"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.15, ease: 'easeOut' }}
                       >
-                        마이페이지
-                      </Link>
-                      <Link
-                        to="/setting"
-                        onClick={() => setShowDropdown(false)}
-                        className="block px-4 py-2 hover:text-[#6B4C36]"
-                      >
-                        설정
-                      </Link>
-                      <button
-                        onClick={handleLogout}
-                        className="block w-full cursor-pointer px-4 py-2 text-left text-red-600 hover:text-red-800"
-                      >
-                        로그아웃
-                      </button>
-                    </div>
-                  )}
+                        <Link
+                          to={`/${localStorage.getItem('myId')}`}
+                          onClick={() => setShowDropdown(false)}
+                          className="block px-4 py-2 hover:text-[#4b4744]"
+                        >
+                          마이페이지
+                        </Link>
+                        <Link
+                          to="/setting"
+                          onClick={() => setShowDropdown(false)}
+                          className="block px-4 py-2 hover:text-[#6B4C36]"
+                        >
+                          설정
+                        </Link>
+                        <button
+                          onClick={handleLogout}
+                          className="block w-full px-4 py-2 text-left text-red-600 hover:text-red-800"
+                        >
+                          로그아웃
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               </>
             ) : (
@@ -168,11 +176,12 @@ export default function Header() {
         </div>
       </div>
 
-      {showChatWindow && (
-        <ChatWindow
-          onClose={() => setShowChatWindow(false)} // 변경: 채팅창 닫기 핸들러
-        />
-      )}
+      {/* Chat Window */}
+      <AnimatePresence>
+        {showChatWindow && (
+          <ChatWindow onClose={() => setShowChatWindow(false)} />
+        )}
+      </AnimatePresence>
 
       <Outlet />
     </>

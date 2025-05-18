@@ -20,6 +20,7 @@ import { useLoginStore } from '../../loginStore';
 // import PostCard from '../molecules/PostCard';
 import { useMemo } from 'react';
 import CommentCard from '../molecules/CommentCard';
+import { AnimatePresence } from 'framer-motion';
 
 interface CommentItem {
   post: string;
@@ -450,14 +451,15 @@ export default function UserPage() {
           <FloatingButton buttonType="chat" />
         </div>
       )}
-
-      {/* 변경: 채팅창 모달 */}
-      {chatOpen && initialConv && (
-        <ChatWindow
-          onClose={() => setChatOpen(false)} // 변경: 채팅창 닫기 핸들러
-          initialConversation={initialConv} //바로 채팅창 보이게
-        />
-      )}
+      <AnimatePresence>
+        {/* 변경: 채팅창 모달 */}
+        {chatOpen && initialConv && (
+          <ChatWindow
+            onClose={() => setChatOpen(false)} // 변경: 채팅창 닫기 핸들러
+            initialConversation={initialConv} //바로 채팅창 보이게
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }
