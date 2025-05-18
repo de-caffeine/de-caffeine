@@ -8,6 +8,7 @@ import { createNotification } from '../../api/notifications'; // ← 추가
 import PostCard from '../molecules/PostCard';
 import CommentBox, { Comment } from '../molecules/CommentBox';
 import FloatingButton from '../atoms/FloatingButton';
+import { toast } from 'react-toastify';
 
 interface Like {
   _id: string;
@@ -72,11 +73,11 @@ export default function Post() {
     if (!confirm('정말 이 포스트를 삭제하시겠습니까?')) return;
     try {
       await deletePost(postId);
-      alert('삭제되었습니다.');
+      toast.success('삭제되었습니다.');
       navigate('/');
     } catch (err) {
       console.error(err);
-      alert('삭제 중 오류가 발생했습니다.');
+      toast.error('삭제 중 오류가 발생했습니다.');
     }
   };
 

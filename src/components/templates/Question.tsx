@@ -5,12 +5,14 @@ import { Link, useLocation } from 'react-router-dom';
 import FloatingButton from '../atoms/FloatingButton';
 import { getAuthUser } from '../../api/auth';
 import { useLoginStore } from '../../loginStore';
+import { toast } from 'react-toastify';
 
 export default function Question() {
   const location = useLocation(); // subChannel
   const [posts, setPosts] = useState<Post[]>([]); // 출력할 posts
   const [myInfo, setMyInfo] = useState<User | null>(); // 사용자 정보
   const isLoggedIn = useLoginStore((state) => state.isLoggedIn);
+  const refetch = useLoginStore((state) => state.refetch);
 
   /* 최초 실행때 myInfo 저장 */
   useEffect(() => {
@@ -18,7 +20,7 @@ export default function Question() {
       setMyInfo(await getAuthUser());
     };
     getMyInfo();
-  }, []);
+  }, [isLoggedIn, refetch]);
 
   /* subChannel에 따라 fetch */
   useEffect(() => {
@@ -54,7 +56,7 @@ export default function Question() {
         break;
       }
     }
-  }, [location.pathname]);
+  }, [location.pathname, refetch]);
 
   return (
     <>
@@ -83,7 +85,7 @@ export default function Question() {
           <div
             className="fixed right-[10%] bottom-[5%]"
             onClick={() => {
-              alert('로그인 후에 이용 가능합니다.');
+              toast.info('로그인 후에 이용해주세요.');
             }}
           >
             <FloatingButton buttonType="write" />

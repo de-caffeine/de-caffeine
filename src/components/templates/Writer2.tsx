@@ -7,6 +7,7 @@ import 'react-quill-new/dist/quill.snow.css';
 import { createPost, getPost, updatePost } from '../../api/posts';
 import '../../css/PostCard.css';
 import coverimage from '../../assets/images/coverimage.png';
+import { toast } from 'react-toastify';
 
 interface LocationState {
   title?: string;
@@ -52,9 +53,9 @@ export default function Writer2() {
 
   // 커버용 상태 분리
   const [coverFile, setCoverFile] = useState<File>();
-  const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | undefined>(
-    state?.imageUrl,
-  );
+  // const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | undefined>(
+  //   state?.imageUrl,
+  // );
   // ▶ 추가: 커버 파일명 상태
   const [coverFileName, setCoverFileName] = useState<string>('');
 
@@ -67,8 +68,8 @@ export default function Writer2() {
     if (file) {
       setCoverFile(file);
       setCoverFileName(file.name);
-      const url = URL.createObjectURL(file);
-      setCoverPreviewUrl(url);
+      // const url = URL.createObjectURL(file);
+      // setCoverPreviewUrl(url);
     }
   };
 
@@ -80,7 +81,7 @@ export default function Writer2() {
           setTitle(data.title);
           setEditor(data.body);
           setTagsArray(data.tags ?? []); // ▶ 수정: tagsArray로 세팅
-          if (data.image) setCoverPreviewUrl(data.image);
+          // if (data.image) setCoverPreviewUrl(data.image);
         })
         .catch((err) => {
           console.error('포스트 불러오기 실패', err);
@@ -142,8 +143,19 @@ export default function Writer2() {
 
   // 3) 제출 핸들러: channelMap[category] 사용
   const handleSubmit = useCallback(async () => {
+    // 1) 순수 텍스트 추출
+    const editorText =
+      quillRef.current
+        ?.getEditor()
+        .getText() // "\n" 만 남아 있는 경우도 있으니
+        .trim() || '';
+
+    if (!title.trim() || !editorText) {
+      toast.error('제목과 내용을 모두 입력해주세요.');
+      return;
+    }
     if (!title.trim() || !editor.trim()) {
-      alert('제목과 내용을 모두 입력해주세요.');
+      toast.error('제목과 내용을 모두 입력해주세요.');
       return;
     }
 
@@ -151,7 +163,6 @@ export default function Writer2() {
     try {
       // ▶ 수정: tagsArray 사용
       const tagArray = tagsArray.map((t) => t.trim()).filter(Boolean);
-
       const selectedChannelId = channelMap[category];
 
       if (postId) {
@@ -163,22 +174,23 @@ export default function Writer2() {
           tagArray,
           coverFile,
         );
-        alert('포스트가 성공적으로 수정되었습니다!');
+        toast.success('포스트가 성공적으로 수정되었습니다!');
         navigate(`/post/${postId}`);
       } else {
-        await createPost(title, editor, selectedChannelId, tagArray, coverFile);
-        alert('포스트가 성공적으로 생성되었습니다!');
-        // 입력값 초기화
-        setTitle('');
-        setEditor('');
-        setTagsArray([]); // ▶ 수정: tagsArray 초기화
-        setCoverFile(undefined);
-        setCoverPreviewUrl(undefined);
-        setCoverFileName(''); // ▶ 추가: 커버 파일명 초기화
+        // 새 포스트 생성 후 반환된 ID로 해당 게시글 페이지로 이동
+        const created = await createPost(
+          title,
+          editor,
+          selectedChannelId,
+          tagArray,
+          coverFile,
+        );
+        toast.success('포스트가 성공적으로 생성되었습니다!');
+        navigate(`/post/${created._id}`);
       }
     } catch (err: any) {
       console.error(err);
-      alert('오류 발생: ' + err.message);
+      toast.error('오류 발생: ' + err.message);
     } finally {
       setLoading(false);
     }
@@ -232,18 +244,18 @@ export default function Writer2() {
               >
                 {coverFileName || '커버 이미지 업로드'}
               </label>
-              {/* ▶ 선택된 이미지 미리보기 */}
+              {/* ▶ 선택된 이미지 미리보기 (필요 시 주석 해제) */}
               {/* {coverPreviewUrl && (
-              <img
-                src={coverPreviewUrl}
-                alt="커버 이미지 미리보기"
-                className="mt-2 max-h-[200px] max-w-[200px] rounded-[5px] object-cover"
-              />
-            )} */}
+                <img
+                  src={coverPreviewUrl}
+                  alt="커버 이미지 미리보기"
+                  className="mt-2 max-h-[200px] max-w-[200px] rounded-[5px] object-cover"
+                />
+              )} */}
             </div>
           </div>
 
-          {/* ▶ 수정: 태그 입력/삭제 및 백스페이스 삭제 지원 */}
+          {/* ▶ 태그 입력/삭제 및 백스페이스 삭제 지원 */}
           <div
             className="flex flex-wrap items-center gap-1 rounded px-2 py-1"
             onClick={() => tagInputRef.current?.focus()}
@@ -251,7 +263,7 @@ export default function Writer2() {
             {tagsArray.map((tag, idx) => (
               <span
                 key={idx}
-                className="flex items-center gap-1 rounded bg-[#D7CAB9] px-2 py-0.5 text-sm text-black"
+                className="flex items-center rounded bg-[#D7CAB9] px-2 py-0.5 text-sm text-black"
               >
                 {tag}
                 <button
@@ -280,7 +292,7 @@ export default function Writer2() {
                   return;
                 }
                 // Enter 또는 쉼표로 태그 추가
-                if (e.key === 'Enter' || e.key === ',') {
+                if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
                   const val = tagInput.trim().replace(/,$/, '');
                   if (val && !tagsArray.includes(val)) {

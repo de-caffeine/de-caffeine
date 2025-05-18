@@ -157,13 +157,13 @@ export default function PostCard({
       <hr className="dark:border-dark-border mb-6 border-t border-[#ABABAB]" />
 
       {/* 커버 이미지 포스트에서 보이게 */}
-      {/* {imageUrl && (
+      {imageUrl && (
         <img
           src={imageUrl}
           alt="post"
           className="mb-6 max-h-[600px] w-full rounded-[5px]"
         />
-      )} */}
+      )}
 
       {/* 본문 */}
       <ReactQuill

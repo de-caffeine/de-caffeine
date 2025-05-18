@@ -4,6 +4,7 @@ import Info from '../atoms/Info';
 import { getAuthUser } from '../../api/auth';
 import { createComment, deleteComment } from '../../api/comments';
 import { createNotification } from '../../api/notifications';
+import { toast } from 'react-toastify';
 
 interface CommentBoxProps {
   postId: string;
@@ -30,7 +31,13 @@ export default function CommentBox({
   postAuthorId,
   initialComments = [],
 }: CommentBoxProps) {
-  const [comments, setComments] = useState<Comment[]>(initialComments);
+  // 초기 comments를 생성일시(createdAt) 내림차순 정렬하여 newest-first 로 세팅
+  const [comments, setComments] = useState<Comment[]>(() =>
+    [...initialComments].sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    ),
+  );
   const [text, setText] = useState('');
   const [meId, setMeId] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -56,7 +63,8 @@ export default function CommentBox({
     if (!text.trim()) return;
     try {
       const newComment = await createComment(postId, text);
-      setComments((prev) => [...prev, newComment]);
+      // 새로 등록된 댓글을 리스트 맨 앞에 추가 (newest-first)
+      setComments((prev) => [newComment, ...prev]);
       setText('');
       // 2) 알림 생성
       await createNotification({
@@ -66,7 +74,7 @@ export default function CommentBox({
         postId: postId, // 댓글이 달린 포스트 ID
       });
     } catch {
-      alert('댓글 작성에 실패했습니다.');
+      toast.error('댓글 작성에 실패했습니다.');
     }
   };
 
@@ -77,7 +85,7 @@ export default function CommentBox({
       await deleteComment(id);
       setComments((prev) => prev.filter((c) => c._id !== id));
     } catch {
-      alert('댓글 삭제에 실패했습니다.');
+      toast.error('댓글 삭제에 실패했습니다.');
     }
   };
 
@@ -108,7 +116,7 @@ export default function CommentBox({
         </button>
       </div>
 
-      {/* 댓글 목록 */}
+      {/* 댓글 목록 (newest-first) */}
       {comments.map((c) => (
         <div key={c._id} className="mb-10 flex flex-col">
           <div className="flex items-start justify-between">

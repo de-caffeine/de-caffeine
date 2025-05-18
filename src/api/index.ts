@@ -1,7 +1,11 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const api = axios.create({
-  baseURL: 'http://13.125.208.179:5010',
+  baseURL:
+    window.location.hostname === 'localhost'
+      ? 'http://13.125.208.179:5010'
+      : '/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -16,7 +20,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// 응답 인터셉터: alert로 에러 메시지 띄우기
+// 응답 인터셉터: toast로 에러 메시지 띄우기
 api.interceptors.response.use(
   (res) => res,
   (err) => {
@@ -25,6 +29,7 @@ api.interceptors.response.use(
 
     if (status === 401) {
       console.log('인증이 필요합니다. 로그인 해주세요.');
+      toast.info('로그인 후에 이용해주세요.');
     } else if (status >= 500) {
       console.log('서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
     } else if (status === 400) {

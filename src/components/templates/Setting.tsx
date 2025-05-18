@@ -6,7 +6,7 @@ import Icon from '../atoms/Icon';
 import UserAvatar from '../atoms/UserAvatar';
 import { updateUser, uploadPhoto } from '../../api/users';
 import { getAuthUser } from '../../api/auth';
-import Button from '../atoms/Button';
+import { toast } from 'react-toastify';
 
 export default function Setting() {
   const [user, setUser] = useState<User | null>(null); // 사용자 데이터
@@ -74,19 +74,19 @@ export default function Setting() {
 
   const handleUpload = async () => {
     if (!file) {
-      return alert('이미지를 선택해주세요.');
+      return toast.error('이미지를 선택해주세요.');
     }
     try {
       const result = await uploadPhoto(file, false);
       // isCover = false → 프로필 이미지
       console.log('업로드 성공', result);
-      alert('사진이 변경되었습니다');
+      toast.success('사진이 변경되었습니다.');
       const updatedUser = await getAuthUser();
       setUser(updatedUser);
       localStorage.setItem('myImage', updatedUser.image);
     } catch (error) {
       console.error('이미지 업로드 실패', error);
-      alert('이미지 업로드 중 오류가 발생했습니다. 다시 시도해 주세요.');
+      toast.error('이미지 업로드 중 오류가 발생했습니다. 다시 시도해 주세요.');
     }
   };
 
@@ -102,17 +102,17 @@ export default function Setting() {
       const updatedUser = await getAuthUser(); // 최신 사용자 정보로 갱신
       setUser(updatedUser);
       localStorage.removeItem('myImage');
-      alert('기본 프로필 이미지로 변경되었습니다.');
+      toast.success('기본 프로필 이미지로 변경되었습니다.');
       console.log(updatedUser);
     } catch (error) {
       console.error('이미지 삭제 실패:', error);
-      alert('이미지 삭제 중 오류가 발생했습니다.');
+      toast.error('이미지 삭제 중 오류가 발생했습니다.');
     }
   };
 
   const handleApply = async () => {
     if (!form.fullName.trim()) {
-      alert('닉네임은 필수 입력 항목입니다.');
+      toast.error('닉네임은 필수 입력 항목입니다.');
       return;
     }
     try {
@@ -133,10 +133,10 @@ export default function Setting() {
       const updatedUser = await getAuthUser(); // 최신 정보 다시 불러오기
       setUser(updatedUser); // 상태 갱신
       console.log('업데이트된 유저 정보:', updatedUser); // ✅ 콘솔 출력
-      alert('변경 사항이 저장되었습니다.');
+      toast.success('변경 사항이 저장되었습니다.');
     } catch (err) {
       console.error(err);
-      alert('저장 중 오류가 발생했습니다.');
+      toast.error('저장 중 오류가 발생했습니다.');
     }
   };
 
@@ -154,14 +154,14 @@ export default function Setting() {
 
     try {
       await deleteUser(user._id);
-      alert('회원 탈퇴가 완료되었습니다.');
+      toast.success('회원 탈퇴가 완료되었습니다.');
       localStorage.removeItem('accessToken'); // 로그인 성공 시 토큰 저장
       localStorage.removeItem('myId');
       localStorage.removeItem('myImage');
       window.location.href = '/'; // 홈 또는 로그인 페이지로 이동
     } catch (error) {
       console.error('회원 탈퇴 실패:', error);
-      alert('회원 탈퇴 중 오류가 발생했습니다.');
+      toast.error('회원 탈퇴 중 오류가 발생했습니다.');
     }
   };
 
