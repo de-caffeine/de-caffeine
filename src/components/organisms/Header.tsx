@@ -121,7 +121,6 @@ export default function Header() {
 
         <div className="relative flex min-w-[150px] flex-grow items-center">
           <div className="mr-5 ml-auto max-w-[350px] min-w-[80px] flex-1">
-
             <SearchBar />
           </div>
 
@@ -202,11 +201,8 @@ export default function Header() {
             />
           )}
 
-          <div className="ml-3 flex flex-col justify-center">
-
           {showSignup && <SignupPopup onClose={() => setShowSignup(false)} />}
           <div className="absolute right-[-50px]">
-
             <input
               type="checkbox"
               id="light-switch"
@@ -266,15 +262,17 @@ export default function Header() {
           >
             <motion.div
               ref={modalRef}
-              className="dark:bg-dark-bg relative w-[90vw] max-w-[400px] rounded-lg bg-white p-6 shadow-xl"
+              className="dark:bg-dark-bg relative w-[90vw] max-w-[350px] rounded-lg bg-white p-6 shadow-xl"
               initial={{ y: 50, scale: 0.95 }}
               animate={{ y: 0, scale: 1 }}
               exit={{ y: 50, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.1 }}
             >
-              <div className="flex flex-col items-center space-y-4">
+              <div className="flex flex-col items-center space-y-5">
                 <Logo />
-                <SearchBar />
+                <div className="w-[200px]">
+                  <SearchBar />
+                </div>
                 <Navigation /> {/* 네비게이션바 추가 */}
               </div>
             </motion.div>
