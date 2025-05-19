@@ -132,6 +132,8 @@ export default function UserPage() {
   }, [id, refetch]);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+
     async function postsOfEachChannel() {
       try {
         const [daily, develop, employ, recruit] = await Promise.all([
