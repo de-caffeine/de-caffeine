@@ -183,14 +183,14 @@ export default function SignupPopup({ onClose }: { onClose: () => void }) {
 
                 {error && <div className="text-sm text-red-500">{error}</div>}
 
-          <Button onClick={handleSignup} size="l" full>
-            회원가입
-          </Button>
-          <Button onClick={onSwitchToLogin} size="l">
-            로그인
-          </Button>
-        </div>
-      </div>
-    </div>
+                <Button onClick={handleSignup} size="l" full>
+                  회원가입
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   );
 }
