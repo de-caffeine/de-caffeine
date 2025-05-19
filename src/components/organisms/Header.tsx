@@ -120,7 +120,7 @@ export default function Header() {
         {/* Search & Icons */}
 
         <div className="relative flex min-w-[150px] flex-grow items-center">
-          <div className="mr-5 ml-auto max-w-[350px] min-w-[120px] flex-1">
+          <div className="mr-5 ml-auto hidden max-w-[350px] min-w-[120px] flex-1 sm:block">
             <SearchBar />
           </div>
 
