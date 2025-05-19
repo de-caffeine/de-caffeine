@@ -13,7 +13,7 @@ export default function Button({
 }) {
   return (
     <button
-      className={`nanum-gothic-regular cursor-pointer rounded border ${
+      className={`nanum-gothic-regular cursor-pointer rounded border duration-200 hover:brightness-120 active:scale-95 ${
         full
           ? 'border-[#6B4C36] bg-[#6B4C36] text-white'
           : 'dark:border-dark-border dark:text-dark-text'
