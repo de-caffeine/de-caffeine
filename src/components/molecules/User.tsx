@@ -79,11 +79,7 @@ export default function User({
             </p>
             <div className="flex items-center justify-start gap-3">
               <span className="flex justify-center gap-1 leading-5 tracking-wide text-[#767676]">
-                <img
-                  src="/src/assets/images/mailStroke.svg"
-                  className="dark:contrast-50 dark:invert"
-                  alt="메일"
-                />
+                <Icon name="mailStrokeIcon" />
                 {email}
               </span>
               {/* github, velog 주소값 여부에 따라 아이콘 렌더링 */}
