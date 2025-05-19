@@ -13,14 +13,14 @@ export default function Button({
 }) {
   return (
     <button
-      className={`nanum-gothic-regular cursor-pointer rounded-[5px] border ${
+      className={`nanum-gothic-regular cursor-pointer rounded border duration-200 hover:brightness-120 active:scale-95 ${
         full
           ? 'border-[#6B4C36] bg-[#6B4C36] text-white'
-          : 'dark:border-dark-border dark:bg-dark-button dark:text-dark-text'
+          : 'dark:border-dark-border dark:text-dark-text'
       } ${
         size === 's' &&
-        `h-[30px] w-[70px] text-[10px] ${full ? 'border-[#A9907E] bg-[#A9907E]' : ''}`
-      } ${size === 'm' && 'h-[40px] w-[100px] text-sm'} ${size === 'l' && 'text-basic h-[50px] w-[350px]'} `}
+        `h-[30px] w-[70px] text-xs ${full ? 'border-[#A9907E] bg-[#A9907E]' : ''}`
+      } ${size === 'm' && 'h-[35px] w-[85px] text-sm'} ${size === 'l' && 'text-basic h-[50px] w-[350px]'} `}
       onClick={onClick}
     >
       {children}

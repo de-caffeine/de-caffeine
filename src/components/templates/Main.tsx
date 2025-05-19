@@ -55,7 +55,6 @@ export default function Main() {
 
     fetchCommunityPosts();
     fetchQuestionPosts();
-    console.log(isLoggedIn);
   }, [isLoggedIn, refetch]);
 
   /* 반응형 출력 */

@@ -10,7 +10,6 @@ import UserCard from '../molecules/UserCard';
 import { getUsers } from '../../api/users';
 import { getAuthUser } from '../../api/auth';
 import { useLoginStore } from '../../stores/loginStore';
-import { toast } from 'react-toastify';
 import CommunityCardSkeleton from '../molecules/CommunityCardSkeleton';
 import QuestionCardSkeleton from '../molecules/QuestionCardSkeleton';
 import UserCardSkeleton from '../molecules/UserCardSkeleton';
@@ -461,21 +460,23 @@ export default function Search() {
                   <>
                     {users.length !== 0 ? (
                       users.map((user) => (
-                        <UserCard
-                          key={user._id}
-                          UName={user.fullName}
-                          followCount={user.following.length}
-                          followerCount={user.followers.length}
-                          tags={
-                            user.username
-                              ? JSON.parse(user.username).tags
+                        <Link to={`/${user._id}`}>
+                          <UserCard
+                            key={user._id}
+                            UName={user.fullName}
+                            followCount={user.following.length}
+                            followerCount={user.followers.length}
+                            tags={
+                              user.username
                                 ? JSON.parse(user.username).tags
+                                  ? JSON.parse(user.username).tags
+                                  : []
                                 : []
-                              : []
-                          }
-                          imgUrl={user.image}
-                          loginStatus={user.isOnline ? 'online' : 'offline'}
-                        ></UserCard>
+                            }
+                            imgUrl={user.image}
+                            loginStatus={user.isOnline ? 'online' : 'offline'}
+                          ></UserCard>
+                        </Link>
                       ))
                     ) : (
                       <p className="nanum-gothic-regular text-base text-[#ababab]">
