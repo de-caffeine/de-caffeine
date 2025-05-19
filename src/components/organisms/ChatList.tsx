@@ -137,7 +137,7 @@ export default function ChatList({
     return <p className="p-4 text-center">대화가 없습니다.</p>;
 
   return (
-    <div className="mr-[15px] h-full overflow-y-auto">
+    <div className="h-full overflow-y-auto pl-[10px]">
       {conversations.map((conv) => (
         <ChattingListItem
           key={conv.chatRoomId}
