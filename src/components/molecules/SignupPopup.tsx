@@ -110,14 +110,14 @@ export default function SignupPopup({ onClose }: { onClose: () => void }) {
             transition={{ duration: 0.2, ease: 'easeOut' }}
             onClick={handleLocalClose}
           >
-            {/* modal content: 스프링 기반 스케일 & 회전 애니메이션 */}
+            {/* modal content: 스프링 기반 스케일 애니메이션 */}
             <motion.div
               key="signup-modal"
-              onClick={(e) => e.stopPropagation()} // ✅ 모달 내부 클릭은 닫힘 방지
+              onClick={(e) => e.stopPropagation()}
               className="dark:bg-dark-card dark:text-dark-text relative rounded-[15px] bg-white p-7 shadow-inner"
-              initial={{ y: 50, opacity: 0, scale: 0.8, rotate: 5 }}
-              animate={{ y: 0, opacity: 1, scale: 1, rotate: 0 }}
-              exit={{ y: 50, opacity: 0, scale: 0.8, rotate: 5 }}
+              initial={{ y: 50, opacity: 0, scale: 0.8 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: 50, opacity: 0, scale: 0.8 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             >
               <div className="flex items-center pt-1 pb-3">

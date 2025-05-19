@@ -81,22 +81,22 @@ export default function LoginPopup({
         <>
           {/* overlay: 배경 페이드인/아웃 */}
           <motion.div
-            key="login-overlay"
-            className="fixed inset-0 z-10 flex items-center justify-center bg-black/50"
+            key="signup-overlay"
+            className="nanum-gothic-regular fixed inset-0 z-50 flex items-center justify-center bg-black/50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0, transition: { duration: 0.2, delay: 0.25 } }}
+            exit={{ opacity: 0, transition: { duration: 0.2, delay: 0.3 } }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            onClick={handleLocalClose} // overlay 클릭 시 로컬 상태만 닫기
+            onClick={handleLocalClose}
           >
-            {/* modal content: 스프링 기반 스케일 & 회전 애니메이션 */}
+            {/* modal content: 스프링 기반 스케일 애니메이션 */}
             <motion.div
-              key="login-modal"
-              onClick={(e) => e.stopPropagation()} // 내부 클릭 시 닫힘 방지
-              className="nanum-gothic-regular dark:bg-dark-card dark:text-dark-text dark:placeholder-dark-text relative rounded-[15px] bg-white p-7 shadow-inner"
-              initial={{ y: 50, opacity: 0, scale: 0.8, rotate: 5 }}
-              animate={{ y: 0, opacity: 1, scale: 1, rotate: 0 }}
-              exit={{ y: 50, opacity: 0, scale: 0.8, rotate: 5 }}
+              key="signup-modal"
+              onClick={(e) => e.stopPropagation()}
+              className="dark:bg-dark-card dark:text-dark-text relative rounded-[15px] bg-white p-7 shadow-inner"
+              initial={{ y: 50, opacity: 0, scale: 0.8 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: 50, opacity: 0, scale: 0.8 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             >
               {/* Header: 타이틀 + 아이콘 */}
