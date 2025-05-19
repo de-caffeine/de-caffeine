@@ -1,9 +1,11 @@
 # ☕de:caffeine
+
 <br/>
-<img width="400" alt="Image" src="https://github.com/user-attachments/assets/a9ef4ca9-e243-4c75-9ca0-cded48e55388" />
+<img width="400" alt="Image" src="https://github.com/user-attachments/assets/a1e6f4c1-84d1-4ac0-97a6-73bdad3c9d83" />
 <br/>
 
 #### 개발자들을 위한 커뮤니티. 오류 해결과 최신 정보 그리고 일상까지 디카페인(de:caffeine)과 함께해요
+
 <br/>
 <br/>
 
@@ -35,27 +37,28 @@
 
 v23.11.0
 
-| part              | badges |
-| ---------------- | -------------------------------------------------------------------------------------------------- |  
-| **`FrontEnd`** | ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) |
-| **`Data Fetching`** | ![Fetch API](https://img.shields.io/badge/Fetch%20API-ffdd57?style=for-the-badge&logoColor=black) |
-| **`State Management`** | ![React](https://img.shields.io/badge/react%20zustand-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)|
-| **`Version Control`** | ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) |
-| **`Collaboration Tools`** | ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white) 	![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)
-| **`API Testing`** | ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white) |
-
+| part                      | badges                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`FrontEnd`**            | ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) |
+| **`Data Fetching`**       | ![Fetch API](https://img.shields.io/badge/Fetch%20API-ffdd57?style=for-the-badge&logoColor=black)                                                                                                                                                                                                                                                                                                                                                                                           |
+| **`State Management`**    | ![React](https://img.shields.io/badge/react%20zustand-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)                                                                                                                                                                                                                                                                                                                                                                     |
+| **`Version Control`**     | ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)                                                                                                                                                                                                                                                                            |
+| **`Collaboration Tools`** | ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white) ![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)                                                                                                                                                                |
+| **`API Testing`**         | ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)                                                                                                                                                                                                                                                                                                                                                                                    |
 
 <br><br>
 
 ---
 
 ## 👥 Team Members
+
 <br/>
 
-  | [이현우](https://github.com/manto123123123) | [황수지](https://github.com/ssujissuji) | [강하영](https://github.com/Hayoung0708) | [이교은](https://github.com/kyoeun01) | [이준수](https://github.com/dlakrp123) |
-  | :--------: | :--------: | :--------: | :--------: | :--------: |
-  | <img src="https://github.com/manto123123123.png" width="150px"> | <img src="https://github.com/ssujissuji.png" width="150px"> | <img src="https://github.com/Hayoung0708.png" width="150px"> | <img src="https://github.com/kyoeun01.png" width="150px"> | <img src="https://github.com/dlakrp123.png" width="150px"> | 
-  | 팀장, ~~담당 | ~~담당 | ~~담당 | ~~담당 | ~~담당 |
+|        [이현우(팀장)](https://github.com/manto123123123)        |           [황수지](https://github.com/ssujissuji)           |           [강하영](https://github.com/Hayoung0708)           |           [이준수](https://github.com/dlakrp123)           |
+| :-------------------------------------------------------------: | :---------------------------------------------------------: | :----------------------------------------------------------: | :--------------------------------------------------------: |
+| <img src="https://github.com/manto123123123.png" width="150px"> | <img src="https://github.com/ssujissuji.png" width="150px"> | <img src="https://github.com/Hayoung0708.png" width="150px"> | <img src="https://github.com/dlakrp123.png" width="150px"> |
+|                  포스트 관련 기능 구현 및 발표                  |       유저 프로필 및 팔로우, 활동 정보 출력 기능 담당       |       주요 페이지 디자인 및 검색, 알람 기능 구현 담당        |             설정 및 유저 관리 기능 구현 담당당             |
+
   <br/>
   <br/>
 
@@ -78,31 +81,33 @@ v23.11.0
   - **채팅 모달**
     - 자신이 현재 누구와 채팅중인지 목록 확인
     - 선택한 유저와 채팅 가능
-   
+
 ---
 
 ## 🎯 Git Convention
 
 ### 1. 커밋 타입
 
-| 타입 | 의미 | 이모지 |
-|:---|:---|:---|
-| Feat | 새로운 기능 추가 | ✨ |
-| Fix | 버그 수정 | 🐛 |
-| Docs | 문서 수정 | 📝 |
-| Style | 코드 포맷팅 등 | 🎨 |
-| Refactor | 리팩토링 | ♻️ |
-| Test | 테스트 코드 추가 | ✅ |
-| Chore | 기타 설정 수정 | 🔧 |
-| Design | UI 디자인 변경 | 💄 |
-| Comment | 주석 추가/변경 | 💬 |
-| Rename | 파일/폴더명 변경 | 🏷️ |
-| Remove | 파일 삭제 | 🔥 |
-| !BREAKING CHANGE | 대규모 변경 | 💥 |
-| !HOTFIX | 긴급 버그 수정 | 🚑️ |
+| 타입             | 의미             | 이모지 |
+| :--------------- | :--------------- | :----- |
+| Feat             | 새로운 기능 추가 | ✨     |
+| Fix              | 버그 수정        | 🐛     |
+| Docs             | 문서 수정        | 📝     |
+| Style            | 코드 포맷팅 등   | 🎨     |
+| Refactor         | 리팩토링         | ♻️     |
+| Test             | 테스트 코드 추가 | ✅     |
+| Chore            | 기타 설정 수정   | 🔧     |
+| Design           | UI 디자인 변경   | 💄     |
+| Comment          | 주석 추가/변경   | 💬     |
+| Rename           | 파일/폴더명 변경 | 🏷️     |
+| Remove           | 파일 삭제        | 🔥     |
+| !BREAKING CHANGE | 대규모 변경      | 💥     |
+| !HOTFIX          | 긴급 버그 수정   | 🚑️    |
 
 ### 2. 커밋 작성 규칙
-**모든 커밋은 아래와 같은 형식을 따라야 합니다.** 
+
+**모든 커밋은 아래와 같은 형식을 따라야 합니다.**
+
 ```
 <이모지> <타입>(영역): <변경사항 요약>
 ```
@@ -114,6 +119,7 @@ v23.11.0
 - 글머리 기호(`-`)로 변경사항 나열
 
 **커밋 메시지 예시**
+
 ```
 ✨ Feat(post): 포스트 작성 기능 추가
 🐛 Fix(auth): 로그인 에러 수정
@@ -126,22 +132,25 @@ v23.11.0
 🚑️ !HOTFIX(auth): 로그인 크래시 긴급 수정
 ```
 
-
 ---
 
 ## 🪴 Branch Convention (GitHub Flow)
+
 ### 브랜치 생성
+
 - Github Issue 생성 → 번호 기반 브랜치 생성
 - 브랜치명: `번호-작업내용`
   - 예: `01-readme-작성`
 
 ### 브랜치 타입
-| 타입 | 설명 | 예시 |
-|:---|:---|:---|
-| main | 배포 가능한 브랜치 | |
-| feature/{description} | 기능 개발 | feature/add-login-page |
+
+| 타입                  | 설명               | 예시                   |
+| :-------------------- | :----------------- | :--------------------- |
+| main                  | 배포 가능한 브랜치 |                        |
+| feature/{description} | 기능 개발          | feature/add-login-page |
 
 ### 작업 흐름
+
 1. `main`에서 작업 브랜치 생성
 2. 기능 개발 후 Pull Request
 3. 코드 리뷰 → merge
