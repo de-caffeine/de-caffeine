@@ -164,12 +164,7 @@ export default function Header() {
               onSwitchToSignup={openSignup}
             />
           )}
-          {showSignup && (
-            <SignupPopup
-              onClose={() => setShowSignup(false)}
-              onSwitchToLogin={openLogin}
-            />
-          )}
+          {showSignup && <SignupPopup onClose={() => setShowSignup(false)} />}
           <div className="absolute right-[-50px]">
             <input
               type="checkbox"
