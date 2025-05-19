@@ -13,9 +13,9 @@ function useWindowWidth() {
   return width;
 }
 
-export default function SearchBar() {
+export default function SearchBar({ placeholder }: { placeholder?: string }) {
   const width = useWindowWidth();
-  const placeholder = width < 640 ? '' : '검색어를 입력해주세요';
+  placeholder = width < 640 ? '' : '검색어를 입력해주세요';
   const [input, setInput] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
