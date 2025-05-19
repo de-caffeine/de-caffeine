@@ -15,6 +15,7 @@ import ChatWindow from './ChatWindow';
 import Button from '../atoms/Button';
 import { useDarkModeStore } from '../../stores/darkModeStore';
 import { AnimatePresence, motion } from 'framer-motion';
+import { toast } from 'react-toastify';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -90,6 +91,7 @@ export default function Header() {
     localStorage.removeItem('myId');
     localStorage.removeItem('myImage');
     useLoginStore.getState().logout();
+    toast.success('로그아웃 되었습니다.');
     setShowDropdown(false);
     setShowChatWindow(false); // 로그아웃 시 채팅창 닫기
     navigate('/'); // 로그아웃 시 메인화면으로 이동

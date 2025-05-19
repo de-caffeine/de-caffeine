@@ -6,6 +6,7 @@ import { useLoginStore } from '../../stores/loginStore';
 import Button from '../atoms/Button';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import { toast } from 'react-toastify';
 
 export default function LoginPopup({
   onClose,
@@ -34,6 +35,7 @@ export default function LoginPopup({
       localStorage.setItem('myId', res.user._id);
       localStorage.setItem('myImage', res.user.image);
       useLoginStore.getState().login();
+      toast.success('로그인 되었습니다.');
       navigate('/');
       // 로그인 성공 직후 모달 닫기
       handleLocalClose();
