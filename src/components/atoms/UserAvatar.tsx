@@ -1,4 +1,4 @@
-import defaultAvatar from '../../images/User.jpg';
+import defaultAvatar from '../../assets/images/User.jpg';
 
 interface UserAvatarProps {
   imageUrl?: string;
