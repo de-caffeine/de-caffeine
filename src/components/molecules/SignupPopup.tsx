@@ -176,9 +176,6 @@ export default function SignupPopup({
           <Button onClick={handleSignup} size="l" full>
             회원가입
           </Button>
-          <Button onClick={onSwitchToLogin} size="l">
-            로그인
-          </Button>
         </div>
       </div>
     </div>
