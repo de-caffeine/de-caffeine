@@ -13,11 +13,17 @@ export default function Navigation() {
         <NavLink key={name} to={path}>
           {({ isActive }) => (
             <div className="group dark:text-dark-text relative cursor-pointer text-base">
-              <span className={isActive ? 'font-semibold text-[#6B4C36]' : ''}>
+              <span
+                className={
+                  isActive
+                    ? 'font-semibold text-[#6B4C36] dark:text-[#977A65]'
+                    : ''
+                }
+              >
                 {name}
               </span>
               <span
-                className={`absolute -bottom-[0px] left-0 h-[2px] w-0 bg-[#6B4C36] transition-discrete duration-200 ${
+                className={`absolute -bottom-[0px] left-0 h-[2px] w-0 bg-[#6B4C36] transition-discrete duration-200 dark:bg-[#977A65] ${
                   isActive ? 'w-full' : 'w-0 group-hover:w-full'
                 }`}
               />

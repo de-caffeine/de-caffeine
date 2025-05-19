@@ -11,7 +11,7 @@ import UserAvatar from '../atoms/UserAvatar';
 import { logout } from '../../api/auth';
 import AlarmIcon from '../molecules/AlarmIcon';
 import { useLoginStore } from '../../stores/loginStore';
-import ChatWindow from './ChatWindow'; // 변경: ChatWindow import 추가
+import ChatWindow from './ChatWindow';
 import Button from '../atoms/Button';
 import { useDarkModeStore } from '../../stores/darkModeStore';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -23,11 +23,14 @@ export default function Header() {
   const isLoggedIn = useLoginStore((state) => state.isLoggedIn);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showChatWindow, setShowChatWindow] = useState(false);
+  const [showMobileNav, setShowMobileNav] = useState(false); // 추가: 모바일 네비게이션 상태
   const avatarRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
   const storedImage = localStorage.getItem('myImage');
   const validImageUrl =
     storedImage && storedImage !== 'undefined' ? storedImage : undefined;
+
   const isDarkMode = useDarkModeStore((state) => state.isDarkMode);
   const toggleDarkMode = useDarkModeStore((state) => state.toggleDarkMode);
 
@@ -55,6 +58,28 @@ export default function Header() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // ESC 키로 닫기
+  useEffect(() => {
+    if (!showMobileNav) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowMobileNav(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showMobileNav]);
+
+  // 바깥 클릭으로 닫기
+  useEffect(() => {
+    if (!showMobileNav) return;
+    const handleClick = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        setShowMobileNav(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [showMobileNav]);
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -66,6 +91,7 @@ export default function Header() {
     localStorage.removeItem('myImage');
     useLoginStore.getState().logout();
     setShowDropdown(false);
+    setShowChatWindow(false); // 로그아웃 시 채팅창 닫기
     navigate('/'); // 로그아웃 시 메인화면으로 이동
   };
 
@@ -77,14 +103,24 @@ export default function Header() {
           <Link to="/">
             <Logo />
           </Link>
-          <div className="hidden sm:flex">
+          {/* 데스크탑 네비게이션 */}
+          <div className="hidden md:flex">
             <Navigation />
+          </div>
+          {/* 모바일 네비게이션 버튼 */}
+          <div className="dark:hover:bg-dark-card rounded hover:bg-gray-100 md:hidden dark:contrast-75 dark:invert">
+            <Icon
+              name="menuIcon"
+              size={24}
+              onClick={() => setShowMobileNav((prev) => !prev)}
+            />
           </div>
         </div>
 
         {/* Search & Icons */}
+
         <div className="relative flex min-w-[150px] flex-grow items-center">
-          <div className="mr-5 ml-auto max-w-[350px] min-w-[120px] flex-1">
+          <div className="mr-5 ml-auto hidden max-w-[350px] min-w-[120px] flex-1 sm:block">
             <SearchBar />
           </div>
 
@@ -131,13 +167,13 @@ export default function Header() {
                         <Link
                           to="/setting"
                           onClick={() => setShowDropdown(false)}
-                          className="block px-4 py-2 hover:text-[#6B4C36]"
+                          className="block px-4 py-2 hover:text-[#4b4744]"
                         >
                           설정
                         </Link>
                         <button
                           onClick={handleLogout}
-                          className="block w-full px-4 py-2 text-left text-red-600 hover:text-red-800"
+                          className="block w-full cursor-pointer px-4 py-2 text-left text-red-600 hover:text-red-400"
                         >
                           로그아웃
                         </button>
@@ -148,11 +184,11 @@ export default function Header() {
               </>
             ) : (
               <>
-                <Button onClick={openLogin} size="s">
-                  Log In
+                <Button onClick={openLogin} size="m">
+                  로그인
                 </Button>
-                <Button onClick={openSignup} size="s" full>
-                  Sign Up
+                <Button onClick={openSignup} size="m" full>
+                  회원가입
                 </Button>
               </>
             )}
@@ -164,12 +200,8 @@ export default function Header() {
               onSwitchToSignup={openSignup}
             />
           )}
-          {showSignup && (
-            <SignupPopup
-              onClose={() => setShowSignup(false)}
-              onSwitchToLogin={openLogin}
-            />
-          )}
+
+          {showSignup && <SignupPopup onClose={() => setShowSignup(false)} />}
           <div className="absolute right-[-50px]">
             <input
               type="checkbox"
@@ -178,45 +210,77 @@ export default function Header() {
               checked={isDarkMode} // 🌗 라이트 모드일 때 체크됨
               onChange={toggleDarkMode}
             />
-            <label
-              className="relative cursor-pointer p-2"
-              htmlFor="light-switch"
-            >
+            <label className="relative cursor-pointer" htmlFor="light-switch">
               <svg
-                className={`${isDarkMode ? 'hidden' : ''}`}
-                width="16"
-                height="16"
+                className={`${isDarkMode ? 'hidden' : 'rounded duration-200 hover:bg-slate-200 dark:hover:bg-slate-700'}`}
+                width="30"
+                height="30"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path
-                  className="fill-slate-300"
-                  d="M7 0h2v2H7zM12.88 1.637l1.414 1.415-1.415 1.413-1.413-1.414zM14 7h2v2h-2zM12.95 14.433l-1.414-1.413 1.413-1.415 1.415 1.414zM7 14h2v2H7zM2.98 14.364l-1.413-1.415 1.414-1.414 1.414 1.415zM0 7h2v2H0zM3.05 1.706 4.463 3.12 3.05 4.535 1.636 3.12z"
-                />
-                <path
-                  className="fill-slate-400"
-                  d="M8 4C5.8 4 4 5.8 4 8s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4Z"
-                />
+                <g transform="translate(7 7)">
+                  <path
+                    className="fill-slate-400"
+                    d="M7 0h2v2H7zM12.88 1.637l1.414 1.415-1.415 1.413-1.413-1.414zM14 7h2v2h-2zM12.95 14.433l-1.414-1.413 1.413-1.415 1.415 1.414zM7 14h2v2H7zM2.98 14.364l-1.413-1.415 1.414-1.414 1.414 1.415zM0 7h2v2H0zM3.05 1.706 4.463 3.12 3.05 4.535 1.636 3.12z"
+                  />
+                  <path
+                    className="fill-slate-500"
+                    d="M8 4C5.8 4 4 5.8 4 8s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4Z"
+                  />
+                </g>
               </svg>
               <svg
-                className={`${isDarkMode ? '' : 'hidden'}`}
-                width="16"
-                height="16"
+                className={`${isDarkMode ? 'rounded duration-200 hover:bg-slate-200 dark:hover:bg-slate-700' : 'hidden'}`}
+                width="30"
+                height="30"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path
-                  className="fill-slate-400"
-                  d="M6.2 1C3.2 1.8 1 4.6 1 7.9 1 11.8 4.2 15 8.1 15c3.3 0 6-2.2 6.9-5.2C9.7 11.2 4.8 6.3 6.2 1Z"
-                />
-                <path
-                  className="fill-slate-500"
-                  d="M12.5 5a.625.625 0 0 1-.625-.625 1.252 1.252 0 0 0-1.25-1.25.625.625 0 1 1 0-1.25 1.252 1.252 0 0 0 1.25-1.25.625.625 0 1 1 1.25 0c.001.69.56 1.249 1.25 1.25a.625.625 0 1 1 0 1.25c-.69.001-1.249.56-1.25 1.25A.625.625 0 0 1 12.5 5Z"
-                />
+                <g transform="translate(7 7)">
+                  <path
+                    className="fill-slate-400"
+                    d="M6.2 1C3.2 1.8 1 4.6 1 7.9 1 11.8 4.2 15 8.1 15c3.3 0 6-2.2 6.9-5.2C9.7 11.2 4.8 6.3 6.2 1Z"
+                  />
+
+                  <path
+                    className="fill-slate-500"
+                    d="M12.5 5a.625.625 0 0 1-.625-.625 1.252 1.252 0 0 0-1.25-1.25.625.625 0 1 1 0-1.25 1.252 1.252 0 0 0 1.25-1.25.625.625 0 1 1 1.25 0c.001.69.56 1.249 1.25 1.25a.625.625 0 1 1 0 1.25c-.69.001-1.249.56-1.25 1.25A.625.625 0 0 1 12.5 5Z"
+                  />
+                </g>
               </svg>
               <span className="sr-only">Switch to light / dark version</span>
             </label>
           </div>
         </div>
       </div>
+
+      {/* 모바일 네비게이션 드로어 */}
+      <AnimatePresence>
+        {showMobileNav && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <motion.div
+              ref={modalRef}
+              className="dark:bg-dark-bg relative w-[90vw] max-w-[350px] rounded-lg bg-white p-6 shadow-xl"
+              initial={{ y: 50, scale: 0.95 }}
+              animate={{ y: 0, scale: 1 }}
+              exit={{ y: 50, scale: 0.95 }}
+              transition={{ duration: 0.1 }}
+            >
+              <div className="flex flex-col items-center space-y-5">
+                <Logo />
+                <div className="w-[200px]">
+                  <SearchBar />
+                </div>
+                <Navigation /> {/* 네비게이션바 추가 */}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Chat Window */}
       <AnimatePresence>
