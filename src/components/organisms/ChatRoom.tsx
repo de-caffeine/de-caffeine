@@ -20,6 +20,9 @@ export default function ChatRoom({ chatId, reloadTrigger = 0 }: ChatRoomProps) {
   const myId = localStorage.getItem('myId');
   const endRef = useRef<HTMLDivElement>(null);
 
+  // 이전 메시지 개수 저장용
+  const prevLengthRef = useRef(0);
+
   useEffect(() => {
     let isMounted = true;
     const fetch = async () => {
@@ -36,9 +39,12 @@ export default function ChatRoom({ chatId, reloadTrigger = 0 }: ChatRoomProps) {
     };
   }, [chatId, reloadTrigger]);
 
-  // 메시지가 바뀔 때마다 스크롤을 가장 아래로 이동
+  // 메시지 length가 이전보다 커졌을 때만 스크롤
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messages.length > prevLengthRef.current) {
+      endRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+    prevLengthRef.current = messages.length;
   }, [messages]);
 
   return (
