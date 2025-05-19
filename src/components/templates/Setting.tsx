@@ -320,7 +320,7 @@ export default function Setting() {
         </div>
       </div>
 
-      <div className="nanum-gothic-bold relative mt-[36px] mb-36 ml-[48px] flex w-[830px]">
+      <div className="nanum-gothic-bold relative mt-[36px] mb-36 ml-[5px] flex justify-between">
         <button
           onClick={handleDeleteAccount}
           className="cursor-pointer text-red-500"

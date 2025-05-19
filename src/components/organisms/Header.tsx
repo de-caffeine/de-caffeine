@@ -131,13 +131,13 @@ export default function Header() {
                         <Link
                           to="/setting"
                           onClick={() => setShowDropdown(false)}
-                          className="block px-4 py-2 hover:text-[#6B4C36]"
+                          className="block px-4 py-2 hover:text-[#4b4744]"
                         >
                           설정
                         </Link>
                         <button
                           onClick={handleLogout}
-                          className="block w-full px-4 py-2 text-left text-red-600 hover:text-red-800"
+                          className="block w-full cursor-pointer px-4 py-2 text-left text-red-600 hover:text-red-400"
                         >
                           로그아웃
                         </button>
@@ -148,11 +148,11 @@ export default function Header() {
               </>
             ) : (
               <>
-                <Button onClick={openLogin} size="s">
-                  Log In
+                <Button onClick={openLogin} size="m">
+                  로그인
                 </Button>
-                <Button onClick={openSignup} size="s" full>
-                  Sign Up
+                <Button onClick={openSignup} size="m" full>
+                  회원가입
                 </Button>
               </>
             )}
