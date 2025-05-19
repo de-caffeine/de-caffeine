@@ -103,7 +103,7 @@ export default function ChatWindow({
       </div>
 
       {selectedChat && (
-        <footer className="p-2">
+        <footer className="mr-[15px] p-2">
           <div className="relative w-full px-1">
             <input
               type="text"
