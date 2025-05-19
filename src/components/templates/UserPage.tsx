@@ -21,6 +21,8 @@ import { useLoginStore } from '../../stores/loginStore';
 import { useMemo } from 'react';
 import CommentCard from '../molecules/CommentCard';
 import { AnimatePresence } from 'framer-motion';
+import UserSkeleton from '../molecules/UserSleleton';
+import CommunityCardSkeleton from '../molecules/CommunityCardSkeleton';
 
 interface CommentItem {
   post: string;
@@ -254,75 +256,99 @@ export default function UserPage() {
   };
 
   if (userInvalid) return <Navigate to="*" replace />;
-  if (userDataLoading) return <div>로딩중 ... </div>;
   if (error) return <Navigate to="*" replace />;
-  if (userData === null) return <div>정보가 없습니다.</div>;
   // if (id === 'user') return <div>탈퇴한 회원입니다.</div>;
   if (channelError) return <div>{channelError}</div>;
   // if (myInfo?._id === '') return <Navigate to="*" />;
   return (
     <>
-      {!parts[2] && (
-        <User
-          name={userData.fullName}
-          followCount={followCount}
-          followerCount={followerCount}
-          imgUrl={userData.image}
-          email={userData.email}
-          techStack={
-            userData.username ? (JSON.parse(userData.username).tags ?? []) : []
-          }
-          introduction={
-            userData.username
-              ? (JSON.parse(userData.username).introduction ?? '')
-              : ''
-          }
-          github={
-            userData.username
-              ? (JSON.parse(userData.username).github ?? '')
-              : ''
-          }
-          velog={
-            userData.username ? (JSON.parse(userData.username).velog ?? '') : ''
-          }
-          homepage={
-            userData.username
-              ? (JSON.parse(userData.username).homepage ?? '')
-              : ''
-          }
-          isMe={isMe}
-          isLogin={isLoggedIn}
-          isFollowing={isFollowing}
-          followHandler={handleFollow}
-        />
+      {userDataLoading ? (
+        <>
+          <UserSkeleton />
+        </>
+      ) : (
+        <>
+          {!parts[2] && (
+            <User
+              name={userData!.fullName}
+              followCount={followCount}
+              followerCount={followerCount}
+              imgUrl={userData!.image}
+              email={userData!.email}
+              techStack={
+                userData!.username
+                  ? (JSON.parse(userData!.username).tags ?? [])
+                  : []
+              }
+              introduction={
+                userData!.username
+                  ? (JSON.parse(userData!.username).introduction ?? '')
+                  : ''
+              }
+              github={
+                userData!.username
+                  ? (JSON.parse(userData!.username).github ?? '')
+                  : ''
+              }
+              velog={
+                userData!.username
+                  ? (JSON.parse(userData!.username).velog ?? '')
+                  : ''
+              }
+              homepage={
+                userData!.username
+                  ? (JSON.parse(userData!.username).homepage ?? '')
+                  : ''
+              }
+              isMe={isMe}
+              isLogin={isLoggedIn}
+              isFollowing={isFollowing}
+              followHandler={handleFollow}
+            />
+          )}
+        </>
       )}
 
       {/* 내가 쓴 글 */}
-      {!parts[2] && (
-        <div className="dark:text-dark-text mx-auto flex w-[1128px] flex-wrap justify-start gap-4 pt-[17px]">
-          {posts.length === 0 ? (
-            <div>아직 작성된 게시글이 없습니다.</div>
-          ) : (
-            posts
-              .filter(
-                (p) =>
-                  p.channel._id === '681d9fee7ffa911fa118e4b5' ||
-                  p.channel._id === '681da0077ffa911fa118e4ba' ||
-                  p.channel._id === '681da0307ffa911fa118e4c2' ||
-                  p.channel._id === '681da0247ffa911fa118e4be',
-              )
-              .map((post) => {
-                const like = myInfo?.likes?.find(
-                  (like) => like.post === post._id,
-                );
-                const likeId = like ? like._id : null;
-
-                return (
-                  <CommunityCard key={post._id} post={post} likeId={likeId} />
-                );
-              })
-          )}
+      {userDataLoading ? (
+        <div className="dark:text-dark-text mx-auto mb-[20px] flex w-[1128px] flex-wrap justify-start gap-4 pt-[17px]">
+          {[...Array(8)].map((_, index) => (
+            <CommunityCardSkeleton key={index} />
+          ))}
         </div>
+      ) : (
+        <>
+          {!parts[2] && (
+            <div className="dark:text-dark-text mx-auto mb-[20px] flex w-[1128px] flex-wrap justify-start gap-4 pt-[17px]">
+              {posts.length === 0 ? (
+                <div>아직 작성된 게시글이 없습니다.</div>
+              ) : (
+                posts
+                  .filter(
+                    (p) =>
+                      p.channel._id === '681d9fee7ffa911fa118e4b5' ||
+                      p.channel._id === '681da0077ffa911fa118e4ba' ||
+                      p.channel._id === '681da0307ffa911fa118e4c2' ||
+                      p.channel._id === '681da0247ffa911fa118e4be',
+                  )
+                  .map((post) => {
+                    const like = myInfo?.likes?.find(
+                      (like) => like.post === post._id,
+                    );
+                    const likeId = like ? like._id : null;
+
+                    return (
+                      <CommunityCard
+                        key={post._id}
+                        post={post}
+                        likeId={likeId}
+                      />
+                    );
+                  })
+              )}
+            </div>
+          )}
+        </>
       )}
 
       {/* 내가 한 질문 */}
