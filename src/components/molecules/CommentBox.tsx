@@ -5,6 +5,7 @@ import { getAuthUser } from '../../api/auth';
 import { createComment, deleteComment } from '../../api/comments';
 import { createNotification } from '../../api/notifications';
 import { toast } from 'react-toastify';
+import Button from '../atoms/Button';
 
 interface CommentBoxProps {
   postId: string;
@@ -103,17 +104,14 @@ export default function CommentBox({
         onChange={(e) => setText(e.target.value)}
         placeholder="댓글을 작성해주세요"
         rows={1}
-        className="nanum-gothic-regular mb-6 w-[782px] resize-none overflow-hidden rounded border border-gray-300 p-6 text-sm"
+        className="nanum-gothic-regular w-[779px] resize-none overflow-hidden rounded border border-gray-300 p-6 text-sm"
       />
 
       {/* 등록 버튼 */}
       <div className="mb-6 flex justify-end">
-        <button
-          onClick={handleSubmit}
-          className="nanum-gothic-regular h-[34px] w-[77px] rounded bg-[#A9907E] text-white"
-        >
+        <Button full size="s" onClick={handleSubmit}>
           댓글 작성
-        </button>
+        </Button>
       </div>
 
       {/* 댓글 목록 (newest-first) */}
