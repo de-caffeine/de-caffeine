@@ -1,6 +1,7 @@
 import Icon from './Icon';
 import { likePost, unlikePost } from '../../api/likes';
 import { useLoginStore } from '../../stores/loginStore';
+import { useDarkModeStore } from '../../stores/darkModeStore';
 
 export default function Interest({
   _id,
@@ -23,12 +24,18 @@ export default function Interest({
     }
     setRefetch();
   };
+  const isDarkMode = useDarkModeStore((state) => state.isDarkMode);
 
   return (
     <>
-      <div className="flex items-center space-x-2 text-xs">
+      <div className="dark:text-dark-text flex items-center space-x-2 text-xs">
         <div className="flex items-center space-x-1">
-          <Icon name="commentIcon" size={20} /> <span>{commentCount}</span>
+          <Icon
+            name="commentIcon"
+            size={20}
+            color={isDarkMode ? 'white' : 'black'}
+          />{' '}
+          <span>{commentCount}</span>
         </div>
         <button
           className="flex cursor-pointer items-center space-x-1"
@@ -37,7 +44,11 @@ export default function Interest({
           {like.likeId ? (
             <Icon name="likeIcon" size={20} color="red" />
           ) : (
-            <Icon name="unlikeIcon" size={20} />
+            <Icon
+              name="unlikeIcon"
+              size={20}
+              color={isDarkMode ? 'white' : 'black'}
+            />
           )}
           <span>{like.likeCount}</span>
         </button>

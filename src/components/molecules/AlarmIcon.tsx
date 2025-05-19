@@ -46,8 +46,8 @@ export default function AlarmIcon() {
 
   return (
     <div className="relative inline-block" ref={modalRef}>
-      <div className="relative mt-[5px] dark:contrast-75 dark:invert">
-        <div className="duration-200 hover:scale-110">
+      <div className="relative mt-[5px]">
+        <div className="duration-200 hover:scale-110 dark:contrast-75 dark:invert">
           <Icon
             size={40}
             name="alarmIcon"

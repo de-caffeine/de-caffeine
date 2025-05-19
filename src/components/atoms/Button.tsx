@@ -19,7 +19,7 @@ export default function Button({
           : 'dark:border-dark-border dark:text-dark-text'
       } ${
         size === 's' &&
-        `h-[30px] w-[70px] text-xs ${full ? 'border-[#A9907E] bg-[#A9907E]' : ''}`
+        `h-[30px] w-[70px] text-xs text-[10px] ${full ? 'border-[#A9907E] bg-[#A9907E]' : ''}`
       } ${size === 'm' && 'h-[35px] w-[85px] text-sm'} ${size === 'l' && 'text-basic h-[50px] w-[350px]'} `}
       onClick={onClick}
     >
