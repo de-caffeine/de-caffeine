@@ -355,7 +355,7 @@ export default function UserPage() {
 
       {/* 내가 한 질문 */}
       {parts[2] === 'question' && (
-        <div className="dark:text-dark-text flex w-[1128px] flex-col gap-4 pt-[22px]">
+        <div className="dark:text-dark-text mb-[20px] flex w-[1128px] flex-col gap-4 pt-[22px]">
           {questionPosts.length === 0 ? (
             <div>아직 작성된 질문이 없습니다.</div>
           ) : (
@@ -406,7 +406,7 @@ export default function UserPage() {
         </div>
       )}
       {parts[2] === 'comments' && (
-        <div className="nanum-gothic-regular dark:text-dark-text mx-auto flex w-[1128px] flex-wrap gap-[15px] pt-[5px]">
+        <div className="nanum-gothic-regular dark:text-dark-text mx-auto mb-[20px] flex w-[1128px] flex-wrap gap-[15px] pt-[5px]">
           {fileteredQuestionComments.length === 0 ? (
             <div>아직 댓글이 없습니다.</div>
           ) : (
@@ -454,7 +454,7 @@ export default function UserPage() {
         </div>
       )}
       {parts[2] === 'liked' && (
-        <div className="nanum-gothic-regular dark:text-dark-text mx-auto flex w-[1128px] flex-wrap gap-[15px] pt-[5px]">
+        <div className="nanum-gothic-regular dark:text-dark-text mx-auto mb-[20px] flex w-[1128px] flex-wrap gap-[15px] pt-[5px]">
           {questionLiked.length === 0 ? (
             <div>아직 좋아요를 누른 글이 없습니다.</div>
           ) : (
