@@ -12,7 +12,7 @@ export default function QuestionCard({
   likeId: string | null;
 }) {
   return (
-    <div className="dark:border-dark-border dark:bg-dark-card dark:text-dark-text flex h-[190px] w-[100%] flex-col justify-between rounded-[5px] border border-[#d9d9d9] duration-400 ease-in-out hover:shadow-md dark:shadow-black">
+    <div className="dark:border-dark-border dark:bg-dark-card dark:text-dark-text flex h-[190px] w-[100%] flex-col justify-between rounded-[5px] border border-[#d9d9d9] duration-300 ease-in-out hover:shadow-md dark:shadow-black">
       <Link to={`/post/${post._id}`}>
         <div className="items-between flex flex-col">
           <div className="flex h-[91px] flex-col p-[15px]">

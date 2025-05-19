@@ -75,7 +75,7 @@ export default function CommentBox({
         postId: postId, // 댓글이 달린 포스트 ID
       });
     } catch {
-      toast.error('댓글 작성에 실패했습니다.');
+      console.log('댓글 작성에 실패했습니다.');
     }
   };
 
@@ -104,12 +104,12 @@ export default function CommentBox({
         onChange={(e) => setText(e.target.value)}
         placeholder="댓글을 작성해주세요"
         rows={1}
-        className="nanum-gothic-regular w-[779px] resize-none overflow-hidden rounded border border-gray-300 p-6 text-sm"
+        className="nanum-gothic-regular mb-3 w-[782px] resize-none overflow-hidden rounded border border-gray-300 p-6 text-sm"
       />
 
       {/* 등록 버튼 */}
-      <div className="mb-6 flex justify-end">
-        <Button full size="s" onClick={handleSubmit}>
+      <div className="m-[-5px] mb-6 flex justify-end">
+        <Button onClick={handleSubmit} size="m" full>
           댓글 작성
         </Button>
       </div>

@@ -4,7 +4,7 @@ export default function Checkbox({ id }: { id?: string }) {
       <input
         type="checkbox"
         id={id}
-        className="cursor-pointer accent-[#6b4c36]"
+        className="h-[20px] w-[20px] cursor-pointer accent-[#6b4c36]"
       ></input>
     </>
   );
