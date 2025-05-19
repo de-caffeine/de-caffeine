@@ -8,7 +8,6 @@ import Checkbox from '../atoms/Checkbox';
 
 export default function SignupPopup({
   onClose,
-  onSwitchToLogin,
 }: {
   onClose: () => void;
   onSwitchToLogin: () => void;
