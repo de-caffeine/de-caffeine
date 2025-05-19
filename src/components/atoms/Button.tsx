@@ -20,7 +20,7 @@ export default function Button({
       } ${
         size === 's' &&
         `h-[30px] w-[70px] text-[10px] ${full ? 'border-[#A9907E] bg-[#A9907E]' : ''}`
-      } ${size === 'm' && 'h-[40px] w-[100px] text-[14px]'} ${size === 'l' && 'h-[50px] w-[350px] text-[16px]'} `}
+      } ${size === 'm' && 'h-[40px] w-[100px] text-sm'} ${size === 'l' && 'text-basic h-[50px] w-[350px]'} `}
       onClick={onClick}
     >
       {children}

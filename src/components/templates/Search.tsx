@@ -114,7 +114,10 @@ export default function Search() {
                     </span>
                   )}
                 </h2>
-                <Link to={`/search/${keyword}/community`}>
+                <Link
+                  to={`/search/${keyword}/community`}
+                  className="dark:contrast-75 dark:invert"
+                >
                   <Icon name="rightIcon" />
                 </Link>
               </div>
@@ -161,7 +164,10 @@ export default function Search() {
                     </span>
                   )}
                 </h2>
-                <Link to={`/search/${keyword}/question`}>
+                <Link
+                  to={`/search/${keyword}/question`}
+                  className="dark:contrast-75 dark:invert"
+                >
                   <Icon name="rightIcon" />
                 </Link>
               </div>
@@ -208,7 +214,10 @@ export default function Search() {
                     </span>
                   )}
                 </h2>
-                <Link to={`/search/${keyword}/user`}>
+                <Link
+                  to={`/search/${keyword}/user`}
+                  className="dark:contrast-75 dark:invert"
+                >
                   <Icon name="rightIcon" />
                 </Link>
               </div>
@@ -274,7 +283,7 @@ export default function Search() {
     case 'community': {
       return (
         <>
-          <div className="mb-[20px] w-[270px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px]">
+          <div className="dark:text-dark-text mb-[20px] w-[270px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px]">
             <div className="flex flex-col">
               <div className="nanum-gothic-regular relative flex py-[5px]">
                 <h2>
@@ -288,7 +297,7 @@ export default function Search() {
                 </h2>
                 <Link
                   to={`/search/${keyword}`}
-                  className="absolute left-[-30px]"
+                  className="absolute left-[-30px] dark:contrast-75 dark:invert"
                 >
                   <Icon name="leftIcon" />
                 </Link>
@@ -349,7 +358,7 @@ export default function Search() {
     case 'question': {
       return (
         <>
-          <div className="w-[270px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px]">
+          <div className="dark:text-dark-text w-[270px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px]">
             <div className="mb-[20px] flex flex-col">
               <div className="nanum-gothic-regular relative flex py-[5px]">
                 <h2>
@@ -363,7 +372,7 @@ export default function Search() {
                 </h2>
                 <Link
                   to={`/search/${keyword}`}
-                  className="absolute left-[-30px]"
+                  className="absolute left-[-30px] dark:contrast-75 dark:invert"
                 >
                   <Icon name="leftIcon" />
                 </Link>
@@ -424,7 +433,7 @@ export default function Search() {
     case 'user': {
       return (
         <>
-          <div className="w-[270px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px]">
+          <div className="dark:text-dark-text w-[270px] sm:w-[270px] md:w-[555px] lg:w-[840px] xl:w-[1125px]">
             <div className="mb-[20px] flex flex-col">
               <div className="nanum-gothic-regular relative flex py-[5px]">
                 <h2>
@@ -438,7 +447,7 @@ export default function Search() {
                 </h2>
                 <Link
                   to={`/search/${keyword}`}
-                  className="absolute left-[-30px]"
+                  className="absolute left-[-30px] dark:contrast-75 dark:invert"
                 >
                   <Icon name="leftIcon" />
                 </Link>

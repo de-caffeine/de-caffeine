@@ -11,10 +11,9 @@ import UserAvatar from '../atoms/UserAvatar';
 import { logout } from '../../api/auth';
 import AlarmIcon from '../molecules/AlarmIcon';
 import { useLoginStore } from '../../stores/loginStore';
-import ChatWindow from './ChatWindow'; // 변경: ChatWindow import 추가
+import ChatWindow from './ChatWindow';
 import Button from '../atoms/Button';
 import { useDarkModeStore } from '../../stores/darkModeStore';
-import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 
 export default function Header() {
@@ -24,12 +23,14 @@ export default function Header() {
   const isLoggedIn = useLoginStore((state) => state.isLoggedIn);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showChatWindow, setShowChatWindow] = useState(false);
+  const [showMobileNav, setShowMobileNav] = useState(false); // 추가: 모바일 네비게이션 상태
   const avatarRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
   const storedImage = localStorage.getItem('myImage');
   const validImageUrl =
     storedImage && storedImage !== 'undefined' ? storedImage : undefined;
-  const navigate = useNavigate();
+
   const isDarkMode = useDarkModeStore((state) => state.isDarkMode);
   const toggleDarkMode = useDarkModeStore((state) => state.toggleDarkMode);
 
@@ -57,6 +58,28 @@ export default function Header() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // ESC 키로 닫기
+  useEffect(() => {
+    if (!showMobileNav) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowMobileNav(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showMobileNav]);
+
+  // 바깥 클릭으로 닫기
+  useEffect(() => {
+    if (!showMobileNav) return;
+    const handleClick = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        setShowMobileNav(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [showMobileNav]);
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -68,6 +91,7 @@ export default function Header() {
     localStorage.removeItem('myImage');
     useLoginStore.getState().logout();
     setShowDropdown(false);
+    setShowChatWindow(false); // 로그아웃 시 채팅창 닫기
     navigate('/'); // 로그아웃 시 메인화면으로 이동
   };
 
@@ -79,14 +103,25 @@ export default function Header() {
           <Link to="/">
             <Logo />
           </Link>
-          <div className="hidden sm:flex">
+          {/* 데스크탑 네비게이션 */}
+          <div className="hidden md:flex">
             <Navigation />
+          </div>
+          {/* 모바일 네비게이션 버튼 */}
+          <div className="dark:hover:bg-dark-card rounded hover:bg-gray-100 md:hidden dark:contrast-75 dark:invert">
+            <Icon
+              name="menuIcon"
+              size={24}
+              onClick={() => setShowMobileNav((prev) => !prev)}
+            />
           </div>
         </div>
 
         {/* Search & Icons */}
-        <div className="flex min-w-[150px] flex-grow items-center">
-          <div className="mr-5 ml-auto max-w-[350px] min-w-[120px] flex-1">
+
+        <div className="relative flex min-w-[150px] flex-grow items-center">
+          <div className="mr-5 ml-auto max-w-[350px] min-w-[80px] flex-1">
+
             <SearchBar />
           </div>
 
@@ -166,13 +201,12 @@ export default function Header() {
               onSwitchToSignup={openSignup}
             />
           )}
-          {showSignup && (
-            <SignupPopup
-              onClose={() => setShowSignup(false)}
-              onSwitchToLogin={openLogin}
-            />
-          )}
+
           <div className="ml-3 flex flex-col justify-center">
+
+          {showSignup && <SignupPopup onClose={() => setShowSignup(false)} />}
+          <div className="absolute right-[-50px]">
+
             <input
               type="checkbox"
               id="light-switch"
@@ -219,6 +253,34 @@ export default function Header() {
           </div>
         </div>
       </div>
+
+      {/* 모바일 네비게이션 드로어 */}
+      <AnimatePresence>
+        {showMobileNav && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <motion.div
+              ref={modalRef}
+              className="dark:bg-dark-bg relative w-[90vw] max-w-[400px] rounded-lg bg-white p-6 shadow-xl"
+              initial={{ y: 50, scale: 0.95 }}
+              animate={{ y: 0, scale: 1 }}
+              exit={{ y: 50, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="flex flex-col items-center space-y-4">
+                <Logo />
+                <SearchBar />
+                <Navigation /> {/* 네비게이션바 추가 */}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Chat Window */}
       <AnimatePresence>

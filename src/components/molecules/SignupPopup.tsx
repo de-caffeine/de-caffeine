@@ -6,13 +6,7 @@ import Button from '../atoms/Button';
 import { toast } from 'react-toastify';
 import Checkbox from '../atoms/Checkbox';
 
-export default function SignupPopup({
-  onClose,
-  onSwitchToLogin,
-}: {
-  onClose: () => void;
-  onSwitchToLogin: () => void;
-}) {
+export default function SignupPopup({ onClose }: { onClose: () => void }) {
   const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
   const [password, setPassword] = useState('');
@@ -175,9 +169,6 @@ export default function SignupPopup({
 
           <Button onClick={handleSignup} size="l" full>
             회원가입
-          </Button>
-          <Button onClick={onSwitchToLogin} size="l">
-            로그인
           </Button>
         </div>
       </div>

@@ -32,7 +32,6 @@ export default function QuestionCard({
             {JSON.parse(post.title).tags.map((t: string, index: number) => (
               <Tag key={index}>{t}</Tag>
             ))}
-            <div className="dark:to-dark-card absolute right-[15px] h-[30px] w-[15px] bg-linear-to-r from-transparent to-white" />
             <div className="dark:bg-dark-card absolute right-0 h-[30px] w-[15px] bg-white" />
           </div>
         </div>
