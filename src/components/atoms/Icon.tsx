@@ -8,6 +8,7 @@ import alarmIcon from '../../assets/images/alarmIcon.svg';
 import chatIcon from '../../assets/images/chatIcon.svg';
 import darkModeIcon from '../../assets/images/solar_moon-line-duotone.svg';
 import menuIcon from '../../assets/images/line-md_menu.svg';
+import mailStrokeIcon from '../../assets/images/mailStroke.svg';
 
 import mailIcon from '../../assets/images/mailIcon.png';
 import githubIcon from '../../assets/images/githubIcon.png';
@@ -28,37 +29,39 @@ export default function Icon({
   color?: 'black' | 'white' | 'red' | 'gray';
 }) {
   const src =
-    name === 'leftIcon'
-      ? ArrowLeftIcon
-      : name === 'rightIcon'
-        ? ArrowRightIcon
-        : name === 'plusIcon'
-          ? AddIcon
-          : name === 'alarmIcon'
-            ? alarmIcon
-            : name === 'chatIcon'
-              ? chatIcon
-              : name === 'mailIcon'
-                ? mailIcon
-                : name === 'githubIcon'
-                  ? githubIcon
-                  : name === 'velogIcon'
-                    ? velogIcon
-                    : name === 'homepageIcon'
-                      ? homepageIcon
-                      : name === 'completeIcon'
-                        ? completeIcon
-                        : name === 'completeNotIcon'
-                          ? completeNotIcon
-                          : name === 'commentIcon'
-                            ? CommentIcon
-                            : name === 'likeIcon'
-                              ? HeartFillIcon
-                              : name === 'darkModeIcon'
-                                ? darkModeIcon
-                                : name === 'menuIcon'
-                                  ? menuIcon
-                                  : HeartIcon;
+    name === 'mailStrokeIcon'
+      ? mailStrokeIcon
+      : name === 'leftIcon'
+        ? ArrowLeftIcon
+        : name === 'rightIcon'
+          ? ArrowRightIcon
+          : name === 'plusIcon'
+            ? AddIcon
+            : name === 'alarmIcon'
+              ? alarmIcon
+              : name === 'chatIcon'
+                ? chatIcon
+                : name === 'mailIcon'
+                  ? mailIcon
+                  : name === 'githubIcon'
+                    ? githubIcon
+                    : name === 'velogIcon'
+                      ? velogIcon
+                      : name === 'homepageIcon'
+                        ? homepageIcon
+                        : name === 'completeIcon'
+                          ? completeIcon
+                          : name === 'completeNotIcon'
+                            ? completeNotIcon
+                            : name === 'commentIcon'
+                              ? CommentIcon
+                              : name === 'likeIcon'
+                                ? HeartFillIcon
+                                : name === 'darkModeIcon'
+                                  ? darkModeIcon
+                                  : name === 'menuIcon'
+                                    ? menuIcon
+                                    : HeartIcon;
 
   return (
     <>
