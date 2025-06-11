@@ -9,7 +9,8 @@ import QuestionCard from '../molecules/QuestionCard';
 import { followUser, unfollowUser } from '../../api/follow';
 import FloatingButton from '../atoms/FloatingButton';
 import { createNotification } from '../../api/notifications';
-
+// 변경: 메시지 API import 추가
+import { createMessage, getConversations } from '../../api/messages'; // 변경: 메시지 전송 및 목록 조회
 // 변경: ChatWindow import 추가
 import ChatWindow from '../organisms/ChatWindow'; // 변경: 채팅창 컴포넌트
 // 변경: Conversation 타입 import 추가
